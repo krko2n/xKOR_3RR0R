@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### ============================================================
-### xKOR_3RR0R OS MODE INSTALLER — FULL SAFE VERSION
+### xKOR_3RR0R OS MODE INSTALLER — AUTO FIX VERSION
 ### ============================================================
 
 LOG_DIR="/var/log/xkor_3rr0r"
@@ -12,7 +12,6 @@ touch "$LOG_FILE"
 
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-### COLORS
 RED="\e[31m"
 GREEN="\e[32m"
 YELLOW="\e[33m"
@@ -20,6 +19,16 @@ BLUE="\e[34m"
 RESET="\e[0m"
 
 echo -e "${BLUE}=== xKOR_3RR0R OS Mode Installer ===${RESET}"
+echo -e "
+\e[31m██╗  ██╗██╗  ██╗ ██████╗ ██████╗     ██████╗ ███████╗██████╗ ██████╗  ██████╗ ██████╗ 
+██║ ██╔╝██║  ██║██╔════╝ ██╔══██╗    ██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔═══██╗██╔══██╗
+█████╔╝ ███████║██║  ███╗██████╔╝    ██████╔╝█████╗  ██████╔╝██████╔╝██║   ██║██████╔╝
+██╔═██╗ ██╔══██║██║   ██║██╔══██╗    ██╔══██╗██╔══╝  ██╔══██╗██╔══██╗██║   ██║██╔══██╗
+██║  ██╗██║  ██║╚██████╔╝██║  ██║    ██║  ██║███████╗██║  ██║██║  ██║╚██████╔╝██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝\e[0m
+
+\e[97m                xKOR_3RR0R OS MODE INSTALLER\e[0m
+"
 echo "Log file: $LOG_FILE"
 echo
 
@@ -31,24 +40,25 @@ fi
 
 ### DISTRO CHECK
 if ! grep -qi "arch" /etc/os-release; then
-    echo -e "${RED}ERROR: Only Arch-based systems are supported.${RESET}"
+    echo -e "${RED}ERROR: Only Arch-based systems supported.${RESET}"
     exit 1
 fi
 
-### TTY CHECK
-if [[ ! -t 1 ]]; then
-    echo -e "${RED}ERROR: Must be run from a real terminal (TTY).${RESET}"
-    exit 1
-fi
-
-### FIX LINE ENDINGS + PERMISSIONS
+### AUTO FIX: LINE ENDINGS + PERMISSIONS
 echo -e "${YELLOW}Fixing line endings and permissions...${RESET}"
-find /opt/xkor_3rr0r -type f -name "*.sh" -exec sed -i 's/\r$//' {} \;
-find /opt/xkor_3rr0r -type f -name "*.sh" -exec chmod +x {} \;
+
+find .. -type f -name "*.sh" -exec sed -i 's/\r$//' {} \;
+find .. -type f -name "*.service" -exec sed -i 's/\r$//' {} \;
+
+find .. -type f -name "*.sh" -exec chmod +x {} \;
+find .. -type f -name "*.service" -exec chmod +x {} \;
+
+echo -e "${GREEN}Auto-fix complete.${RESET}"
+echo
 
 ### UPDATE SYSTEM
 echo -e "${YELLOW}Updating system...${RESET}"
-pacman -Syu --noconfirm || { echo -e "${RED}System update failed.${RESET}"; exit 1; }
+pacman -Syu --noconfirm
 
 ### INSTALL DEPENDENCIES
 echo -e "${YELLOW}Installing dependencies...${RESET}"
@@ -57,11 +67,11 @@ pacman -S --noconfirm \
     xorg-server xorg-xinit xorg-xauth xorg-xrandr xorg-xset \
     mesa \
     plymouth \
-    pam pam_u2f || { echo -e "${RED}Dependency installation failed.${RESET}"; exit 1; }
+    pam pam_u2f
 
 ### INSTALL ELECTRON
 echo -e "${YELLOW}Installing Electron...${RESET}"
-npm install -g electron || { echo -e "${RED}Electron installation failed.${RESET}"; exit 1; }
+npm install -g electron
 
 ### COPY PROJECT
 echo -e "${YELLOW}Copying project to /opt/xkor_3rr0r...${RESET}"
@@ -72,7 +82,7 @@ cp -r ../* /opt/xkor_3rr0r
 ### INSTALL LOGIN SCREEN DEPENDENCIES
 echo -e "${YELLOW}Installing login screen dependencies...${RESET}"
 cd /opt/xkor_3rr0r/os/login
-npm install || { echo -e "${RED}Login screen dependencies failed.${RESET}"; exit 1; }
+npm install
 
 ### INSTALL SYSTEMD SERVICES
 echo -e "${YELLOW}Installing systemd services...${RESET}"
