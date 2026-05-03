@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=xKOR_3RR0R Boot
+Description=Cyberpunk boot animation
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/xkor
+ScriptFile=/usr/share/plymouth/themes/xkor/xkor.script

@@ -1,0 +1,10 @@
+[Unit]
+Description=xKOR_3RR0R UI
+After=graphical.target
+
+[Service]
+ExecStart=/opt/xkor_3rr0r/os/xorg/xkor-session.sh
+Restart=always
+
+[Install]
+WantedBy=graphical.target

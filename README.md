@@ -1,190 +1,164 @@
-# xKOR_3RR0R  
-### Cyberpunk System Dashboard OS  
-### Powered by Electron + Node.js + WebSockets + node-pty
+<pre>
+██████╗ ██╗  ██╗ ██████╗ ██████╗     ██████╗ ███████╗██████╗ ██████╗  ██████╗ ██████╗ 
+██╔══██╗██║  ██║██╔════╝ ██╔══██╗    ██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔═══██╗██╔══██╗
+██████╔╝███████║██║  ███╗██████╔╝    ██████╔╝█████╗  ██████╔╝██████╔╝██║   ██║██████╔╝
+██╔══██╗██╔══██║██║   ██║██╔══██╗    ██╔══██╗██╔══╝  ██╔══██╗██╔══██╗██║   ██║██╔══██╗
+██║  ██║██║  ██║╚██████╔╝██║  ██║    ██║  ██║███████╗██║  ██║██║  ██║╚██████╔╝██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
+</pre>
+
+# xKOR_3RR0R — Cyberpunk System UI / OS Mode
+
+xKOR_3RR0R je cyberpunkové systémové UI inspirované eDEX‑UI. Projekt může běžet jako běžná Electron aplikace nebo jako plnohodnotné systémové UI (**OS Mode**), které nahrazuje klasické Linux GUI. OS Mode obsahuje vlastní login screen, glitch animaci, vlastní Xorg session a systémové služby. Je určen pro čisté non‑GUI Linux systémy.
+
+> Cílem je vytvořit prostředí, které působí jako samostatný operační systém.
 
 ---
 
-## ⚡ Overview
+## Funkce
 
-**xKOR_3RR0R** is a fully‑featured cyberpunk system dashboard inspired by eDEX‑UI, rebuilt from scratch with:
-
-- 3 independent terminal sessions  
-- AI chat panel (F2)  
-- terminal‑based web browser  
-- realtime system monitoring  
-- file manager with context menu  
-- on‑screen keyboard  
-- rotating neon globe with threat zones  
-- full mouse + keyboard support  
-- fullscreen immersive UI  
-
-Runs on **Arch Linux** with a single command installation.
+- Fullscreen cyberpunk UI
+- Více terminálů
+- Systémové grafy
+- File manager
+- AI panel
+- Neonové CSS
+- OS Mode s vlastním login screenem
+- Glitch loading animace
+- Custom Xorg session
+- Systemd služby
+- Custom boot screen (Plymouth)
+- Kompatibilní s non‑GUI Linuxem
 
 ---
 
-## 🚀 Installation (Arch Linux)
+## Instalace (OS Mode)
 
-git clone https://github.com<yourname>xKOR_3RR0R
-cd xKOR_3RR0R
+> Doporučeno pro **Arch / Manjaro / EndeavourOS**.
+
+**1. Naklonování projektu:**
+
+```bash
+git clone https://github.com/krko2n/xKOR_3RR0R
+cd xKOR_3RR0R/os
+```
+
+**2. Instalace:**
+
+```bash
 sudo ./install.sh
+```
 
+Instalátor provede:
 
-This installs:
+- instalaci Node.js, npm, Electron, Xorg
+- instalaci Plymouth a nastavení boot screen
+- vytvoření systemd služby pro login screen
+- vytvoření Xorg session
+- zkopírování projektu do `/opt/xkor_3rr0r`
+- nastavení oprávnění
 
-- Node.js + npm  
-- Electron  
-- node-pty  
-- w3m  
-- all system libraries  
-- all npm dependencies  
-- builds the Electron app  
+**3. Restart systému.**
 
-No manual steps required.
-
----
-
-## ▶️ Running
-
-./run.sh
-
-
-This will:
-
-- start backend daemon (port 3001)  
-- launch Electron frontend  
-- show boot sequence  
-- load the full UI  
+Po restartu se zobrazí boot screen, login screen, glitch animace a následně xKOR_3RR0R UI.
 
 ---
 
-## 🧠 Features
+## Odinstalace
 
-### ✔ 3 TERMINALS  
-- ALT+1 / ALT+2 / ALT+3  
-- independent PTY sessions  
-- persistent  
-- real-time output  
+```bash
+cd xKOR_3RR0R/os
+sudo ./uninstall.sh
+```
 
-### ✔ AI PANEL (F2)  
-- animated messages  
-- loading indicator  
-- auto-scroll  
-- configurable AI endpoint  
-- backend proxy  
-
-### ✔ WEB TAB  
-- terminal-based browser (w3m)  
-- monochrome  
-- runs inside terminal panel  
-
-### ✔ FILE MANAGER  
-- click navigation  
-- open files  
-- rename  
-- delete  
-- copy/paste  
-- drag & drop  
-- backend FS API  
-
-### ✔ ON-SCREEN KEYBOARD  
-- full layout  
-- SHIFT / CTRL / ALT / CAPS  
-- physical key highlight  
-- sends real key events  
-
-### ✔ REALTIME GRAPHS  
-- CPU (200ms)  
-- RAM (200ms)  
-- NET (300ms)  
-- TEMP (1s)  
-- circular buffers  
-- neon canvas rendering  
-
-### ✔ ROTATING GLOBE  
-- 60 FPS  
-- neon outline  
-- pulsing threat zones  
-- Ukraine / Middle East / Taiwan  
-
-### ✔ BOOT SEQUENCE  
-- glitch logo  
-- scanline CRT effect  
-- progress bar  
-- sequential log output  
+Odinstalátor vypne systemd služby a smaže `/opt/xkor_3rr0r`.
 
 ---
 
-## 🏗 Architecture
+## Struktura projektu
 
+```
 xKOR_3RR0R/
-├── backend/        # Node.js daemon
-│   ├── system/     # CPU/RAM/NET/TEMP
-│   ├── fs/         # File manager API
-│   ├── ai/         # AI proxy
-│   └── terminal/   # node-pty sessions
+├── assets/
+│   ├── branding/
+│   ├── fonts/
+│   ├── globe/worldmap.json
+│   ├── icons/
+│   ├── images/
+│   └── sounds/
+│
+├── backend/
+│   ├── server.js
+│   ├── ai/proxy.js
+│   ├── fs/
+│   │   ├── delete.js
+│   │   ├── list.js
+│   │   ├── read.js
+│   │   ├── rename.js
+│   │   └── write.js
+│   ├── system/
+│   │   ├── cpu.js
+│   │   ├── net.js
+│   │   ├── ram.js
+│   │   └── temp.js
+│   └── terminal/pty.js
+│
 ├── src/
-│   ├── main.js     # Electron main process
-│   ├── preload.js  # Secure IPC bridge
-│   └── renderer/   # UI (HTML/CSS/JS)
-├── assets/         # Globe, fonts, images
-├── install.sh      # Auto-installer
-├── run.sh          # Launcher
-└── package.json
-
-
----
-
-## ⌨️ Keyboard Shortcuts
-
-| Shortcut | Action |
-|---------|--------|
-| ALT+1   | Terminal 1 |
-| ALT+2   | Terminal 2 |
-| ALT+3   | Terminal 3 |
-| F2      | Toggle AI panel |
-| ESC     | (future) exit fullscreen |
-| CTRL+C  | Kill process in terminal |
-
----
-
-## 🛠 Troubleshooting
-
-### ❗ Backend not starting  
-Check if port **3001** is free:
-
-sudo lsof -i :3001
-
-
-Kill process if needed.
-
----
-
-### ❗ Electron fails to launch  
-Install missing libraries:
-
-sudo pacman -S gtk3 nss libxss libxkbfile
-
+│   ├── main.js
+│   ├── preload.js
+│   └── renderer/
+│       ├── index.html
+│       ├── css/*.css
+│       └── js/*.js
+│
+├── config/
+│   └── ai-endpoint.json
+│
+├── os/
+│   ├── login/
+│   │   ├── login.js
+│   │   ├── pam.js
+│   │   ├── package.json
+│   │   └── start-login.sh
+│   ├── loading/loading.sh
+│   ├── xorg/
+│   │   ├── .xinitrc
+│   │   └── xkor-session.sh
+│   ├── systemd/
+│   │   ├── xkor-login.service
+│   │   └── xkor-ui.service
+│   ├── plymouth/
+│   │   ├── xkor.plymouth
+│   │   └── xkor.script
+│   ├── install.sh
+│   └── uninstall.sh
+│
+├── install.sh
+├── run.sh
+├── package.json
+└── README.md
+```
 
 ---
 
-### ❗ AI panel says “endpoint unreachable”  
-Edit:
+## Vývoj
 
-config/ai-endpoint.json
+**Spuštění v dev režimu:**
 
+```bash
+npm install
+npm start
+```
 
-Set your local LLM endpoint.
+**Build:**
 
----
-
-## 📜 License  
-MIT License.
-
----
-
-## 👤 Author  
-Matěj (xKOR_3RR0R Architect)
+```bash
+npm run build
+```
 
 ---
 
-## 💀 Welcome to the system.  
+## Licence
+
+MIT License  
+© 2026 krko2n

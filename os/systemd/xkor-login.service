@@ -1,0 +1,15 @@
+[Unit]
+Description=xKOR_3RR0R Login Screen
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/xkor_3rr0r/os/login/start-login.sh
+StandardInput=tty
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
