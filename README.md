@@ -114,7 +114,7 @@ This will stop all systemd services and delete `/opt/xkor_3rr0r`.
 xKOR_3RR0R/                          root
 │
 │   .gitattributes                   git line-ending rules
-│   package.json                     [1] app manifest & scripts       ← DUPLICATE
+│   package.json                     [1] app manifest & scripts       
 │   README.md                        this file
 │   run.sh                           quick launch script
 │
