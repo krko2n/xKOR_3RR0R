@@ -1,4 +1,5 @@
 <div align="center">
+
 <pre>
 ██╗  ██╗██╗  ██╗ ██████╗ ██████╗      ██████╗ ██████╗ ██████╗  ██████╗ ██████╗ 
 ╚██╗██╔╝██║  ██║██╔═══██╗██╔══██╗     ╚════██╗██╔══██╗██╔══██╗██╔═══██╗██╔══██╗
@@ -7,77 +8,107 @@
 ██╔╝ ██╗██║  ██║╚██████╔╝██║  ██║     ██████╔╝██║  ██║██║  ██║╚██████╔╝██║  ██║
 ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝     ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
 </pre>
+
+### Cyberpunk System UI / OS Mode
+
+![License](https://img.shields.io/badge/license-MIT-cyan?style=flat-square)
+![Platform](https://img.shields.io/badge/platform-Linux-green?style=flat-square&logo=linux&logoColor=white)
+![Electron](https://img.shields.io/badge/built%20with-Electron-2B2E3A?style=flat-square&logo=electron&logoColor=9FEAF9)
+![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)
+
+*A full cyberpunk OS UI for Linux — inspired by eDEX-UI.*
+
 </div>
 
-# xKOR_3RR0R — Cyberpunk System UI / OS Mode
+---
 
-xKOR_3RR0R je cyberpunkové systémové UI inspirované eDEX‑UI. Projekt může běžet jako běžná Electron aplikace nebo jako plnohodnotné systémové UI (**OS Mode**), které nahrazuje klasické Linux GUI. OS Mode obsahuje vlastní login screen, glitch animaci, vlastní Xorg session a systémové služby. Je určen pro čisté non‑GUI Linux systémy.
+## Quick Start
 
-> Cílem je vytvořit prostředí, které působí jako samostatný operační systém.
+```bash
+git clone https://github.com/krko2n/xKOR_3RR0R
+cd xKOR_3RR0R/os
+sudo ./install.sh
+```
+
+After reboot, the boot screen, login screen, glitch animation, and xKOR_3RR0R UI will launch automatically.
 
 ---
 
-## Funkce
+## About
 
-- Fullscreen cyberpunk UI
-- Více terminálů
-- Systémové grafy
-- File manager
-- AI panel
-- Neonové CSS
-- OS Mode s vlastním login screenem
-- Glitch loading animace
-- Custom Xorg session
-- Systemd služby
-- Custom boot screen (Plymouth)
-- Kompatibilní s non‑GUI Linuxem
+xKOR_3RR0R can run as a regular Electron app or as a full system UI (**OS Mode**) that completely replaces the standard Linux desktop. OS Mode includes a custom login screen, glitch animation, a custom Xorg session, and systemd services. It is designed for clean, non-GUI Linux systems.
+
+> The goal is to create an environment that feels like a standalone operating system.
 
 ---
 
-## Instalace (OS Mode)
+## Features
 
-> Doporučeno pro **Arch / Manjaro / EndeavourOS**.
+| Feature | Description |
+|---|---|
+| Fullscreen UI | Immersive cyberpunk interface that takes over the entire display |
+| Multiple terminals | Run several terminal instances simultaneously |
+| System graphs | Real-time CPU, RAM, network, and temperature monitoring |
+| File manager | Browse and manage files from within the UI |
+| AI panel | Built-in AI integration |
+| Neon CSS | Custom neon-styled design throughout |
+| OS Mode | Custom login screen that replaces the standard display manager |
+| Glitch animation | Cyberpunk-style loading sequence on startup |
+| Custom Xorg session | Dedicated X session for the UI |
+| Systemd services | Runs as a proper system service |
+| Plymouth boot screen | Custom boot animation |
+| Non-GUI compatible | Works on headless Linux installs with no prior desktop environment |
 
-**1. Naklonování projektu:**
+---
+
+## Installation (OS Mode)
+
+> Recommended for: **Arch · Manjaro · EndeavourOS**
+
+**1. Clone the project**
 
 ```bash
 git clone https://github.com/krko2n/xKOR_3RR0R
 cd xKOR_3RR0R/os
 ```
 
-**2. Instalace:**
+**2. Run the installer**
 
 ```bash
 sudo ./install.sh
 ```
 
-Instalátor provede:
+<details>
+<summary>What the installer does</summary>
 
-- instalaci Node.js, npm, Electron, Xorg
-- instalaci Plymouth a nastavení boot screen
-- vytvoření systemd služby pro login screen
-- vytvoření Xorg session
-- zkopírování projektu do `/opt/xkor_3rr0r`
-- nastavení oprávnění
+- Installs Node.js, npm, Electron, and Xorg
+- Installs Plymouth and configures the boot screen
+- Creates a systemd service for the login screen
+- Creates a custom Xorg session
+- Copies the project to `/opt/xkor_3rr0r`
+- Sets correct file permissions
 
-**3. Restart systému.**
+</details>
 
-Po restartu se zobrazí boot screen, login screen, glitch animace a následně xKOR_3RR0R UI.
+**3. Reboot** — xKOR_3RR0R will take over from there.
 
 ---
 
-## Odinstalace
+## Uninstall
 
 ```bash
 cd xKOR_3RR0R/os
 sudo ./uninstall.sh
 ```
 
-Odinstalátor vypne systemd služby a smaže `/opt/xkor_3rr0r`.
+This will stop all systemd services and delete `/opt/xkor_3rr0r`.
 
 ---
 
-## Struktura projektu
+## Project Structure
+
+<details>
+<summary>Show structure</summary>
 
 ```
 xKOR_3RR0R/
@@ -141,26 +172,38 @@ xKOR_3RR0R/
 └── README.md
 ```
 
+</details>
+
 ---
 
-## Vývoj
-
-**Spuštění v dev režimu:**
+## Development
 
 ```bash
+# Run in dev mode
 npm install
 npm start
-```
 
-**Build:**
-
-```bash
+# Build
 npm run build
 ```
 
 ---
 
-## Licence
+## License
 
-MIT License  
-© 2026 krko2n
+This project is licensed under the **MIT License** — one of the most permissive open source licenses available. In plain terms, this means:
+
+- You are free to **use** this project for any purpose, including commercially
+- You are free to **modify** the source code however you like
+- You are free to **distribute** copies of the original or your modified version
+- You are free to **include** it in your own projects, open or closed source
+
+The only requirement is that you **keep the original copyright notice** (`© 2026 krko2n`) in any copy or substantial portion of the software. That's it — no royalties, no restrictions, no asking for permission.
+
+---
+
+<div align="center">
+
+MIT License · © 2026 [krko2n](https://github.com/krko2n)
+
+</div>
