@@ -1,0 +1,42 @@
+#filemanager {
+    padding: 10px;
+    overflow-y: auto;
+    background: #0d0d0d;
+    color: #00ff9f;
+    font-size: 14px;
+    user-select: none;
+}
+
+.fm-item {
+    padding: 6px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #003f2f;
+}
+
+.fm-item:hover {
+    background: #00ff9f;
+    color: #000;
+}
+
+.fm-item.selected {
+    background: #00d4ff;
+    color: #000;
+}
+
+#fm-context {
+    position: absolute;
+    background: #111;
+    border: 2px solid #00ff9f;
+    display: none;
+    z-index: 9999;
+}
+
+#fm-context div {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+#fm-context div:hover {
+    background: #00ff9f;
+    color: #000;
+}

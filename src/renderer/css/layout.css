@@ -1,0 +1,32 @@
+#layout {
+    display: flex;
+    height: calc(100vh - 40px - 200px);
+}
+
+#left-panel {
+    width: 300px;
+    border-right: 2px solid #00ff9f;
+    display: flex;
+    flex-direction: column;
+}
+
+#main-panel {
+    flex: 1;
+    position: relative;
+}
+
+#bottom {
+    height: 200px;
+    display: flex;
+    border-top: 2px solid #00ff9f;
+}
+
+#filemanager {
+    width: 50%;
+    border-right: 2px solid #00ff9f;
+    overflow-y: auto;
+}
+
+#keyboard {
+    width: 50%;
+}
