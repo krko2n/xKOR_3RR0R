@@ -1,5 +1,20 @@
 #!/bin/bash
 
+### AUTO-FIX PERMISSIONS & LINE ENDINGS ###
+echo "Fixing script permissions and line endings..."
+
+# Fix CRLF → LF
+find .. -type f -name "*.sh" -exec sed -i 's/\r$//' {} \;
+
+# Remove UTF-8 BOM
+find .. -type f -name "*.sh" -exec sed -i '1s/^\xEF\xBB\xBF//' {} \;
+
+# Make all scripts executable
+find .. -type f -name "*.sh" -exec chmod +x {} \;
+
+echo "Auto-fix complete."
+
+
 ### ============================================================
 ### xKOR_3RR0R OS MODE INSTALLER — AUTO FIX VERSION
 ### ============================================================
