@@ -1,12 +1,3 @@
-/* ============================================================
-   TERMINAL SYSTEM — xKOR_3RR0R
-   - 3 independent terminals
-   - ALT+1 / ALT+2 / ALT+3 switching
-   - persistent PTY sessions
-   - real-time output streaming
-   - input from keyboard + on-screen keyboard
-   ============================================================ */
-
 let terminalElements = {
     term1: document.getElementById("term1"),
     term2: document.getElementById("term2"),
@@ -21,10 +12,7 @@ let terminalSessions = {
 
 let activeTerminal = "term1";
 
-/* ============================================================
-   CREATE TERMINAL SESSIONS
-   ============================================================ */
-
+// CREATE TERMINAL SESSION
 function createTerminalSession(name) {
     window.xkor.send({
         type: "terminal_create",
@@ -32,20 +20,15 @@ function createTerminalSession(name) {
     });
 }
 
-/* ============================================================
-   HANDLE BACKEND EVENTS
-   ============================================================ */
-
+// HANDLE BACKEND EVENTS
 window.xkor.onBackend((data) => {
 
-    // Backend created a new PTY session
     if (data.type === "terminal_created") {
         const panel = data.panel;
         terminalSessions[panel] = data.id;
         console.log(`[TERM] ${panel} session = ${data.id}`);
     }
 
-    // Terminal output
     if (data.type === "terminal_output") {
         const panel = Object.keys(terminalSessions).find(
             key => terminalSessions[key] === data.id
@@ -54,15 +37,12 @@ window.xkor.onBackend((data) => {
         if (!panel) return;
 
         const el = terminalElements[panel];
-        el.innerText += data.data;
+        el.textContent += data.data;
         el.scrollTop = el.scrollHeight;
     }
 });
 
-/* ============================================================
-   SEND INPUT TO ACTIVE TERMINAL
-   ============================================================ */
-
+// SEND INPUT
 function sendToTerminal(text) {
     const sessionId = terminalSessions[activeTerminal];
     if (!sessionId) return;
@@ -74,13 +54,8 @@ function sendToTerminal(text) {
     });
 }
 
-/* ============================================================
-   KEYBOARD INPUT (PHYSICAL)
-   ============================================================ */
-
+// KEYBOARD INPUT
 document.addEventListener("keydown", (e) => {
-
-    // Terminal switching
     if (e.altKey) {
         if (e.key === "1") switchTerminal("term1");
         if (e.key === "2") switchTerminal("term2");
@@ -88,22 +63,14 @@ document.addEventListener("keydown", (e) => {
         return;
     }
 
-    // Ignore if AI panel is focused
     if (document.activeElement.id === "ai-input") return;
 
-    // Send key to terminal
-    if (e.key.length === 1) {
-        sendToTerminal(e.key);
-    }
-
+    if (e.key.length === 1) sendToTerminal(e.key);
     if (e.key === "Enter") sendToTerminal("\r");
     if (e.key === "Backspace") sendToTerminal("\x7f");
 });
 
-/* ============================================================
-   SWITCH TERMINAL
-   ============================================================ */
-
+// SWITCH TERMINAL
 function switchTerminal(name) {
     activeTerminal = name;
 
@@ -114,18 +81,11 @@ function switchTerminal(name) {
     document.querySelector(`[data-tab="${name}"]`).classList.add("active");
 }
 
-/* ============================================================
-   INITIALIZE ALL 3 TERMINALS
-   ============================================================ */
-
+// INIT
 createTerminalSession("term1");
 createTerminalSession("term2");
 createTerminalSession("term3");
 
 switchTerminal("term1");
-
-/* ============================================================
-   EXPORT FOR KEYBOARD.JS
-   ============================================================ */
 
 window.sendToTerminal = sendToTerminal;

@@ -1,2 +1,20 @@
+# Shell skripty – vždy LF
 *.sh text eol=lf
-*.service text eol=lf
+
+# JS / JSON / HTML / CSS – taky LF
+*.js text eol=lf
+*.json text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+
+# Obrázky a binárky
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.wav binary
+*.mp3 binary
+*.ogg binary
