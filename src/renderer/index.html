@@ -5,7 +5,11 @@
     <title>xKOR_3RR0R</title>
 
     <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self'; connect-src ws://localhost:*; script-src 'self'; style-src 'self' 'unsafe-inline';">
+          content="default-src 'self'; connect-src ws://localhost:* http://localhost:*; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/boot.css">
     <link rel="stylesheet" href="css/theme.css">
@@ -16,9 +20,33 @@
     <link rel="stylesheet" href="css/keyboard.css">
     <link rel="stylesheet" href="css/graphs.css">
     <link rel="stylesheet" href="css/globe.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 
 <body>
+
+<!-- ========================= -->
+<!-- LOGIN SCREEN              -->
+<!-- ========================= -->
+<div id="login-screen">
+    <div id="login-noise"></div>
+    <div id="login-box">
+        <div id="login-logo">xKOR_3RR0R</div>
+        <div id="login-subtitle">SECURE TERMINAL INTERFACE</div>
+        <div id="login-version">v1.0.0 &nbsp;·&nbsp; AUTHENTICATED ACCESS ONLY</div>
+        <div id="login-divider"></div>
+        <div class="login-field">
+            <label>USER IDENTIFIER</label>
+            <input type="text" id="login-user" autocomplete="off" spellcheck="false" placeholder="——————">
+        </div>
+        <div class="login-field">
+            <label>ACCESS KEY</label>
+            <input type="password" id="login-pass" autocomplete="off" placeholder="——————">
+        </div>
+        <button id="login-btn">[ AUTHENTICATE ]</button>
+        <div id="login-status"></div>
+    </div>
+</div>
 
 <!-- ========================= -->
 <!-- BOOT SCREEN -->
@@ -82,6 +110,7 @@
 
 </div>
 
+<script src="js/login.js"></script>
 <script src="js/boot.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/tabs.js"></script>
