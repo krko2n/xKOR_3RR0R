@@ -1,3 +1,5 @@
+(function xkorAuthGuard(){var overlay=document.getElementById('login-overlay');if(!overlay||overlay.classList.contains('hidden'))return;var _st=window.setTimeout,_si=window.setInterval,q=[];window.setTimeout=function(f,ms){q.push({f:f,ms:ms,t:'T'});};window.setInterval=function(f,ms){q.push({f:f,ms:ms,t:'I'});};window.addEventListener('xkor-auth-ok',function(){window.setTimeout=_st;window.setInterval=_si;for(var i=0;i<q.length;i++){if(q[i].t==='T')_st(q[i].f,q[i].ms);else _si(q[i].f,q[i].ms);}},{once:true});})();
+
 /* ============================================================
    BOOT SEQUENCE — xKOR_3RR0R
    - Glitch logo

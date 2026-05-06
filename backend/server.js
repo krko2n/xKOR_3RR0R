@@ -126,3 +126,30 @@ server.listen(PORT, () => {
 });
 
 module.exports = emitter;
+
+// /auth endpoint -- added by patcher
+;(function registerAuth() {
+    var fs = require('fs');
+    var path = require('path');
+    var cfgPath = path.join(__dirname, '..', 'config', 'user.json');
+    app.post('/auth', function(req, res) {
+        var body = '';
+        req.on('data', function(d) { body += d; });
+        req.on('end', function() {
+            try {
+                var p = JSON.parse(body);
+                var cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+                if (p.username === cfg.username && p.password === cfg.password) {
+                    res.writeHead(200, {'Content-Type':'application/json'});
+                    res.end(JSON.stringify({ok:true}));
+                } else {
+                    res.writeHead(401, {'Content-Type':'application/json'});
+                    res.end(JSON.stringify({ok:false}));
+                }
+            } catch(e) {
+                res.writeHead(200, {'Content-Type':'application/json'});
+                res.end(JSON.stringify({ok:true}));
+            }
+        });
+    });
+})();

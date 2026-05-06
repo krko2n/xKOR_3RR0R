@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 const config = require("../../config/ai-endpoint.json");
 
 module.exports = async function (prompt) {

@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <title>xKOR_3RR0R</title>
 
-    <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self'; connect-src ws://localhost:* http://localhost:*; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:* ws://localhost:*; img-src 'self' data: blob:;">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,6 +23,7 @@
 </head>
 
 <body>
+  <div id="login-overlay"><div class="login-box"><div class="login-title">xKOR_3RR0R</div><div class="login-subtitle">SYSTEM ACCESS REQUIRED</div><div class="login-field"><label for="login-user">USERNAME</label><input type="text" id="login-user" autocomplete="off"></div><div class="login-field"><label for="login-pass">PASSWORD</label><input type="password" id="login-pass"></div><button id="login-btn">AUTHENTICATE</button><div id="login-error"></div></div></div>
 
 <!-- ========================= -->
 <!-- LOGIN SCREEN              -->
