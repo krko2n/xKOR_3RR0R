@@ -1,47 +1,53 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 STATE_FILE="$HOME/.xkor_stage"
 BASH_PROFILE="$HOME/.bash_profile"
-CURRENT_DIR=C:\Users\admin\Downloads\xKOR_3RR0R_FIX
+# ZĂ­skĂˇnĂ­ absolutnĂ­ cesty v rĂˇmci Linuxu, ne Windows!
+CURRENT_DIR=$(pwd)
 
 # --- FĂZE 2: PO RESTARTU ---
 if [ -f "$STATE_FILE" ]; then
-    echo "--- FĂZE 2: DokonÄŤovĂˇnĂ­ instalace po restartu ---"
+    echo "--- FĂZE 2: DokonÄŤovĂˇnĂ­ ÄŤistĂ© instalace ---"
     
-    # OdstranÄ›nĂ­ automatickĂ©ho spouĹˇtÄ›nĂ­ z .bash_profile
-    sed -i "\|\/run.sh|d" "$BASH_PROFILE"
+    # OdstranÄ›nĂ­ se z .bash_profile
+    sed -i "|$CURRENT_DIR/run.sh|d" "$BASH_PROFILE"
     rm "$STATE_FILE"
 
-    echo "Instaluji a rebuilduji Node.js moduly..."
+    echo "Rebuilduji moduly..."
     npm install
     ./node_modules/.bin/electron-rebuild -f -u node-pty
 
-    echo "VĹˇe je pĹ™ipraveno! SpouĹˇtĂ­m aplikaci..."
+    echo "VĹˇe ÄŤistĂ© a pĹ™ipravenĂ©! SpouĹˇtĂ­m..."
     echo "exec ./node_modules/.bin/electron . --no-sandbox" > .xinitrc_temp
     startx ./ .xinitrc_temp -- :0 vt7
     rm .xinitrc_temp
     exit
 
-# --- FĂZE 1: PRVNĂŤ SPUĹ TÄšNĂŤ ---
+# --- FĂZE 1: PRVNĂŤ SPUĹ TÄšNĂŤ A ÄŚIĹ TÄšNĂŤ ---
 else
-    echo "--- FĂZE 1: Instalace systĂ©movĂ˝ch komponent ---"
+    echo "--- FĂZE 1: TotĂˇlnĂ­ oÄŤista a instalace ---"
     
-    # 1. Instalace Xorg a ovladaÄŤĹŻ
+    # SmazĂˇnĂ­ zbytkĹŻ z minula
+    echo "MaĹľu starĂ© moduly a doÄŤasnĂ© soubory..."
+    rm -rf node_modules package-lock.json .xinitrc_temp
+    
+    # VyÄŤiĹˇtÄ›nĂ­ .bash_profile od starĂ˝ch pokusĹŻ
+    sed -i "/run.sh/d" "$BASH_PROFILE"
+
+    # Instalace systĂ©movĂ˝ch vÄ›cĂ­
     sudo pacman -S --needed --noconfirm xorg-server xorg-xinit xorg-server-common xf86-video-fbdev xf86-video-vesa
 
-    # 2. NastavenĂ­ skupin
-    echo "Upravuji prĂˇva uĹľivatele..."
+    # NastavenĂ­ skupin
     sudo usermod -aG video,tty $USER
 
-    # 3. PĹ™Ă­prava na restart - zĂˇpis do .bash_profile
-    echo "Nastavuji automatickĂ© pokraÄŤovĂˇnĂ­ po pĹ™ihlĂˇĹˇenĂ­..."
+    # PĹ™Ă­prava na restart
     touch "$STATE_FILE"
-    echo "cd $CURRENT_DIR && ./run.sh" >> "$BASH_PROFILE"
+    # ZapĂ­Ĺˇeme cestu tak, aby ji bash sprĂˇvnÄ› pĹ™eÄŤetl
+    echo "cd \"$CURRENT_DIR\" && ./run.sh" >> "$BASH_PROFILE"
 
     echo "------------------------------------------------------------"
-    echo "SYSTĂ‰M SE ZA 5 SEKUND RESTARTUJE."
-    echo "Po restartu se staÄŤĂ­ pĹ™ihlĂˇsit jako 'admin' a skript"
-    echo "automaticky dokonÄŤĂ­ zbytek prĂˇce."
+    echo "ÄŚIĹ TÄšNĂŤ HOTOVO. RESTART ZA 5 SEKUND."
+    echo "Po restartu se jen pĹ™ihlas."
     echo "------------------------------------------------------------"
     
     sleep 5
