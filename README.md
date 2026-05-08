@@ -5,12 +5,12 @@
 <div align="center">
 
 <pre>
-Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”  Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”  Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€” Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€” Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”      Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€” Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€” Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”  Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€” Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€” 
-Ă˘â€˘ĹˇĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ĹĄĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€  Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”     Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”
- Ă˘â€˘ĹˇĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ĹĄ Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€   Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ĹĄ      Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ĹĄĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ĹĄĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ĹĄĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€   Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ĹĄ
- Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€” Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€   Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”      Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€   Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”
-Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ĹĄ Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€”Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€  Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€Ă˘â€˘ĹˇĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ĹĄĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€  Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€     Ă˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ĹĄĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€  Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€  Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€Ă˘â€˘ĹˇĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€ťĂ˘â€˘ĹĄĂ˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€  Ă˘â€“ÂĂ˘â€“ÂĂ˘â€˘â€
-Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄ  Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄĂ˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄ  Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄ Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ĹĄ Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄ  Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄ     Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ĹĄ Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄ  Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄĂ˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄ  Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄ Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ÂĂ˘â€˘ĹĄ Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄ  Ă˘â€˘ĹˇĂ˘â€˘ÂĂ˘â€˘ĹĄ
+██╗  ██╗██╗  ██╗ ██████╗ ██████╗      ██████╗ ██████╗ ██████╗  ██████╗ ██████╗ 
+╚██╗██╔╝██║  ██║██╔═══██╗██╔══██╗     ╚════██╗██╔══██╗██╔══██╗██╔═══██╗██╔══██╗
+ ╚███╔╝ ███████║██║   ██║██████╔╝      █████╔╝██████╔╝██████╔╝██║   ██║██████╔╝
+ ██╔██╗ ██╔══██║██║   ██║██╔══██╗      ╚═══██╗██╔══██╗██╔══██╗██║   ██║██╔══██╗
+██╔╝ ██╗██║  ██║╚██████╔╝██║  ██║     ██████╔╝██║  ██║██║  ██║╚██████╔╝██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝     ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
 </pre>
 
 ### Cyberpunk System UI / OS Mode
@@ -20,7 +20,7 @@
 ![Electron](https://img.shields.io/badge/built%20with-Electron-2B2E3A?style=flat-square&logo=electron&logoColor=9FEAF9)
 ![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)
 
-*A full cyberpunk OS UI for Linux Ă˘â‚¬â€ť inspired by eDEX-UI.*
+*A full cyberpunk OS UI for Linux — inspired by eDEX-UI.*
 
 </div>
 
@@ -67,7 +67,7 @@ xKOR_3RR0R can run as a regular Electron app or as a full system UI (**OS Mode**
 
 ## Installation (OS Mode)
 
-> Recommended for: **Arch Ă‚Â· Manjaro Ă‚Â· EndeavourOS**
+> Recommended for: **Arch · Manjaro · EndeavourOS**
 
 **1. Clone the project**
 
@@ -94,7 +94,7 @@ sudo ./install.sh
 
 </details>
 
-**3. Reboot** Ă˘â‚¬â€ť xKOR_3RR0R will take over from there.
+**3. Reboot** — xKOR_3RR0R will take over from there.
 
 ---
 
@@ -116,94 +116,94 @@ This will stop all systemd services and delete `/opt/xkor_3rr0r`.
 
 ```
 xKOR_3RR0R/                          root
-Ă˘â€ťâ€š
-Ă˘â€ťâ€š   .gitattributes                   git line-ending rules
-Ă˘â€ťâ€š   package.json                     [1] app manifest & scripts       
-Ă˘â€ťâ€š   README.md                        this file
-Ă˘â€ťâ€š   run.sh                           quick launch script
-Ă˘â€ťâ€š
-Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ assets/                          static resources
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ branding/                    logos, wordmarks
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ fonts/                       custom typefaces
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ globe/
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       worldmap.json            globe geometry data
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ icons/                       UI icons
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ images/                      screenshots, backgrounds
-Ă˘â€ťâ€š   Ă˘â€ťâ€ťĂ˘â€ťâ‚¬Ă˘â€ťâ‚¬ sounds/                      audio effects
-Ă˘â€ťâ€š
-Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ backend/                         Node.js backend (runs in main process)
-Ă˘â€ťâ€š   Ă˘â€ťâ€š   server.js                    Express / IPC server entry point
-Ă˘â€ťâ€š   Ă˘â€ťâ€š
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ ai/
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       proxy.js                 forwards requests to AI endpoint
-Ă˘â€ťâ€š   Ă˘â€ťâ€š
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ fs/                          file system API
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       delete.js
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       list.js
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       read.js
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       rename.js
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       write.js
-Ă˘â€ťâ€š   Ă˘â€ťâ€š
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ system/                      hardware monitoring
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       cpu.js
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       net.js
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       ram.js
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       temp.js
-Ă˘â€ťâ€š   Ă˘â€ťâ€š
-Ă˘â€ťâ€š   Ă˘â€ťâ€ťĂ˘â€ťâ‚¬Ă˘â€ťâ‚¬ terminal/
-Ă˘â€ťâ€š           pty.js                   pseudo-terminal handler (node-pty)
-Ă˘â€ťâ€š
-Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ config/
-Ă˘â€ťâ€š       ai-endpoint.json             AI backend URL & auth config
-Ă˘â€ťâ€š
-Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ os/                              OS Mode Ă˘â‚¬â€ť replaces the Linux desktop
-Ă˘â€ťâ€š   Ă˘â€ťâ€š   clean-arch.sh               wipe leftover config on Arch
-Ă˘â€ťâ€š   Ă˘â€ťâ€š   install.sh                  full OS Mode installer
-Ă˘â€ťâ€š   Ă˘â€ťâ€š   uninstall.sh                removes all OS Mode components
-Ă˘â€ťâ€š   Ă˘â€ťâ€š
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ loading/
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       loading.sh              glitch animation sequence
-Ă˘â€ťâ€š   Ă˘â€ťâ€š
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ login/                      custom login screen (separate Node app)
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       login.js                login UI logic
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       package.json            [2] login app manifest              Ă˘â€ Â DUPLICATE
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       pam.js                  PAM authentication bridge
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       start-login.sh          launches the login screen
-Ă˘â€ťâ€š   Ă˘â€ťâ€š
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ plymount/                   boot screen (Plymouth theme)
-Ă˘â€ťâ€š   Ă˘â€ťâ€š   Ă˘â€ťâ€š   plymount-theme.sh       installs the Plymouth theme
-Ă˘â€ťâ€š   Ă˘â€ťâ€š   Ă˘â€ťâ€š
-Ă˘â€ťâ€š   Ă˘â€ťâ€š   Ă˘â€ťâ€ťĂ˘â€ťâ‚¬Ă˘â€ťâ‚¬ xkor/
-Ă˘â€ťâ€š   Ă˘â€ťâ€š           xkor.plymouth       theme descriptor
-Ă˘â€ťâ€š   Ă˘â€ťâ€š           xkor.script         boot animation script
-Ă˘â€ťâ€š   Ă˘â€ťâ€š
-Ă˘â€ťâ€š   Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ systemd/                    system services
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       xkor-login.service      starts the login screen at boot
-Ă˘â€ťâ€š   Ă˘â€ťâ€š       xkor-ui.service         starts the main UI after login
-Ă˘â€ťâ€š   Ă˘â€ťâ€š
-Ă˘â€ťâ€š   Ă˘â€ťâ€ťĂ˘â€ťâ‚¬Ă˘â€ťâ‚¬ xorg/                       X display server config
-Ă˘â€ťâ€š           .xinitrc                X startup commands
-Ă˘â€ťâ€š           xkor-session.sh         launches Electron inside X
-Ă˘â€ťâ€š
-Ă˘â€ťâ€ťĂ˘â€ťâ‚¬Ă˘â€ťâ‚¬ src/                            Electron renderer (frontend)
-    Ă˘â€ťâ€š   main.js                     Electron main process entry
-    Ă˘â€ťâ€š   preload.js                  context bridge (main Ă˘â€ â€ť renderer)
-    Ă˘â€ťâ€š
-    Ă˘â€ťâ€ťĂ˘â€ťâ‚¬Ă˘â€ťâ‚¬ renderer/                   what the user sees
-        Ă˘â€ťâ€š   index.html              root HTML shell
-        Ă˘â€ťâ€š
-        Ă˘â€ťĹ›Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ css/                    styling
-        Ă˘â€ťâ€š       ai.css
-        Ă˘â€ťâ€š       boot.css
-        Ă˘â€ťâ€š       filemanager.css
-        Ă˘â€ťâ€š       globe.css
-        Ă˘â€ťâ€š       graphs.css
-        Ă˘â€ťâ€š       keyboard.css
-        Ă˘â€ťâ€š       layout.css
-        Ă˘â€ťâ€š       terminal.css
-        Ă˘â€ťâ€š       theme.css           global neon theme variables
-        Ă˘â€ťâ€š
-        Ă˘â€ťâ€ťĂ˘â€ťâ‚¬Ă˘â€ťâ‚¬ js/                     UI modules
+│
+│   .gitattributes                   git line-ending rules
+│   package.json                     [1] app manifest & scripts       
+│   README.md                        this file
+│   run.sh                           quick launch script
+│
+├── assets/                          static resources
+│   ├── branding/                    logos, wordmarks
+│   ├── fonts/                       custom typefaces
+│   ├── globe/
+│   │       worldmap.json            globe geometry data
+│   ├── icons/                       UI icons
+│   ├── images/                      screenshots, backgrounds
+│   └── sounds/                      audio effects
+│
+├── backend/                         Node.js backend (runs in main process)
+│   │   server.js                    Express / IPC server entry point
+│   │
+│   ├── ai/
+│   │       proxy.js                 forwards requests to AI endpoint
+│   │
+│   ├── fs/                          file system API
+│   │       delete.js
+│   │       list.js
+│   │       read.js
+│   │       rename.js
+│   │       write.js
+│   │
+│   ├── system/                      hardware monitoring
+│   │       cpu.js
+│   │       net.js
+│   │       ram.js
+│   │       temp.js
+│   │
+│   └── terminal/
+│           pty.js                   pseudo-terminal handler (node-pty)
+│
+├── config/
+│       ai-endpoint.json             AI backend URL & auth config
+│
+├── os/                              OS Mode — replaces the Linux desktop
+│   │   clean-arch.sh               wipe leftover config on Arch
+│   │   install.sh                  full OS Mode installer
+│   │   uninstall.sh                removes all OS Mode components
+│   │
+│   ├── loading/
+│   │       loading.sh              glitch animation sequence
+│   │
+│   ├── login/                      custom login screen (separate Node app)
+│   │       login.js                login UI logic
+│   │       package.json            [2] login app manifest              ← DUPLICATE
+│   │       pam.js                  PAM authentication bridge
+│   │       start-login.sh          launches the login screen
+│   │
+│   ├── plymount/                   boot screen (Plymouth theme)
+│   │   │   plymount-theme.sh       installs the Plymouth theme
+│   │   │
+│   │   └── xkor/
+│   │           xkor.plymouth       theme descriptor
+│   │           xkor.script         boot animation script
+│   │
+│   ├── systemd/                    system services
+│   │       xkor-login.service      starts the login screen at boot
+│   │       xkor-ui.service         starts the main UI after login
+│   │
+│   └── xorg/                       X display server config
+│           .xinitrc                X startup commands
+│           xkor-session.sh         launches Electron inside X
+│
+└── src/                            Electron renderer (frontend)
+    │   main.js                     Electron main process entry
+    │   preload.js                  context bridge (main ↔ renderer)
+    │
+    └── renderer/                   what the user sees
+        │   index.html              root HTML shell
+        │
+        ├── css/                    styling
+        │       ai.css
+        │       boot.css
+        │       filemanager.css
+        │       globe.css
+        │       graphs.css
+        │       keyboard.css
+        │       layout.css
+        │       terminal.css
+        │       theme.css           global neon theme variables
+        │
+        └── js/                     UI modules
                 ai.js
                 boot.js
                 filemanager.js
@@ -234,20 +234,20 @@ npm run build
 
 ## License
 
-This project is licensed under the **MIT License** Ă˘â‚¬â€ť one of the most permissive open source licenses available. In plain terms, this means:
+This project is licensed under the **MIT License** — one of the most permissive open source licenses available. In plain terms, this means:
 
 - You are free to **use** this project for any purpose, including commercially
 - You are free to **modify** the source code however you like
 - You are free to **distribute** copies of the original or your modified version
 - You are free to **include** it in your own projects, open or closed source
 
-The only requirement is that you **keep the original copyright notice** (`Ă‚Â© 2026 krko2n`) in any copy or substantial portion of the software. That's it Ă˘â‚¬â€ť no royalties, no restrictions, no asking for permission.
+The only requirement is that you **keep the original copyright notice** (`© 2026 krko2n`) in any copy or substantial portion of the software. That's it — no royalties, no restrictions, no asking for permission.
 
 ---
 
 <div align="center">
 
-MIT License Ă‚Â· Ă‚Â© 2026 [krko2n](https://github.com/krko2n)
+MIT License · © 2026 [krko2n](https://github.com/krko2n)
 
 </div>
 
