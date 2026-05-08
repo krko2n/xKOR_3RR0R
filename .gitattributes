@@ -18,3 +18,5 @@
 *.wav binary
 *.mp3 binary
 *.ogg binary
+
+run.sh text eol=lf

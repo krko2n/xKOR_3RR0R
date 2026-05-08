@@ -1,20 +1,27 @@
 #!/bin/bash
+# xKOR_3RR0R - Quick Launcher
+# Usage: bash run.sh [--dev]
+
 set -e
 
-echo "=== Inicializace prostredi xKOR_3RR0R ==="
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 
-# 1. Vrstva prostredi: Kontrola a instalace spravce balicku 'uv'
-if ! command -v uv &> /dev/null; then
-    echo "[INFO] Instaluji uv manager dle doporuceni..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-    source $HOME/.cargo/env
+if ! command -v node &>/dev/null; then
+    echo "[ERROR] Node.js is not installed."
+    echo "        Arch: sudo pacman -S nodejs npm"
+    exit 1
 fi
 
-echo "[INFO] Synchronizace zavislosti (Python 3.11+ pre-req)..."
-uv sync
+if [ ! -d "node_modules" ]; then
+    echo "[INFO] Installing dependencies (npm install)..."
+    npm install
+fi
 
-echo "[INFO] Faze 1: Spoustim Krkn-AI Discovery..."
-uv run krkn_ai discover --config settings.yaml
-
-echo "[INFO] Faze 2: Spoustim Krkn-AI Chaos Run..."
-uv run krkn_ai run --config settings.yaml
+if [ "$1" = "--dev" ]; then
+    echo "[INFO] Starting in DEV mode..."
+    npm run dev 2>/dev/null || npm start
+else
+    echo "[INFO] Starting xKOR_3RR0R..."
+    npm start
+fi
