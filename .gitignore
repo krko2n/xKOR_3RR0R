@@ -6,3 +6,4 @@ dist/
 build/
 .env
 config/ai-endpoint.json
+.xkor_initialized
