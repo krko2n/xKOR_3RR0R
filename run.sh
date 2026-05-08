@@ -16,6 +16,12 @@ fi
 if [ ! -d "node_modules" ]; then
     echo "[INFO] Installing dependencies (npm install)..."
     npm install
+    
+    echo "[INFO] Rebuilding native modules for Electron (node-pty fix)..."
+    if [ ! -f "./node_modules/.bin/electron-rebuild" ]; then
+        npm install --save-dev electron-rebuild
+    fi
+    ./node_modules/.bin/electron-rebuild -f -w node-pty
 fi
 
 if [ "$1" = "--dev" ]; then
