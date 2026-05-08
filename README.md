@@ -118,9 +118,16 @@ This will stop all systemd services and delete `/opt/xkor_3rr0r`.
 xKOR_3RR0R/                          root
 │
 │   .gitattributes                   git line-ending rules
-│   package.json                     [1] app manifest & scripts       
+│   .gitignore                       git ignore rules
+│   AGENT.md                         AI agent instructions
+│   fixGuide.pdf                     fix & troubleshooting guide
+│   logo.png                         project logo
+│   logo_with_text.png               project logo with text
+│   package.json                     app manifest & scripts
 │   README.md                        this file
 │   run.sh                           quick launch script
+│   setup.sh                         initial setup script
+│   text.png                         text asset
 │
 ├── assets/                          static resources
 │   ├── branding/                    logos, wordmarks
@@ -155,18 +162,19 @@ xKOR_3RR0R/                          root
 │
 ├── config/
 │       ai-endpoint.json             AI backend URL & auth config
+│       user.json                    user preferences & profile
 │
 ├── os/                              OS Mode — replaces the Linux desktop
 │   │   clean-arch.sh               wipe leftover config on Arch
 │   │   install.sh                  full OS Mode installer
-│   │   uninstall.sh                removes all OS Mode components
+│   │   unistall.sh                 removes all OS Mode components
 │   │
 │   ├── loading/
 │   │       loading.sh              glitch animation sequence
 │   │
 │   ├── login/                      custom login screen (separate Node app)
 │   │       login.js                login UI logic
-│   │       package.json            [2] login app manifest              ← DUPLICATE
+│   │       package.json            login app manifest
 │   │       pam.js                  PAM authentication bridge
 │   │       start-login.sh          launches the login screen
 │   │
@@ -200,6 +208,7 @@ xKOR_3RR0R/                          root
         │       graphs.css
         │       keyboard.css
         │       layout.css
+        │       login.css
         │       terminal.css
         │       theme.css           global neon theme variables
         │
@@ -210,6 +219,7 @@ xKOR_3RR0R/                          root
                 globe.js
                 graphs.js
                 keyboard.js
+                login.js
                 tabs.js
                 terminal.js
                 ui.js               main UI controller
