@@ -115,4 +115,18 @@ echo "Reboot to start xKOR_3RR0R OS mode."
 
 # Install dependencies for login screen
 echo '[INFO] Installing os/login dependencies...'
-(cd /opt/xKOR_3RR0R/os/login && npm install)
+echo '[INFO] Installing os/login dependencies (with Node 26 patch)...'
+cd /opt/xKOR_3RR0R/os/login
+
+# 1. StĂˇhneme balĂ­ÄŤky, ale zakĂˇĹľeme automatickou C++ kompilaci
+npm install --ignore-scripts
+
+# 2. Opatchujeme C++ kĂłd pĹ™Ă­mo ve zdrojĂˇcĂ­ch balĂ­ÄŤku authenticate-pam
+if [ -f "node_modules/authenticate-pam/authenticate_pam.cc" ]; then
+    echo '[INFO] Patching V8 WriteUtf8 -> WriteUtf8V2...'
+    sed -i 's/WriteUtf8/WriteUtf8V2/g' node_modules/authenticate-pam/authenticate_pam.cc
+fi
+
+# 3. NynĂ­ bezpeÄŤnÄ› spustĂ­me kompilaci
+npm rebuild
+cd - > /dev/null
