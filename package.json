@@ -1,38 +1,37 @@
 {
-  "name": "xkor_3rr0r",
-  "version": "1.0.0",
-  "description": "Cyberpunk system dashboard OS",
-  "main": "src/main.js",
-  "scripts": {
-    "start": "electron .",
-    "build": "electron-builder",
-    "dev": "electron .",
-    "postinstall": "electron-rebuild -f -w node-pty",
-    "install-linux": "npm install && npm run postinstall"
-  },
-  "dependencies": {
-    "electron": "^34.0.0",
-    "node-pty": "^1.0.0",
-    "ws": "^8.16.0",
-    "express": "^4.18.2",
-    "systeminformation": "^5.22.3",
-    "xterm": "^5.3.0"
-  },
-  "devDependencies": {
-    "electron-builder": "^24.6.0",
-    "@electron/rebuild": "^3.6.0"
-  },
-  "build": {
-    "appId": "com.xkor3rror.app",
-    "productName": "xKOR_3RR0R",
-    "directories": {
-      "output": "dist"
-    },
-    "linux": {
-      "target": [
-        "AppImage"
-      ],
-      "category": "Utility"
-    }
-  }
+    "name":  "xkor_3rr0r",
+    "version":  "1.0.0",
+    "description":  "Cyberpunk system dashboard OS",
+    "main":  "src/main.js",
+    "scripts":  {
+                    "start":  "electron .",
+                    "build":  "electron-builder",
+                    "dev":  "electron .",
+                    "install-linux":  "npm install \u0026\u0026 npm run postinstall"
+                },
+    "dependencies":  {
+                         "electron":  "^34.0.0",
+                         "node-pty":  "^1.0.0",
+                         "ws":  "^8.16.0",
+                         "express":  "^4.18.2",
+                         "systeminformation":  "^5.22.3",
+                         "@xterm/xterm":  "^5.5.0"
+                     },
+    "devDependencies":  {
+                            "electron-builder":  "^24.6.0",
+                            "@electron/rebuild":  "^3.6.0"
+                        },
+    "build":  {
+                  "appId":  "com.xkor3rror.app",
+                  "productName":  "xKOR_3RR0R",
+                  "directories":  {
+                                      "output":  "dist"
+                                  },
+                  "linux":  {
+                                "target":  [
+                                               "AppImage"
+                                           ],
+                                "category":  "Utility"
+                            }
+              }
 }
