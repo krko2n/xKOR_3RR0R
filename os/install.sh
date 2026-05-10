@@ -123,6 +123,26 @@ npm install --ignore-scripts
 
 # 2. Opatchujeme C++ kĂłd pĹ™Ă­mo ve zdrojĂˇcĂ­ch balĂ­ÄŤku authenticate-pam
 if [ -f "node_modules/authenticate-pam/authenticate_pam.cc" ]; then
+
+# [PATCHED] chmod+x and login npm install
+# Fix: ensure all OS Mode shell scripts are executable after clone
+chmod +x "$INSTALL_DIR/os/install.sh"          2>/dev/null || true
+chmod +x "$INSTALL_DIR/os/uninstall.sh"        2>/dev/null || true
+chmod +x "$INSTALL_DIR/os/loading/loading.sh"  2>/dev/null || true
+chmod +x "$INSTALL_DIR/os/xorg/xkor-session.sh" 2>/dev/null || true
+chmod +x "$INSTALL_DIR/os/login/start-login.sh" 2>/dev/null || true
+chmod +x "$INSTALL_DIR/run.sh"                 2>/dev/null || true
+
+# Fix: install Node dependencies for the login app (separate package.json)
+echo "[INFO] Installing login app dependencies..."
+if [ -f "$INSTALL_DIR/os/login/package.json" ]; then
+    cd "$INSTALL_DIR/os/login"
+    npm install --omit=dev
+    cd "$INSTALL_DIR"
+    echo "[OK]   Login app dependencies installed"
+else
+    echo "[WARN] os/login/package.json not found, skipping"
+fi
     echo '[INFO] Patching V8 WriteUtf8 -> WriteUtf8V2...'
     sed -i 's/WriteUtf8/WriteUtf8V2/g' node_modules/authenticate-pam/authenticate_pam.cc
 fi
