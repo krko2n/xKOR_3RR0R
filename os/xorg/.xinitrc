@@ -1,12 +1,14 @@
 #!/bin/bash
-# xKOR_3RR0R - Xorg init script
+# xKOR_3RR0R - .xinitrc fallback
+
+export DISPLAY=:0
+export HOME=/home/admin
 
 xset s off
 xset -dpms
 xset s noblank
 
-# Remove cursor
-unclutter -root &
+unclutter -root -idle 1 &
 
 cd /opt/xkor_3rr0r
 exec npm start

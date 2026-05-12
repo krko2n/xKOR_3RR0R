@@ -1,31 +1,8 @@
 #!/bin/bash
+# xKOR_3RR0R OS Mode Installer
+# Run as root on Arch-based systems: sudo bash install.sh
 
-### AUTO-FIX PERMISSIONS & LINE ENDINGS ###
-echo "Fixing script permissions and line endings..."
-
-# Fix CRLF Ä‚ËĂ˘â‚¬Â Ă˘â‚¬â„˘ LF
-find .. -type f -name "*.sh" -exec sed -i 's/\r$//' {} \;
-
-# Remove UTF-8 BOM
-find .. -type f -name "*.sh" -exec sed -i '1s/^\xEF\xBB\xBF//' {} \;
-
-# Make all scripts executable
-find .. -type f -name "*.sh" -exec chmod +x {} \;
-
-echo "Auto-fix complete."
-
-
-### ============================================================
-### xKOR_3RR0R OS MODE INSTALLER Ä‚ËĂ˘â€šÂ¬Ă˘â‚¬ĹĄ AUTO FIX VERSION
-### ============================================================
-
-LOG_DIR="/var/log/xkor_3rr0r"
-LOG_FILE="$LOG_DIR/install_$(date +%Y-%m-%d_%H-%M-%S).log"
-
-mkdir -p "$LOG_DIR"
-touch "$LOG_FILE"
-
-exec > >(tee -a "$LOG_FILE") 2>&1
+set -e
 
 RED="\e[31m"
 GREEN="\e[32m"
@@ -33,140 +10,108 @@ YELLOW="\e[33m"
 BLUE="\e[34m"
 RESET="\e[0m"
 
-echo -e "${BLUE}=== xKOR_3RR0R OS Mode Installer ===${RESET}"
-echo -e "
-\e[31mÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť     Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť 
-Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËÄąÄ„Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„ Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť    Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť
-Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËÄąÄ„ Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËÄąÄ„    Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËÄąÄ„Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËÄąÄ„Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËÄąÄ„Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â   Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËÄąÄ„
-Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â   Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť    Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â   Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ť
-Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ÂÄ‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËÄąÄ„Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â    Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬â€ťÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ÂÄ‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬ĹĄÄ‚ËĂ˘â‚¬ËÄąÄ„Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â  Ä‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬â€śĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ˘â‚¬Â
-Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„  Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„  Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„ Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„ Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„  Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„    Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„  Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„  Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„  Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„ Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„ Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„  Ä‚ËĂ˘â‚¬ËÄąË‡Ä‚ËĂ˘â‚¬ËĂ‚ÂÄ‚ËĂ˘â‚¬ËÄąÄ„\e[0m
-
-\e[97m                xKOR_3RR0R OS MODE INSTALLER\e[0m
-"
-echo "Log file: $LOG_FILE"
-echo
-
-### ROOT CHECK
+# â”€â”€ Root check â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if [[ $EUID -ne 0 ]]; then
-    echo -e "${RED}ERROR: Run this installer as root.${RESET}"
+    echo -e "${RED}ERROR: Run as root (sudo bash install.sh)${RESET}"
     exit 1
 fi
 
-### DISTRO CHECK
+# â”€â”€ Distro check â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if ! grep -qi "arch" /etc/os-release; then
     echo -e "${RED}ERROR: Only Arch-based systems supported.${RESET}"
     exit 1
 fi
 
-### AUTO FIX: LINE ENDINGS + PERMISSIONS
-echo -e "${YELLOW}Fixing line endings and permissions...${RESET}"
+INSTALL_DIR="/opt/xkor_3rr0r"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-find .. -type f -name "*.sh" -exec sed -i 's/\r$//' {} \;
-find .. -type f -name "*.service" -exec sed -i 's/\r$//' {} \;
+LOG_DIR="/var/log/xkor_3rr0r"
+LOG_FILE="$LOG_DIR/install_$(date +%Y-%m-%d_%H-%M-%S).log"
+mkdir -p "$LOG_DIR"
+exec > >(tee -a "$LOG_FILE") 2>&1
 
-find .. -type f -name "*.sh" -exec chmod +x {} \;
-find .. -type f -name "*.service" -exec chmod +x {} \;
-
-echo -e "${GREEN}Auto-fix complete.${RESET}"
+echo -e "${BLUE}=== xKOR_3RR0R OS Mode Installer ===${RESET}"
+echo "Log: $LOG_FILE"
 echo
 
-### UPDATE SYSTEM
+# â”€â”€ Fix line endings + permissions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+echo -e "${YELLOW}Fixing line endings and permissions...${RESET}"
+find "$REPO_ROOT" -type f -name "*.sh" -exec sed -i 's/\r$//' {} \;
+find "$REPO_ROOT" -type f -name "*.sh" -exec chmod +x {} \;
+echo -e "${GREEN}Done.${RESET}"
+
+# â”€â”€ Update system â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 echo -e "${YELLOW}Updating system...${RESET}"
 pacman -Syu --noconfirm
 
-### INSTALL DEPENDENCIES
+# â”€â”€ Install dependencies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 echo -e "${YELLOW}Installing dependencies...${RESET}"
-pacman -S --noconfirm \
+pacman -S --noconfirm --needed \
     nodejs npm \
-    xorg-server xorg-xinit xorg-xauth xorg-xrandr xorg-xset \
+    xorg-server xorg-xinit xorg-xauth xorg-xrandr xorg-xset xorg-xdpyinfo \
     mesa \
     plymouth \
-    pam pam
+    pam \
+    unclutter
 
-### INSTALL ELECTRON
-echo -e "${YELLOW}Installing Electron...${RESET}"
-npm install -g electron
+# â”€â”€ Copy project to /opt/xkor_3rr0r â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+echo -e "${YELLOW}Copying project to $INSTALL_DIR...${RESET}"
+rm -rf "$INSTALL_DIR"
+mkdir -p "$INSTALL_DIR"
+cp -r "$REPO_ROOT"/* "$INSTALL_DIR/"
+chmod +x "$INSTALL_DIR/run.sh" 2>/dev/null || true
 
-### COPY PROJECT
-echo -e "${YELLOW}Copying project to /opt/xKOR_3RR0R...${RESET}"
-rm -rf /opt/xKOR_3RR0R
-mkdir -p /opt/xKOR_3RR0R
-cp -r ../* /opt/xKOR_3RR0R
-
-### INSTALL LOGIN SCREEN DEPENDENCIES
-echo -e "${YELLOW}Installing login screen dependencies...${RESET}"
-cd /opt/xKOR_3RR0R/os/login
+# â”€â”€ Install main app dependencies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+echo -e "${YELLOW}Installing main app dependencies...${RESET}"
+cd "$INSTALL_DIR"
 npm install
 
-### INSTALL SYSTEMD SERVICES
-echo -e "${YELLOW}Installing systemd services...${RESET}"
-cp /opt/xKOR_3RR0R/os/systemd/xkor-login.service /etc/systemd/system/
-systemctl enable xkor-login.service
+# Rebuild node-pty for Electron
+if [ -f "node_modules/.bin/electron-rebuild" ]; then
+    echo "[INFO] Rebuilding node-pty for Electron..."
+    ./node_modules/.bin/electron-rebuild -f -w node-pty
+    touch node_modules/.node-pty-rebuilt
+    echo "[OK] node-pty rebuilt"
+fi
 
-### INSTALL PLYMOUTH THEME
-echo -e "${YELLOW}Installing Plymouth theme...${RESET}"
-cd /opt/xKOR_3RR0R/os/plymouth
-cp -r xkor /usr/share/plymouth/themes/
-plymouth-set-default-theme -R xkor
+# â”€â”€ Install login screen dependencies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+echo -e "${YELLOW}Installing login screen dependencies...${RESET}"
+cd "$INSTALL_DIR/os/login"
 
-echo -e "${GREEN}Installation complete.${RESET}"
-echo "Reboot to start xKOR_3RR0R OS mode."
-
-# Install dependencies for login screen
-echo '[INFO] Installing os/login dependencies...'
-echo '[INFO] Installing os/login dependencies (with Node 26 patch)...'
-cd /opt/xKOR_3RR0R/os/login
-
-# 1. StĂˇhneme balĂ­ÄŤky, ale zakĂˇĹľeme automatickou C++ kompilaci
+# authenticate-pam needs C++ patch for Node.js 22+
 npm install --ignore-scripts
 
-# 2. Opatchujeme C++ kĂłd pĹ™Ă­mo ve zdrojĂˇcĂ­ch balĂ­ÄŤku authenticate-pam
 if [ -f "node_modules/authenticate-pam/authenticate_pam.cc" ]; then
-
-# [PATCHED] chmod+x and login npm install
-# Fix: ensure all OS Mode shell scripts are executable after clone
-chmod +x "$INSTALL_DIR/os/install.sh"          2>/dev/null || true
-chmod +x "$INSTALL_DIR/os/uninstall.sh"        2>/dev/null || true
-chmod +x "$INSTALL_DIR/os/loading/loading.sh"  2>/dev/null || true
-chmod +x "$INSTALL_DIR/os/xorg/xkor-session.sh" 2>/dev/null || true
-chmod +x "$INSTALL_DIR/os/login/start-login.sh" 2>/dev/null || true
-chmod +x "$INSTALL_DIR/run.sh"                 2>/dev/null || true
-
-# Fix: install Node dependencies for the login app (separate package.json)
-echo "[INFO] Installing login app dependencies..."
-if [ -f "$INSTALL_DIR/os/login/package.json" ]; then
-    cd "$INSTALL_DIR/os/login"
-    npm install --omit=dev
-    cd "$INSTALL_DIR"
-    echo "[OK]   Login app dependencies installed"
-else
-    echo "[WARN] os/login/package.json not found, skipping"
+    echo "[INFO] Patching authenticate-pam for Node.js 22+..."
+    sed -i 's/args\[0\]->IsString()/args[0]->IsString() || true/g' \
+        node_modules/authenticate-pam/authenticate_pam.cc 2>/dev/null || true
+    sed -i 's/\.WriteUtf8(isolate,/.WriteUtf8V2(isolate,/g' \
+        node_modules/authenticate-pam/authenticate_pam.cc 2>/dev/null || true
 fi
 
-# [PATCHED-v2] Comprehensive fixes
-INSTALL_DIR="/opt/xkor_3rr0r"
-
-# chmod+x all shell scripts
-chmod +x "$INSTALL_DIR/run.sh"                          2>/dev/null || true
-chmod +x "$INSTALL_DIR/os/install.sh"                   2>/dev/null || true
-chmod +x "$INSTALL_DIR/os/uninstall.sh"                 2>/dev/null || true
-chmod +x "$INSTALL_DIR/os/xorg/xkor-session.sh"         2>/dev/null || true
-chmod +x "$INSTALL_DIR/os/xorg/.xinitrc"                2>/dev/null || true
-chmod +x "$INSTALL_DIR/os/login/start-login.sh"         2>/dev/null || true
-chmod +x "$INSTALL_DIR/os/loading/loading.sh"           2>/dev/null || true
-
-# Install login app deps
-echo "[INFO] Installing login app dependencies..."
-cd "$INSTALL_DIR/os/login" && npm install --omit=dev && cd "$INSTALL_DIR"
-echo "[OK]   Login deps installed"
-
-# Install unclutter for cursor hiding
-pacman -S --noconfirm --needed unclutter xorg-xdpyinfo 2>/dev/null || true
-    echo '[INFO] Patching V8 WriteUtf8 -> WriteUtf8V2...'
-    sed -i 's/WriteUtf8/WriteUtf8V2/g' node_modules/authenticate-pam/authenticate_pam.cc
-fi
-
-# 3. NynĂ­ bezpeÄŤnÄ› spustĂ­me kompilaci
 npm rebuild
-cd - > /dev/null
+echo -e "${GREEN}Login dependencies installed.${RESET}"
+
+# â”€â”€ Install systemd services â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+echo -e "${YELLOW}Installing systemd services...${RESET}"
+cd "$INSTALL_DIR"
+cp os/systemd/xkor-login.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable xkor-login.service
+echo -e "${GREEN}xkor-login.service enabled.${RESET}"
+
+# â”€â”€ Install Plymouth theme â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+echo -e "${YELLOW}Installing Plymouth theme...${RESET}"
+if [ -d "$INSTALL_DIR/os/plymount/xkor" ]; then
+    cp -r "$INSTALL_DIR/os/plymount/xkor" /usr/share/plymouth/themes/
+    plymouth-set-default-theme -R xkor 2>/dev/null || true
+    echo -e "${GREEN}Plymouth theme installed.${RESET}"
+else
+    echo -e "${YELLOW}Plymouth theme directory not found, skipping.${RESET}"
+fi
+
+echo
+echo -e "${GREEN}=== Installation complete ===${RESET}"
+echo "Reboot to start xKOR_3RR0R OS Mode."
+echo "If something goes wrong: Ctrl+Alt+F2 -> sudo systemctl disable xkor-login.service -> reboot"
