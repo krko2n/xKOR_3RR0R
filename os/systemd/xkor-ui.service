@@ -1,10 +1,18 @@
 [Unit]
-Description=xKOR_3RR0R UI
-After=graphical.target
+Description=xKOR_3RR0R Main UI
+After=xkor-login.service
+Wants=xkor-login.service
 
 [Service]
-ExecStart=/opt/xkor_3rr0r/os/xorg/xkor-session.sh
-Restart=always
+Type=simple
+User=admin
+ExecStart=/bin/bash /opt/xkor_3rr0r/os/xorg/xkor-session.sh
+Restart=on-failure
+RestartSec=3
+Environment=HOME=/home/admin
+Environment=DISPLAY=:0
+Environment=NODE_ENV=production
+Environment=XAUTHORITY=/home/admin/.Xauthority
 
 [Install]
 WantedBy=graphical.target

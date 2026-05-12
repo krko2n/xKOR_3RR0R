@@ -22,3 +22,8 @@ No Python/Rust allowed. Strictly Linux/Arch environment.
 - PowerShell scripts for fixing MUST use `@'...'@` for bash content.
 - Use explicit LF line endings for bash files.
 - Never track `node_modules` or local config secrets.
+
+## Fixes applied by agent v2
+- systemd services corrected
+- start-login.sh rewritten
+- xkor-session.sh waits for X

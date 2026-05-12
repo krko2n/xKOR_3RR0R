@@ -143,6 +143,26 @@ if [ -f "$INSTALL_DIR/os/login/package.json" ]; then
 else
     echo "[WARN] os/login/package.json not found, skipping"
 fi
+
+# [PATCHED-v2] Comprehensive fixes
+INSTALL_DIR="/opt/xkor_3rr0r"
+
+# chmod+x all shell scripts
+chmod +x "$INSTALL_DIR/run.sh"                          2>/dev/null || true
+chmod +x "$INSTALL_DIR/os/install.sh"                   2>/dev/null || true
+chmod +x "$INSTALL_DIR/os/uninstall.sh"                 2>/dev/null || true
+chmod +x "$INSTALL_DIR/os/xorg/xkor-session.sh"         2>/dev/null || true
+chmod +x "$INSTALL_DIR/os/xorg/.xinitrc"                2>/dev/null || true
+chmod +x "$INSTALL_DIR/os/login/start-login.sh"         2>/dev/null || true
+chmod +x "$INSTALL_DIR/os/loading/loading.sh"           2>/dev/null || true
+
+# Install login app deps
+echo "[INFO] Installing login app dependencies..."
+cd "$INSTALL_DIR/os/login" && npm install --omit=dev && cd "$INSTALL_DIR"
+echo "[OK]   Login deps installed"
+
+# Install unclutter for cursor hiding
+pacman -S --noconfirm --needed unclutter xorg-xdpyinfo 2>/dev/null || true
     echo '[INFO] Patching V8 WriteUtf8 -> WriteUtf8V2...'
     sed -i 's/WriteUtf8/WriteUtf8V2/g' node_modules/authenticate-pam/authenticate_pam.cc
 fi

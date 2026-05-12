@@ -1,15 +1,21 @@
 [Unit]
 Description=xKOR_3RR0R Login Screen
-After=network.target
+After=systemd-user-sessions.service plymouth-quit-wait.service
+After=getty@tty1.service
+Conflicts=getty@tty1.service
 
 [Service]
 Type=simple
-ExecStart=/opt/xkor_3rr0r/os/login/start-login.sh
+ExecStartPre=/bin/bash -c 'cd /opt/xkor_3rr0r/os/login && npm install --omit=dev'
+ExecStart=/bin/bash /opt/xkor_3rr0r/os/login/start-login.sh
+Restart=on-failure
+RestartSec=3
 StandardInput=tty
 TTYPath=/dev/tty1
 TTYReset=yes
 TTYVHangup=yes
-Restart=always
+Environment=HOME=/root
+Environment=NODE_ENV=production
 
 [Install]
 WantedBy=multi-user.target
