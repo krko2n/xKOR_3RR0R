@@ -19,7 +19,7 @@
                      },
     "devDependencies":  {
                             "electron-builder":  "^24.6.0",
-                            "@electron/rebuild":  "^3.6.0"
+                            "@electron/rebuild":  "^3.7.2"
                         },
     "build":  {
                   "appId":  "com.xkor3rror.app",

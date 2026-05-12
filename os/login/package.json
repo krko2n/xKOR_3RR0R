@@ -6,7 +6,5 @@
   "scripts": {
     "start": "node login.js"
   },
-  "dependencies": {
-    "authenticate-pam": "^1.0.0"
-  }
+  "dependencies": {}
 }
