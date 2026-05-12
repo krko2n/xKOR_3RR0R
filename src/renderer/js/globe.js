@@ -16,7 +16,7 @@ let angle = 0;
    LOAD WORLD MAP
    ============================================================ */
 
-fetch("assets/globe/worldmap.json")
+fetch("../../assets/globe/worldmap.json")
     .then(r => r.json())
     .then(data => {
         world = data.points;

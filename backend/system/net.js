@@ -1,14 +1,27 @@
 const fs = require("fs");
 
 module.exports = async function () {
-  const data = fs.readFileSync("/proc/net/dev", "utf8").split("\n");
-  const eth = data.find((l) => l.includes("eth0") || l.includes("enp"));
+    try {
+        const lines = fs.readFileSync("/proc/net/dev", "utf8").split("\n");
 
-  if (!eth) return { rx: 0, tx: 0 };
+        // Skip header lines and loopback (lo), find first real interface
+        const iface = lines.find((l) => {
+            const name = l.trim().split(":")[0];
+            return l.includes(":") &&
+                   name !== "lo" &&
+                   l.trim() !== "";
+        });
 
-  const parts = eth.split(/ +/);
-  return {
-    rx: parseInt(parts[1]),
-    tx: parseInt(parts[9]),
-  };
+        if (!iface) return { rx: 0, tx: 0 };
+
+        const parts = iface.trim().split(/\s+/);
+        // Format: iface: rx_bytes ... tx_bytes (field 9 after split on colon)
+        const stats = iface.split(":")[1].trim().split(/\s+/);
+        return {
+            rx: parseInt(stats[0]) || 0,
+            tx: parseInt(stats[8]) || 0,
+        };
+    } catch {
+        return { rx: 0, tx: 0 };
+    }
 };
