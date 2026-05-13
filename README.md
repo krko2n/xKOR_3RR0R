@@ -1,59 +1,44 @@
 <div align="center">
-  <img src="logo_with_text.png" alt="xKOR_3RR0R" width="650"/>
+  <img src="logo_with_text.png" width="600" alt="xKOR_3RR0R"/>
+  <br><br>
+
+  [![License](https://img.shields.io/badge/MIT-00ff9f?style=for-the-badge&label=LICENSE&labelColor=0d0d0d)](LICENSE)
+  [![Platform](https://img.shields.io/badge/ARCH%20LINUX-1793d1?style=for-the-badge&label=PLATFORM&labelColor=0d0d0d&logo=archlinux&logoColor=1793d1)](https://archlinux.org)
+  [![Electron](https://img.shields.io/badge/ELECTRON%2034-47848f?style=for-the-badge&label=BUILT%20WITH&labelColor=0d0d0d&logo=electron&logoColor=47848f)](https://electronjs.org)
+  [![Node](https://img.shields.io/badge/NODE%2018+-339933?style=for-the-badge&label=REQUIRES&labelColor=0d0d0d&logo=node.js&logoColor=339933)](https://nodejs.org)
+
+  <br>
+
+  > **A fullscreen cyberpunk OS interface for Linux.**
+  > Real terminals. Live system data. Full OS replacement.
+  > *Inspired by eDEX-UI.*
+
+  <br>
+
+  [**Get Started**](#-installation) · [**Features**](#-features) · [**OS Mode**](#-os-mode) · [**Config**](#-configuration) · [**Recovery**](#-emergency-recovery)
+
 </div>
+
+---
+
+<br>
+
+## 📖 What is this?
+
+xKOR_3RR0R turns your Linux machine into a **sci-fi hacker workstation**. It runs as a regular Electron app on your desktop, or in **OS Mode** — where it completely takes over your system. No display manager. No desktop environment. Just xKOR_3RR0R.
 
 <br>
 
 <div align="center">
 
-```
-██╗  ██╗██╗  ██╗ ██████╗ ██████╗      ██████╗ ██████╗ ██████╗  ██████╗ ██████╗
-╚██╗██╔╝██║ ██╔╝██╔═══██╗██╔══██╗    ╚════██╗██╔══██╗██╔══██╗██╔═══██╗██╔══██╗
- ╚███╔╝ █████╔╝ ██║   ██║██████╔╝     █████╔╝██████╔╝██████╔╝██║   ██║██████╔╝
- ██╔██╗ ██╔═██╗ ██║   ██║██╔══██╗     ╚═══██╗██╔══██╗██╔══██╗██║   ██║██╔══██╗
-██╔╝ ██╗██║  ██╗╚██████╔╝██║  ██║    ██████╔╝██║  ██║██║  ██║╚██████╔╝██║  ██║
-╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
-```
-
-**A cyberpunk OS interface for Linux. Real terminals. Real data. Real immersion.**
-
-<br>
-
-[![License](https://img.shields.io/badge/LICENSE-MIT-00ff9f?style=for-the-badge&labelColor=0a0a0a)](LICENSE)
-[![Platform](https://img.shields.io/badge/PLATFORM-LINUX-00d4ff?style=for-the-badge&labelColor=0a0a0a&logo=linux&logoColor=white)](https://archlinux.org)
-[![Electron](https://img.shields.io/badge/BUILT%20WITH-ELECTRON-9feaf9?style=for-the-badge&labelColor=0a0a0a&logo=electron&logoColor=9feaf9)](https://electronjs.org)
-[![Node](https://img.shields.io/badge/NODE.JS-18+-339933?style=for-the-badge&labelColor=0a0a0a&logo=node.js&logoColor=339933)](https://nodejs.org)
-[![Status](https://img.shields.io/badge/STATUS-ACTIVE-00ff9f?style=for-the-badge&labelColor=0a0a0a)](https://github.com/krko2n/xKOR_3RR0R)
-[![Arch](https://img.shields.io/badge/ARCH%20LINUX-NATIVE-1793d1?style=for-the-badge&labelColor=0a0a0a&logo=archlinux&logoColor=1793d1)](https://archlinux.org)
-
-<br>
-
-*Inspired by [eDEX-UI](https://github.com/GitSquared/edex-ui) · Built for Arch · Runs as your entire OS*
-
-</div>
-
----
-
-<br>
-
-## `> OVERVIEW`
-
-xKOR_3RR0R is a **fullscreen cyberpunk system dashboard** for Linux. It can run as a regular Electron app on top of your existing desktop, or in **OS Mode** — completely replacing your display manager, login screen, boot animation, and desktop environment.
-
-When you turn on your PC in OS Mode, you don't see GNOME or KDE. You see this.
-
-<br>
-
-<div align="center">
-
-|  | App Mode | OS Mode |
-|--|----------|---------|
-| **Launch** | `bash run.sh` | Boot into it automatically |
-| **Login** | Built-in UI login screen | PAM authentication on TTY |
-| **Session** | Window on your desktop | Dedicated Xorg session |
-| **Replaces desktop** | ✗ | ✓ |
-| **Plymouth boot screen** | ✗ | ✓ |
-| **systemd integration** | ✗ | ✓ |
+|  | 🖥️ App Mode | ⚙️ OS Mode |
+|--|:-----------:|:----------:|
+| Launch | `bash run.sh` | Automatic on boot |
+| Login | Built-in screen | PAM auth on TTY |
+| Session | Window on desktop | Dedicated Xorg session |
+| Boot animation | ✗ | ✓ Plymouth theme |
+| systemd service | ✗ | ✓ |
+| Replaces desktop | ✗ | ✓ |
 
 </div>
 
@@ -63,44 +48,38 @@ When you turn on your PC in OS Mode, you don't see GNOME or KDE. You see this.
 
 <br>
 
-## `> FEATURES`
+## ✨ Features
 
 <br>
 
-<div align="center">
+<table>
+<tr>
+<td width="50%">
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                                                                     │
-│   ██████╗  ██████╗      ███╗   ███╗ ██████╗ ██████╗ ███████╗      │
-│   ██╔══██╗██╔════╝      ████╗ ████║██╔═══██╗██╔══██╗██╔════╝      │
-│   ██████╔╝██║           ██╔████╔██║██║   ██║██║  ██║█████╗        │
-│   ██╔═══╝ ██║           ██║╚██╔╝██║██║   ██║██║  ██║██╔══╝        │
-│   ██║     ╚██████╗      ██║ ╚═╝ ██║╚██████╔╝██████╔╝███████╗      │
-│   ╚═╝      ╚═════╝      ╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝      │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-```
+### 💻 Multiple Terminals
+Real PTY shell instances via `node-pty`. Three simultaneous terminals — not emulated, actual bash.
 
-</div>
+### 📊 Live System Graphs
+CPU · RAM · Network · Temperature. Canvas rendering, 200ms refresh, neon color-coded.
 
-<br>
+### 🤖 AI Panel
+Toggle with `F2`. Connects to any OpenAI-compatible API. Default: local Ollama with llama3.
 
-**`◈ TERMINALS`** — Multiple real PTY shell instances running simultaneously via `node-pty`. Not fake. Not emulated. Real bash.
+</td>
+<td width="50%">
 
-**`◈ SYSTEM GRAPHS`** — Live CPU, RAM, network, and temperature graphs. 200ms update interval. Circular buffers. Neon canvas rendering.
+### 📁 File Manager
+Browse, open, rename, delete, copy/paste. Right-click context menu. Integrates with terminals.
 
-**`◈ FILE MANAGER`** — Browse, rename, delete, copy and paste files without leaving the UI. Right-click context menu. Drag support.
+### 🌍 3D Globe
+Rotating world map with threat zone markers. 60fps canvas animation.
 
-**`◈ AI PANEL`** — Built-in AI chat panel (toggle with `F2`). Connects to any OpenAI-compatible backend. Default: local Ollama.
+### ⌨️ Keyboard Visualizer
+Full on-screen keyboard. Lights up physical keys as you type. Click to input.
 
-**`◈ 3D GLOBE`** — Rotating world map with live threat zone markers. 60fps canvas animation.
-
-**`◈ ON-SCREEN KEYBOARD`** — Full keyboard visualizer. Highlights physical keys as you press them. Click to type.
-
-**`◈ OS MODE`** — Replaces your entire desktop. Custom Plymouth boot screen, PAM login on TTY, glitch animation, dedicated Xorg session.
-
-**`◈ NEON THEME`** — Custom CSS variables, CRT scanline overlay, glitch effects, `Share Tech Mono` font throughout.
+</td>
+</tr>
+</table>
 
 <br>
 
@@ -108,51 +87,7 @@ When you turn on your PC in OS Mode, you don't see GNOME or KDE. You see this.
 
 <br>
 
-## `> BOOT SEQUENCE (OS MODE)`
-
-```
-  ┌──────────────────────────────────────────────────────────────────┐
-  │                                                                  │
-  │  POWER ON                                                        │
-  │     │                                                            │
-  │     ▼                                                            │
-  │  [ GRUB ]  ──────────────────────────────────────────────────►  │
-  │     │                                                            │
-  │     ▼                                                            │
-  │  [ KERNEL ]  ────────────────────────────────────────────────►  │
-  │     │                                                            │
-  │     ▼                                                            │
-  │  [ PLYMOUTH ]  xKOR boot animation                           ►  │
-  │     │                                                            │
-  │     ▼                                                            │
-  │  [ xkor-login.service ]  TTY1 · conflicts getty@tty1         ►  │
-  │     │                                                            │
-  │     ▼                                                            │
-  │  [ login.js ]  ASCII banner · PAM auth via pamtester         ►  │
-  │     │                                                            │
-  │     ├── FAIL ──► process.exit(1) ──► service restarts           │
-  │     │                                                            │
-  │     └── OK ───►                                                  │
-  │                  │                                               │
-  │                  ▼                                               │
-  │             [ loading.sh ]  glitch animation ~4s             ►  │
-  │                  │                                               │
-  │                  ▼                                               │
-  │             [ startx xkor-session.sh ]                       ►  │
-  │                  │                                               │
-  │                  ▼                                               │
-  │             [ Electron ]  fullscreen · frameless             ►  │
-  │                                                                  │
-  └──────────────────────────────────────────────────────────────────┘
-```
-
-<br>
-
----
-
-<br>
-
-## `> QUICK START`
+## 🚀 Installation
 
 <br>
 
@@ -164,13 +99,13 @@ cd xKOR_3RR0R
 bash run.sh
 ```
 
-> `run.sh` handles `npm install`, `electron-rebuild` for `node-pty`, and `npm start` automatically.
+> `run.sh` handles everything: `npm install` → rebuild `node-pty` for Electron → `npm start`
 
 <br>
 
 ### OS Mode
 
-> **Supported:** Arch Linux · Manjaro · EndeavourOS
+> ⚠️ **Arch Linux / Manjaro / EndeavourOS only**
 
 ```bash
 git clone https://github.com/krko2n/xKOR_3RR0R
@@ -180,17 +115,19 @@ sudo reboot
 ```
 
 <details>
-<summary><b>What the installer does</b></summary>
+<summary>📋 What the installer does</summary>
 <br>
 
-- Updates system via `pacman -Syu`
-- Installs: `nodejs` `npm` `xorg-server` `xorg-xinit` `xorg-xauth` `mesa` `plymouth` `pam` `unclutter` `pamtester`
-- Copies project to `/opt/xkor_3rr0r`
-- Runs `npm install` + rebuilds `node-pty` for Electron ABI
-- Installs `os/login` dependencies
-- Installs and enables `xkor-login.service` (systemd)
-- Installs Plymouth theme `xkor`
-- Logs everything to `/var/log/xkor_3rr0r/`
+| Step | Action |
+|------|--------|
+| 1 | `pacman -Syu` — full system update |
+| 2 | Installs `nodejs` `npm` `xorg-server` `xorg-xinit` `mesa` `plymouth` `pamtester` `unclutter` |
+| 3 | Copies project to `/opt/xkor_3rr0r` |
+| 4 | `npm install` + rebuilds `node-pty` for Electron ABI |
+| 5 | Installs login app dependencies |
+| 6 | Enables `xkor-login.service` (systemd) |
+| 7 | Installs Plymouth boot theme `xkor` |
+| 8 | Logs everything to `/var/log/xkor_3rr0r/` |
 
 </details>
 
@@ -209,11 +146,47 @@ sudo bash unistall.sh
 
 <br>
 
-## `> CONFIGURATION`
+## ⚙️ OS Mode
+
+When installed, xKOR_3RR0R becomes your entire desktop. Here's what happens when you press the power button:
+
+```
+POWER ON
+  │
+  ├─► GRUB
+  │
+  ├─► Kernel loads
+  │
+  ├─► Plymouth ──────────── xKOR boot animation plays
+  │
+  ├─► systemd ────────────  xkor-login.service starts on TTY1
+  │                         (replaces getty, no normal login prompt)
+  │
+  ├─► login.js ───────────  ASCII banner + Username/Password prompt
+  │       │                 Authenticates via PAM (pamtester)
+  │       │
+  │       ├─ Wrong password → service restarts → prompt again
+  │       │
+  │       └─ Correct ──────  loading.sh glitch animation (~4s)
+  │                          │
+  │                          └─► startx xkor-session.sh
+  │                                  │
+  │                                  └─► Electron fullscreen ✓
+  │
+  └─► You're in.
+```
 
 <br>
 
-**AI Backend** — `config/ai-endpoint.json`
+---
+
+<br>
+
+## 🔧 Configuration
+
+<br>
+
+### AI Backend — `config/ai-endpoint.json`
 
 ```json
 {
@@ -222,11 +195,11 @@ sudo bash unistall.sh
 }
 ```
 
-Default uses local [Ollama](https://ollama.ai). Change `endpoint` and `model` for any OpenAI-compatible API.
+Default is [Ollama](https://ollama.ai) running locally. Change to any OpenAI-compatible endpoint.
 
 <br>
 
-**Login Credentials** — `config/user.json`
+### Login Credentials — `config/user.json`
 
 ```json
 {
@@ -235,7 +208,7 @@ Default uses local [Ollama](https://ollama.ai). Change `endpoint` and `model` fo
 }
 ```
 
-> ⚠️ Change this before running. Used by the App Mode login screen.
+> ⚠️ **Change these before running.** Used by the App Mode login screen.
 
 <br>
 
@@ -243,61 +216,66 @@ Default uses local [Ollama](https://ollama.ai). Change `endpoint` and `model` fo
 
 <br>
 
-## `> PROJECT STRUCTURE`
+## 🗂️ Project Structure
 
 <details>
-<summary><b>Show full tree</b></summary>
+<summary>Show full file tree</summary>
 <br>
 
 ```
 xKOR_3RR0R/
 │
-├── run.sh                      Quick launcher (npm install + rebuild + start)
-├── setup.sh                    One-time App Mode setup script
-├── package.json                App manifest + dependencies
+├── 📄 run.sh                   Quick launcher (install + rebuild + start)
+├── 📄 setup.sh                 One-time App Mode setup script
+├── 📄 package.json             App manifest and dependencies
 │
-├── config/
-│   ├── ai-endpoint.json        AI backend URL + model
+├── 📁 config/
+│   ├── ai-endpoint.json        AI backend URL + model name
 │   └── user.json               App Mode login credentials
 │
-├── assets/
-│   ├── globe/
-│   │   └── worldmap.json       Globe geometry data
+├── 📁 assets/
+│   ├── globe/worldmap.json     Globe geometry data
 │   ├── fonts/                  Custom typefaces
-│   ├── sounds/                 UI audio effects
-│   └── icons/                  UI icons
+│   └── sounds/                 UI audio effects
 │
-├── backend/                    Node.js (runs in Electron main process)
-│   ├── server.js               Express + WebSocket server (port 3001)
-│   ├── ai/
-│   │   └── proxy.js            Forwards prompts to AI endpoint
+├── 📁 backend/                 Node.js (runs in Electron main process)
+│   ├── server.js               Express + WebSocket server on port 3001
+│   ├── ai/proxy.js             Forwards prompts to AI backend
 │   ├── fs/                     Filesystem API (list/read/write/delete/rename)
-│   ├── system/                 Hardware monitoring (cpu/ram/net/temp)
-│   └── terminal/
-│       └── pty.js              PTY session manager (node-pty)
+│   ├── system/                 Hardware reads (cpu · ram · net · temp)
+│   └── terminal/pty.js         PTY session manager (node-pty)
 │
-├── src/
-│   ├── main.js                 Electron main process
+├── 📁 src/
+│   ├── main.js                 Electron main process entry
 │   ├── preload.js              Context bridge (main ↔ renderer)
 │   └── renderer/
 │       ├── index.html          Root HTML shell
-│       ├── css/                Neon stylesheet modules
-│       └── js/                 UI modules (login, boot, terminal, ai, ...)
+│       ├── css/                Neon theme + per-module stylesheets
+│       └── js/                 UI modules
+│           ├── login.js        Login screen + auth
+│           ├── boot.js         Boot animation sequence
+│           ├── ui.js           Main controller
+│           ├── terminal.js     Terminal rendering + input
+│           ├── graphs.js       Live system graphs
+│           ├── globe.js        3D rotating globe
+│           ├── ai.js           AI chat panel
+│           ├── filemanager.js  File browser
+│           ├── keyboard.js     On-screen keyboard
+│           └── tabs.js         Tab switching
 │
-└── os/                         OS Mode — replaces the Linux desktop
-    ├── install.sh              Full installer (run as root)
+└── 📁 os/                      OS Mode — replaces the desktop
+    ├── install.sh              Full installer (sudo required)
     ├── unistall.sh             Removes all OS Mode components
-    ├── loading/
-    │   └── loading.sh          Glitch animation sequence
-    ├── login/                  Separate Node.js TTY login app
-    │   ├── login.js            TTY readline login + PAM auth
+    ├── loading/loading.sh      Glitch animation (plays after login)
+    ├── login/                  Standalone TTY login app (plain Node.js)
+    │   ├── login.js            Readline prompt + PAM auth
     │   ├── pam.js              pamtester bridge
-    │   └── start-login.sh      Launcher (called by systemd)
-    ├── plymount/               Plymouth boot animation theme
+    │   └── start-login.sh      systemd entry point
+    ├── plymount/               Plymouth boot theme (xkor)
     ├── systemd/
-    │   └── xkor-login.service  Starts login screen at boot
+    │   └── xkor-login.service  Starts login at boot (replaces getty)
     └── xorg/
-        ├── xkor-session.sh     Launches Electron inside X
+        ├── xkor-session.sh     Launches Electron inside X session
         └── .xinitrc            X startup fallback
 ```
 
@@ -309,23 +287,22 @@ xKOR_3RR0R/
 
 <br>
 
-## `> TECH STACK`
+## 🛠️ Tech Stack
 
 <br>
 
 <div align="center">
 
-| Layer | Technology |
-|-------|-----------|
+| What | Technology |
+|------|-----------|
 | App shell | Electron 34 |
-| Terminal backend | node-pty (real PTY) |
-| Backend server | Express + WebSocket (ws) |
-| System monitoring | /proc/ + /sys/ direct reads |
-| Terminal renderer | xterm.js (planned full integration) |
-| Frontend | Vanilla JS + custom neon CSS |
+| Real terminals | node-pty |
+| Backend server | Express + WebSocket |
+| System monitoring | `/proc/` + `/sys/` direct reads |
+| Frontend | Vanilla JS + Custom CSS |
+| PAM authentication | pamtester (system binary) |
 | Boot animation | Plymouth theme |
-| PAM auth | pamtester (system binary) |
-| Language split | 69% JS · 14% Shell · 12% CSS · 6% HTML |
+| Build tool | @electron/rebuild |
 
 </div>
 
@@ -335,19 +312,15 @@ xKOR_3RR0R/
 
 <br>
 
-## `> KEYBOARD SHORTCUTS`
-
-<br>
+## ⌨️ Keyboard Shortcuts
 
 <div align="center">
 
-| Key | Action |
-|-----|--------|
+| Shortcut | Action |
+|----------|--------|
 | `F2` | Toggle AI panel |
 | `F12` | Toggle DevTools |
-| `Alt+1` | Switch to Terminal 1 |
-| `Alt+2` | Switch to Terminal 2 |
-| `Alt+3` | Switch to Terminal 3 |
+| `Enter` (in AI input) | Send message |
 
 </div>
 
@@ -357,17 +330,19 @@ xKOR_3RR0R/
 
 <br>
 
-## `> EMERGENCY RECOVERY`
+## 🆘 Emergency Recovery
 
-If you get a **black screen with blinking cursor** after installing OS Mode:
+Got a **black screen with blinking cursor** after installing OS Mode?
 
 ```bash
-# Switch to TTY2
+# 1. Switch to a working TTY
 Ctrl + Alt + F2
 
-# Log in, then:
+# 2. Log in with your username and password
+
+# 3. Disable xKOR_3RR0R and restore your display manager
 sudo systemctl disable xkor-login.service
-sudo systemctl enable --now sddm    # or gdm / lightdm
+sudo systemctl enable --now sddm    # swap for gdm or lightdm if needed
 sudo reboot
 ```
 
@@ -377,17 +352,18 @@ sudo reboot
 
 <br>
 
-## `> DEVELOPMENT`
+## 💻 Development
 
 ```bash
-# Install dependencies
+# Clone and start
+git clone https://github.com/krko2n/xKOR_3RR0R
+cd xKOR_3RR0R
 npm install
-
-# Start (dev mode)
 npm start
 
-# If terminals don't work (node-pty rebuild)
+# If terminals show blank (node-pty needs rebuild)
 node node_modules/@electron/rebuild/lib/cli.js -f -w node-pty
+npm start
 ```
 
 <br>
@@ -398,15 +374,13 @@ node node_modules/@electron/rebuild/lib/cli.js -f -w node-pty
 
 <div align="center">
 
-```
-  ╔══════════════════════════════════════════════════╗
-  ║   MIT License  ·  © 2026 krko2n                 ║
-  ║   github.com/krko2n/xKOR_3RR0R                  ║
-  ╚══════════════════════════════════════════════════╝
-```
+**MIT License · © 2026 [krko2n](https://github.com/krko2n)**
+
+[![GitHub followers](https://img.shields.io/github/followers/krko2n?style=for-the-badge&labelColor=0d0d0d&color=00ff9f&logo=github&logoColor=white)](https://github.com/krko2n)
+[![GitHub stars](https://img.shields.io/github/stars/krko2n/xKOR_3RR0R?style=for-the-badge&labelColor=0d0d0d&color=00d4ff&logo=github&logoColor=white)](https://github.com/krko2n/xKOR_3RR0R/stargazers)
 
 <br>
 
-[![GitHub](https://img.shields.io/badge/github-krko2n-00ff9f?style=for-the-badge&labelColor=0a0a0a&logo=github&logoColor=white)](https://github.com/krko2n)
+*If this project helped you or looks cool, drop a ⭐*
 
 </div>
