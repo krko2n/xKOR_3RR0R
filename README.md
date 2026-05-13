@@ -25,7 +25,9 @@
 
   <br>
 
-  [GET STARTED](#installation) &nbsp;·&nbsp; [FEATURES](#features) &nbsp;·&nbsp; [OS MODE](#os-mode) &nbsp;·&nbsp; [CONFIG](#configuration) &nbsp;·&nbsp; [RECOVERY](#emergency-recovery)
+  [LIVE PAGE](https://krko2n.github.io/xKOR_3RR0R) &nbsp;·&nbsp; [GET STARTED](#installation) &nbsp;·&nbsp; [FEATURES](#features) &nbsp;·&nbsp; [OS MODE](#os-mode) &nbsp;·&nbsp; [RECOVERY](#emergency-recovery)
+
+  [![Pages](https://img.shields.io/badge/GITHUB%20PAGES-LIVE-00ff9f?style=for-the-badge&labelColor=0d0d0d&logo=github&logoColor=white)](https://krko2n.github.io/xKOR_3RR0R)
 
 </div>
 

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>xKOR_3RR0R</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:  #00ff9f;
+    --cyan:   #00d4ff;
+    --red:    #ff0033;
+    --yellow: #ffaa00;
+    --bg:     #060606;
+    --bg2:    #0d0d0d;
+    --bg3:    #111;
+    --border: #1a1a1a;
+    --dim:    #333;
+    --mono:   'Share Tech Mono', monospace;
+    --vt:     'VT323', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--green);
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── scanlines overlay ──────────────────────── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── noise flicker ──────────────────────────── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: -50%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.35;
+    z-index: 9998;
+    animation: flicker 8s infinite;
+  }
+
+  @keyframes flicker {
+    0%,100% { opacity: 0.35; }
+    92% { opacity: 0.35; }
+    93% { opacity: 0.15; }
+    94% { opacity: 0.35; }
+    96% { opacity: 0.2; }
+    97% { opacity: 0.35; }
+  }
+
+  /* ── layout ─────────────────────────────────── */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── top bar ─────────────────────────────────── */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 36px;
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    z-index: 100;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  .topbar-left { display: flex; gap: 20px; }
+  .topbar-left a {
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .topbar-left a:hover { color: var(--green); }
+  .topbar-right { color: var(--dim); }
+  .topbar-right span { color: var(--green); }
+
+  /* ── hero ────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    position: relative;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,159,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,159,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .logo-wrap {
+    position: relative;
+    margin-bottom: 32px;
+  }
+
+  .logo-wrap img {
+    width: min(500px, 80vw);
+    filter: drop-shadow(0 0 20px rgba(0,255,159,0.4));
+  }
+
+  .ascii-title {
+    font-family: var(--vt);
+    font-size: clamp(18px, 2.5vw, 28px);
+    color: var(--green);
+    letter-spacing: 0.05em;
+    line-height: 1.15;
+    text-shadow: 0 0 10px rgba(0,255,159,0.5);
+    white-space: pre;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .hero-tagline {
+    margin-top: 28px;
+    font-size: 13px;
+    color: #666;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .hero-tagline b { color: var(--green); }
+
+  .boot-log {
+    margin-top: 32px;
+    text-align: left;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    width: min(500px, 90vw);
+    font-size: 12px;
+    line-height: 2;
+  }
+
+  .log-ok   { color: var(--green); }
+  .log-warn { color: var(--yellow); }
+  .log-err  { color: var(--red); }
+  .log-info { color: var(--cyan); }
+  .log-dim  { color: var(--dim); }
+
+  .hero-cta {
+    margin-top: 36px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border: 1px solid currentColor;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    cursor: pointer;
+  }
+
+  .btn-primary { color: var(--bg); background: var(--green); border-color: var(--green); }
+  .btn-primary:hover { background: transparent; color: var(--green); }
+  .btn-outline { color: var(--green); background: transparent; }
+  .btn-outline:hover { background: rgba(0,255,159,0.08); }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 28px;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.2em;
+    animation: blink 1.4s infinite;
+  }
+
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* ── section common ──────────────────────────── */
+  .section {
+    padding: 80px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: var(--vt);
+    font-size: 32px;
+    color: var(--green);
+    letter-spacing: 0.05em;
+    margin-bottom: 40px;
+  }
+
+  /* ── modes table ─────────────────────────────── */
+  .modes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+
+  .mode-cell {
+    background: var(--bg2);
+    padding: 28px;
+  }
+
+  .mode-cell.header {
+    background: var(--bg3);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 12px 28px;
+  }
+
+  .mode-name {
+    font-family: var(--vt);
+    font-size: 26px;
+    color: var(--green);
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .mode-desc { color: #555; font-size: 12px; margin-bottom: 20px; line-height: 1.8; }
+
+  .mode-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    color: #444;
+  }
+
+  .mode-row:last-child { border-bottom: none; }
+  .mode-row span:first-child { color: #555; }
+  .mode-row span:last-child { color: var(--green); }
+  .mode-row .off { color: var(--dim); }
+
+  /* ── features ────────────────────────────────── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .feat {
+    background: var(--bg2);
+    padding: 28px;
+    transition: background 0.2s;
+  }
+
+  .feat:hover { background: var(--bg3); }
+
+  .feat-id {
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+  }
+
+  .feat-name {
+    font-family: var(--vt);
+    font-size: 22px;
+    color: var(--green);
+    margin-bottom: 10px;
+    letter-spacing: 0.03em;
+  }
+
+  .feat-desc { font-size: 12px; color: #555; line-height: 1.8; }
+
+  /* ── install ─────────────────────────────────── */
+  .install-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .install-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg3);
+  }
+
+  .install-tab {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    color: var(--dim);
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    transition: color 0.15s;
+    border-right: 1px solid var(--border);
+  }
+
+  .install-tab.active { color: var(--green); background: var(--bg2); }
+  .install-tab:hover { color: var(--green); }
+
+  .install-content { display: none; }
+  .install-content.active { display: block; }
+
+  .code-block {
+    padding: 24px 28px;
+    font-size: 13px;
+    line-height: 2;
+  }
+
+  .code-block .prompt { color: var(--dim); user-select: none; }
+  .code-block .cmd { color: var(--green); }
+  .code-block .arg { color: var(--cyan); }
+  .code-block .comment { color: var(--dim); }
+  .code-block .ok { color: var(--green); }
+  .code-block .warn { color: var(--yellow); }
+
+  .install-note {
+    padding: 14px 28px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--dim);
+    background: var(--bg3);
+  }
+
+  /* ── boot sequence ───────────────────────────── */
+  .boot-seq {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 28px;
+    font-size: 12px;
+    line-height: 2.2;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .boot-seq::before {
+    content: 'BOOT SEQUENCE — OS MODE';
+    position: absolute;
+    top: 14px; right: 20px;
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.2em;
+  }
+
+  .bs-step { display: flex; gap: 16px; align-items: baseline; }
+  .bs-tag { min-width: 90px; text-align: right; color: var(--dim); font-size: 11px; flex-shrink: 0; }
+  .bs-line { color: #555; flex: 1; }
+  .bs-ok { color: var(--green); }
+  .bs-fail { color: var(--red); }
+  .bs-indent { padding-left: 106px; color: #444; font-size: 11px; }
+
+  /* ── stack ───────────────────────────────────── */
+  .stack-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--border);
+    font-size: 12px;
+  }
+
+  .stack-table td, .stack-table th {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .stack-table th {
+    background: var(--bg3);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    font-weight: normal;
+  }
+
+  .stack-table tr:last-child td { border-bottom: none; }
+  .stack-table td:first-child { color: #555; }
+  .stack-table td:last-child { color: var(--cyan); }
+  .stack-table tr:hover td { background: var(--bg3); }
+
+  /* ── recovery ────────────────────────────────── */
+  .recovery {
+    background: rgba(255,0,51,0.04);
+    border: 1px solid rgba(255,0,51,0.2);
+    padding: 28px;
+  }
+
+  .recovery-title {
+    font-family: var(--vt);
+    font-size: 22px;
+    color: var(--red);
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+
+  .recovery pre {
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 2;
+    color: #888;
+  }
+
+  .recovery pre .g { color: var(--green); }
+  .recovery pre .r { color: var(--red); }
+  .recovery pre .d { color: var(--dim); }
+
+  /* ── footer ──────────────────────────────────── */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  .footer a { color: var(--dim); text-decoration: none; }
+  .footer a:hover { color: var(--green); }
+  .footer-right { display: flex; gap: 20px; }
+
+  /* ── cursor blink in code ────────────────────── */
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--green);
+    animation: blink 1s infinite;
+    vertical-align: middle;
+  }
+
+  /* ── responsive ──────────────────────────────── */
+  @media (max-width: 640px) {
+    .modes { grid-template-columns: 1fr; }
+    .ascii-title { font-size: 14px; }
+    .topbar-right { display: none; }
+    .footer { flex-direction: column; gap: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- top bar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="#features">FEATURES</a>
+    <a href="#install">INSTALL</a>
+    <a href="#stack">STACK</a>
+    <a href="https://github.com/krko2n/xKOR_3RR0R">GITHUB</a>
+  </div>
+  <div class="topbar-right">STATUS &nbsp;<span>ACTIVE</span></div>
+</div>
+
+<!-- hero -->
+<section class="hero">
+  <div class="hero-grid"></div>
+
+  <div class="logo-wrap">
+    <!-- PowerGlitch applied to logo -->
+    <img src="../logo_with_text.png" class="glitch-logo" alt="xKOR_3RR0R"
+         onerror="this.style.display='none'; document.querySelector('.ascii-title').style.display='block'"/>
+  </div>
+
+  <pre class="ascii-title" style="display:none" id="ascii-fallback">
+██╗  ██╗██╗  ██╗ ██████╗ ██████╗
+╚██╗██╔╝██║ ██╔╝██╔═══██╗██╔══██╗
+ ╚███╔╝ █████╔╝ ██║   ██║██████╔╝
+ ██╔██╗ ██╔═██╗ ██║   ██║██╔══██╗
+██╔╝ ██╗██║  ██╗╚██████╔╝██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝</pre>
+
+  <p class="hero-tagline">
+    A <b>cyberpunk OS interface</b> for Linux &nbsp;·&nbsp;
+    Real terminals &nbsp;·&nbsp; Live system data &nbsp;·&nbsp; Full OS replacement
+  </p>
+
+  <div class="boot-log">
+    <div><span class="log-dim">[  SYS  ]</span> &nbsp;initializing xKOR_3RR0R...</div>
+    <div><span class="log-ok">[  OK   ]</span> &nbsp;Electron runtime loaded</div>
+    <div><span class="log-ok">[  OK   ]</span> &nbsp;backend server on port 3001</div>
+    <div><span class="log-ok">[  OK   ]</span> &nbsp;node-pty rebuild verified</div>
+    <div><span class="log-warn">[ WARN  ]</span> &nbsp;standard desktop not found</div>
+    <div><span class="log-ok">[  OK   ]</span> &nbsp;that's intentional&nbsp;<span class="cursor"></span></div>
+  </div>
+
+  <div class="hero-cta">
+    <a href="#install" class="btn btn-primary">GET STARTED</a>
+    <a href="https://github.com/krko2n/xKOR_3RR0R" class="btn btn-outline">VIEW SOURCE</a>
+  </div>
+
+  <div class="scroll-hint">-- SCROLL DOWN --</div>
+</section>
+
+<!-- modes -->
+<section class="section" id="modes">
+  <div class="container">
+    <div class="section-label">// 01</div>
+    <div class="section-title">OPERATING MODES</div>
+
+    <div class="modes">
+      <div class="mode-cell header">APP MODE</div>
+      <div class="mode-cell header">OS MODE</div>
+
+      <div class="mode-cell">
+        <div class="mode-name">APP MODE</div>
+        <div class="mode-desc">Run on top of your existing Linux desktop as a regular Electron window. Quick to try, no system changes.</div>
+        <div class="mode-row"><span>LAUNCH</span><span>bash run.sh</span></div>
+        <div class="mode-row"><span>LOGIN</span><span>built-in UI</span></div>
+        <div class="mode-row"><span>REPLACES DE</span><span class="off">--</span></div>
+        <div class="mode-row"><span>BOOT SCREEN</span><span class="off">--</span></div>
+        <div class="mode-row"><span>systemd</span><span class="off">--</span></div>
+      </div>
+
+      <div class="mode-cell">
+        <div class="mode-name">OS MODE</div>
+        <div class="mode-desc">Completely replaces your desktop. Custom Plymouth boot, PAM login on TTY, glitch animation, dedicated Xorg session.</div>
+        <div class="mode-row"><span>LAUNCH</span><span>auto on boot</span></div>
+        <div class="mode-row"><span>LOGIN</span><span>PAM on TTY1</span></div>
+        <div class="mode-row"><span>REPLACES DE</span><span>YES</span></div>
+        <div class="mode-row"><span>BOOT SCREEN</span><span>Plymouth xkor</span></div>
+        <div class="mode-row"><span>systemd</span><span>xkor-login.service</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- features -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-label">// 02</div>
+    <div class="section-title">FEATURES</div>
+
+    <div class="features-grid">
+      <div class="feat">
+        <div class="feat-id">MODULE_01</div>
+        <div class="feat-name">TERMINALS</div>
+        <div class="feat-desc">Multiple real PTY shell instances via node-pty. Three simultaneous terminals. Actual bash, not emulated.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-id">MODULE_02</div>
+        <div class="feat-name">SYSTEM GRAPHS</div>
+        <div class="feat-desc">Live CPU, RAM, network, and temperature monitoring. Canvas rendering at 200ms refresh. Neon color-coded per metric.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-id">MODULE_03</div>
+        <div class="feat-name">AI PANEL</div>
+        <div class="feat-desc">Toggle with F2. Connects to any OpenAI-compatible API. Default: local Ollama with llama3. No cloud required.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-id">MODULE_04</div>
+        <div class="feat-name">FILE MANAGER</div>
+        <div class="feat-desc">Browse, rename, delete, copy and paste files. Right-click context menu. Opens files in the active terminal.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-id">MODULE_05</div>
+        <div class="feat-name">3D GLOBE</div>
+        <div class="feat-desc">Rotating world map with threat zone markers. 60fps canvas animation. No WebGL dependency.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-id">MODULE_06</div>
+        <div class="feat-name">KEYBOARD VIZ</div>
+        <div class="feat-desc">Full on-screen keyboard visualizer. Lights up physical keys as you type. Click to input directly.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- install -->
+<section class="section" id="install">
+  <div class="container">
+    <div class="section-label">// 03</div>
+    <div class="section-title">INSTALLATION</div>
+
+    <div class="install-block">
+      <div class="install-tabs">
+        <button class="install-tab active" onclick="switchTab('app')">APP MODE</button>
+        <button class="install-tab" onclick="switchTab('os')">OS MODE</button>
+        <button class="install-tab" onclick="switchTab('dev')">DEVELOPMENT</button>
+      </div>
+
+      <div class="install-content active" id="tab-app">
+        <div class="code-block">
+          <div><span class="prompt">$ </span><span class="cmd">git clone</span> <span class="arg">https://github.com/krko2n/xKOR_3RR0R</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">cd</span> <span class="arg">xKOR_3RR0R</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">bash</span> <span class="arg">run.sh</span></div>
+          <div>&nbsp;</div>
+          <div><span class="ok">[  OK   ]</span> npm install complete</div>
+          <div><span class="ok">[  OK   ]</span> node-pty rebuilt for Electron ABI</div>
+          <div><span class="ok">[  OK   ]</span> launching xKOR_3RR0R...</div>
+        </div>
+        <div class="install-note">run.sh handles npm install, electron-rebuild, and npm start automatically.</div>
+      </div>
+
+      <div class="install-content" id="tab-os">
+        <div class="code-block">
+          <div><span class="comment"># Arch / Manjaro / EndeavourOS only</span></div>
+          <div>&nbsp;</div>
+          <div><span class="prompt">$ </span><span class="cmd">git clone</span> <span class="arg">https://github.com/krko2n/xKOR_3RR0R</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">cd</span> <span class="arg">xKOR_3RR0R/os</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">sudo bash</span> <span class="arg">install.sh</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">sudo reboot</span></div>
+          <div>&nbsp;</div>
+          <div><span class="comment"># On next boot xKOR_3RR0R will take over automatically</span></div>
+        </div>
+        <div class="install-note">Installs to /opt/xkor_3rr0r &nbsp;·&nbsp; Enables xkor-login.service &nbsp;·&nbsp; Installs Plymouth theme</div>
+      </div>
+
+      <div class="install-content" id="tab-dev">
+        <div class="code-block">
+          <div><span class="prompt">$ </span><span class="cmd">npm install</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">npm start</span></div>
+          <div>&nbsp;</div>
+          <div><span class="comment"># if terminals show blank (node-pty needs rebuild)</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">node</span> <span class="arg">node_modules/@electron/rebuild/lib/cli.js -f -w node-pty</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">npm start</span></div>
+        </div>
+        <div class="install-note">F12 opens DevTools &nbsp;·&nbsp; F2 toggles AI panel &nbsp;·&nbsp; config/ holds credentials and AI endpoint</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- boot sequence -->
+<section class="section" id="boot">
+  <div class="container">
+    <div class="section-label">// 04</div>
+    <div class="section-title">BOOT SEQUENCE</div>
+
+    <div class="boot-seq">
+      <div class="bs-step"><span class="bs-tag">POWER ON</span><span class="bs-line bs-ok">system initialized</span></div>
+      <div class="bs-step"><span class="bs-tag">GRUB</span><span class="bs-line">bootloader</span></div>
+      <div class="bs-step"><span class="bs-tag">KERNEL</span><span class="bs-line">linux loads</span></div>
+      <div class="bs-step"><span class="bs-tag">PLYMOUTH</span><span class="bs-line bs-ok">xKOR boot animation plays</span></div>
+      <div class="bs-step"><span class="bs-tag">systemd</span><span class="bs-line bs-ok">xkor-login.service starts on TTY1</span></div>
+      <div class="bs-indent">Conflicts=getty@tty1 &nbsp;·&nbsp; replaces normal login prompt</div>
+      <div class="bs-step"><span class="bs-tag">login.js</span><span class="bs-line">ASCII banner + Username/Password</span></div>
+      <div class="bs-indent">PAM authentication via pamtester</div>
+      <div class="bs-step"><span class="bs-tag">FAIL</span><span class="bs-line bs-fail">process.exit(1) &nbsp;→&nbsp; service restarts &nbsp;→&nbsp; prompt again</span></div>
+      <div class="bs-step"><span class="bs-tag">OK</span><span class="bs-line bs-ok">loading.sh glitch animation ~4s</span></div>
+      <div class="bs-step"><span class="bs-tag">startx</span><span class="bs-line bs-ok">xkor-session.sh &nbsp;→&nbsp; Electron fullscreen</span></div>
+      <div class="bs-step"><span class="bs-tag">READY</span><span class="bs-line bs-ok">ACCESS GRANTED</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- stack -->
+<section class="section" id="stack">
+  <div class="container">
+    <div class="section-label">// 05</div>
+    <div class="section-title">TECH STACK</div>
+
+    <table class="stack-table">
+      <tr><th>LAYER</th><th>TECHNOLOGY</th></tr>
+      <tr><td>App shell</td><td>Electron 34</td></tr>
+      <tr><td>Real terminals</td><td>node-pty (native PTY)</td></tr>
+      <tr><td>Backend server</td><td>Express + WebSocket (ws) — port 3001</td></tr>
+      <tr><td>System monitoring</td><td>/proc/ + /sys/ direct reads</td></tr>
+      <tr><td>Terminal renderer</td><td>@xterm/xterm (integration in progress)</td></tr>
+      <tr><td>Frontend</td><td>Vanilla JS + custom CSS</td></tr>
+      <tr><td>PAM auth</td><td>pamtester (system binary — no native compilation)</td></tr>
+      <tr><td>Boot animation</td><td>Plymouth theme</td></tr>
+      <tr><td>Build</td><td>@electron/rebuild ^3.7.2</td></tr>
+      <tr><td>Language split</td><td>69% JS &nbsp;·&nbsp; 14% Shell &nbsp;·&nbsp; 12% CSS &nbsp;·&nbsp; 6% HTML</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- recovery -->
+<section class="section" id="recovery">
+  <div class="container">
+    <div class="section-label">// 06</div>
+    <div class="section-title">EMERGENCY RECOVERY</div>
+
+    <div class="recovery">
+      <div class="recovery-title">BLACK SCREEN AFTER INSTALL?</div>
+      <pre>
+<span class="d"># switch to a working TTY</span>
+<span class="g">Ctrl + Alt + F2</span>
+
+<span class="d"># log in, then disable the service and restore your DM</span>
+<span class="g">sudo systemctl disable xkor-login.service</span>
+<span class="g">sudo systemctl enable --now sddm</span>   <span class="d"># or gdm / lightdm</span>
+<span class="g">sudo reboot</span>
+
+<span class="d"># project files remain at /opt/xkor_3rr0r</span>
+<span class="d"># re-run sudo bash install.sh after fixing the issue</span>
+      </pre>
+    </div>
+  </div>
+</section>
+
+<!-- footer -->
+<div class="container">
+  <div class="footer">
+    <div>MIT License &nbsp;·&nbsp; (c) 2026 <a href="https://github.com/krko2n">krko2n</a></div>
+    <div class="footer-right">
+      <a href="https://github.com/krko2n/xKOR_3RR0R">GITHUB</a>
+      <a href="https://github.com/krko2n/xKOR_3RR0R/issues">ISSUES</a>
+      <a href="https://github.com/krko2n/xKOR_3RR0R/blob/main/AGENT.md">AGENT.md</a>
+    </div>
+  </div>
+</div>
+
+<!-- PowerGlitch -->
+<script src="https://unpkg.com/powerglitch@latest/dist/powerglitch.min.js"></script>
+<script>
+  // glitch the logo
+  if (document.querySelector('.glitch-logo')) {
+    PowerGlitch.glitch('.glitch-logo', {
+      playMode: 'always',
+      createContainers: true,
+      hideOverflow: false,
+      timing: { duration: 3000, iterations: Infinity, easing: 'ease-in-out' },
+      glitchTimeSpan: { start: 0.8, end: 0.95 },
+      shake: { velocity: 12, amplitudeX: 0.04, amplitudeY: 0.02 },
+      slice: {
+        count: 5,
+        velocity: 12,
+        minHeight: 0.01,
+        maxHeight: 0.12,
+        hueRotate: true
+      },
+      pulse: false
+    });
+  }
+
+  // tab switcher
+  function switchTab(name) {
+    document.querySelectorAll('.install-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.install-content').forEach(c => c.classList.remove('active'));
+    event.target.classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+  }
+
+  // typing effect for boot log
+  (function() {
+    const lines = document.querySelectorAll('.boot-log div');
+    lines.forEach((l, i) => {
+      l.style.opacity = '0';
+      l.style.transform = 'translateX(-6px)';
+      l.style.transition = 'opacity 0.2s, transform 0.2s';
+      setTimeout(() => {
+        l.style.opacity = '1';
+        l.style.transform = 'none';
+      }, 400 + i * 220);
+    });
+  })();
+
+  // random glitch flicker on section titles
+  document.querySelectorAll('.section-title, .mode-name, .feat-name').forEach(el => {
+    setInterval(() => {
+      if (Math.random() > 0.97) {
+        el.style.textShadow = '2px 0 #ff0033, -2px 0 #00d4ff';
+        el.style.transform = 'translateX(' + (Math.random() * 4 - 2) + 'px)';
+        setTimeout(() => {
+          el.style.textShadow = '';
+          el.style.transform = '';
+        }, 80);
+      }
+    }, 2000);
+  });
+</script>
+</body>
+</html>
