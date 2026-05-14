@@ -4,7 +4,7 @@
 
 <br>
 
-[![License](https://img.shields.io/badge/MIT-00ff9f?style=for-the-badge&label=LICENSE&labelColor=#1D1065)](LICENSE)
+[![License](https://img.shields.io/badge/MIT-1D1065?style=for-the-badge&label=LICENSE&labelColor=#1D1065)](LICENSE)
 [![Platform](https://img.shields.io/badge/ARCH%20LINUX-1793d1?style=for-the-badge&label=PLATFORM&labelColor=0d0d0d&logo=archlinux&logoColor=1793d1)](https://archlinux.org)
 [![Electron](https://img.shields.io/badge/ELECTRON%2034-47848f?style=for-the-badge&label=BUILT%20WITH&labelColor=0d0d0d&logo=electron&logoColor=47848f)](https://electronjs.org)
 [![Node](https://img.shields.io/badge/NODE%2018+-339933?style=for-the-badge&label=REQUIRES&labelColor=0d0d0d&logo=node.js&logoColor=339933)](https://nodejs.org)
