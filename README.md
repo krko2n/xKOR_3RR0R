@@ -9,8 +9,8 @@
 [![Electron](https://img.shields.io/badge/ELECTRON%2034-47848f?style=for-the-badge&label=BUILT%20WITH&labelColor=0d0d0d&logo=electron&logoColor=47848f)](https://electronjs.org)
 [![Node](https://img.shields.io/badge/NODE%2018+-339933?style=for-the-badge&label=REQUIRES&labelColor=0d0d0d&logo=node.js&logoColor=339933)](https://nodejs.org)
 [![Status](https://img.shields.io/badge/ACTIVE-00ff9f?style=for-the-badge&label=STATUS&labelColor=0d0d0d)](https://github.com/krko2n/xKOR_3RR0R)
-[![Lines of code](https://tokei.rs/b1/github/krko2n/xKOR_3RR0R?category=code&style=flat-square&label=LINES+OF+CODE&color=00ff9f)](https://github.com/krko2n/xKOR_3RR0R)
-[![Files](https://tokei.rs/b1/github/krko2n/xKOR_3RR0R?category=files&style=flat-square&label=FILES&color=00d4ff)](https://github.com/krko2n/xKOR_3RR0R)
+[![Lines of code](https://tokei.rs/b1/github/krko2n/xKOR_3RR0R?category=code&style=for-the-badge&color=00ff9f&label=LINES+OF+CODE)](https://github.com/krko2n/xKOR_3RR0R)
+[![Files](https://tokei.rs/b1/github/krko2n/xKOR_3RR0R?category=files&style=for-the-badge&color=00d4ff&label=FILES)](https://github.com/krko2n/xKOR_3RR0R)
 
 <br>
 
