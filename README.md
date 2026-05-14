@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
 
 <img src="logo_with_text.png" width="580" alt="xKOR_3RR0R"/>
 
@@ -9,9 +9,9 @@
 [![Electron](https://img.shields.io/badge/ELECTRON%2034-47848f?style=for-the-badge&label=BUILT%20WITH&labelColor=0d0d0d&logo=electron&logoColor=47848f)](https://electronjs.org)
 [![Node](https://img.shields.io/badge/NODE%2018+-339933?style=for-the-badge&label=REQUIRES&labelColor=0d0d0d&logo=node.js&logoColor=339933)](https://nodejs.org)
 [![Status](https://img.shields.io/badge/ACTIVE-00ff9f?style=for-the-badge&label=STATUS&labelColor=0d0d0d)](https://github.com/krko2n/xKOR_3RR0R)
-
 [![Lines of code](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/counts.json&style=for-the-badge)](https://github.com/krko2n/xKOR_3RR0R)
 [![Files](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/files.json&style=for-the-badge)](https://github.com/krko2n/xKOR_3RR0R)
+
 <br>
 
 **A fullscreen cyberpunk OS interface for Linux.**<br>
