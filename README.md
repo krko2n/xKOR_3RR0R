@@ -325,7 +325,7 @@ npm start
 
 MIT License · © 2026 [krko2n](https://github.com/krko2n)
 
-[![GitHub](https://img.shields.io/badge/krko2n-00ff9f?style=for-the-badge&label=GITHUB&labelColor=0d0d0d&logo=github&logoColor=white)](https://github.com/krko2n)
+[![GitHub](https://img.shields.io/badge/krko2n-391362?style=for-the-badge&label=GITHUB&labelColor=000000&logo=github&logoColor=white)](https://github.com/krko2n)
 [![Stars](https://img.shields.io/github/stars/krko2n/xKOR_3RR0R?style=for-the-badge&label=STARS&labelColor=0d0d0d&color=00d4ff&logo=github&logoColor=white)](https://github.com/krko2n/xKOR_3RR0R/stargazers)
 
 </div>
