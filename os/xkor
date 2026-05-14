@@ -1,0 +1,67 @@
+#!/bin/bash
+# xKOR_3RR0R Management CLI
+# Installed to /usr/local/bin/xkor by the installer
+# Usage: xkor <command>
+
+INSTALL_DIR="/opt/xkor_3rr0r"
+OS_DIR="$INSTALL_DIR/os"
+
+cmd="${1:-help}"
+shift 2>/dev/null || true
+
+case "$cmd" in
+    install)
+        [[ $EUID -ne 0 ]] && exec sudo "$0" install "$@"
+        exec bash "$OS_DIR/install.sh" "$@"
+        ;;
+    uninstall)
+        [[ $EUID -ne 0 ]] && exec sudo "$0" uninstall "$@"
+        exec bash "$OS_DIR/uninstall.sh" "$@"
+        ;;
+    repair)
+        [[ $EUID -ne 0 ]] && exec sudo "$0" repair "$@"
+        exec bash "$OS_DIR/repair.sh" "$@"
+        ;;
+    clean-install)
+        [[ $EUID -ne 0 ]] && exec sudo "$0" clean-install "$@"
+        bash "$OS_DIR/uninstall.sh"
+        exec bash "$OS_DIR/install.sh" "$@"
+        ;;
+    status)
+        source "$OS_DIR/lib/xkor-lib.sh"
+        source "$OS_DIR/lib/manifest.sh"
+        echo "=== xKOR_3RR0R Status ==="
+        if manifest_exists; then
+            echo "  Installed:  YES"
+            echo "  Version:    $(manifest_get_one VERSION)"
+            echo "  Date:       $(manifest_get_one INSTALL_DATE)"
+            echo "  Path:       $(manifest_get_one INSTALL_PATH)"
+            echo "  Service:    $(systemctl is-enabled xkor-login.service 2>/dev/null || echo disabled)"
+        else
+            echo "  Installed:  NO"
+        fi
+        ;;
+    verify)
+        [[ $EUID -ne 0 ]] && exec sudo "$0" verify "$@"
+        source "$OS_DIR/lib/xkor-lib.sh"
+        source "$OS_DIR/lib/manifest.sh"
+        source "$OS_DIR/lib/verify.sh"
+        log_init "/var/log/xkor_3rr0r/verify_$(date +%Y-%m-%d_%H-%M-%S).log"
+        run_verify
+        ;;
+    help|--help|-h)
+        echo "Usage: xkor <command>"
+        echo ""
+        echo "  install        Full installation"
+        echo "  uninstall      Remove everything (--remove-logs to also delete logs)"
+        echo "  clean-install  Uninstall then fresh install"
+        echo "  repair         Fix broken install without reinstalling"
+        echo "  status         Show installation status"
+        echo "  verify         Full integrity check"
+        echo "  help           Show this message"
+        ;;
+    *)
+        echo "Unknown command: $cmd -- run: xkor help"
+        exit 1
+        ;;
+esac

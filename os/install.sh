@@ -1,159 +1,138 @@
 #!/bin/bash
-# xKOR_3RR0R OS Mode Installer
-# Run as root: sudo bash install.sh
-# Self-contained -- everything installed here, nothing needed after reboot.
+# xKOR_3RR0R OS Mode Installer v9
+# Usage: sudo bash os/install.sh  OR  sudo xkor install
 
 set -e
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/lib/xkor-lib.sh"
+source "$SCRIPT_DIR/lib/manifest.sh"
+source "$SCRIPT_DIR/lib/cleanup.sh"
+source "$SCRIPT_DIR/lib/verify.sh"
 
-RED="\e[31m"
-GREEN="\e[32m"
-YELLOW="\e[33m"
-BLUE="\e[34m"
-RESET="\e[0m"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PROJECT_VERSION=$(grep '"version"' "$REPO_ROOT/package.json" 2>/dev/null | head -1 | sed 's/.*"\([0-9][^"]*\)".*/\1/' || echo "unknown")
 
-ok()   { echo -e "${GREEN}[  OK  ]${RESET} $1"; }
-info() { echo -e "${YELLOW}[ INFO ]${RESET} $1"; }
-fail() { echo -e "${RED}[ FAIL ]${RESET} $1"; exit 1; }
-
-# â”€â”€ Guards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-[[ $EUID -ne 0 ]] && fail "Run as root: sudo bash install.sh"
+[[ $EUID -ne 0 ]] && fail "Run as root: sudo bash os/install.sh"
 grep -qi "arch" /etc/os-release || fail "Arch-based distros only."
 
-INSTALL_DIR="/opt/xkor_3rr0r"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+mkdir -p "$XKOR_LOG_DIR"
+log_init "$XKOR_LOG_DIR/install_$(date +%Y-%m-%d_%H-%M-%S).log"
 
-LOG_DIR="/var/log/xkor_3rr0r"
-mkdir -p "$LOG_DIR"
-LOG_FILE="$LOG_DIR/install_$(date +%Y-%m-%d_%H-%M-%S).log"
-exec > >(tee -a "$LOG_FILE") 2>&1
-
-echo -e "${BLUE}=== xKOR_3RR0R OS Mode Installer ===${RESET}"
-echo "Log: $LOG_FILE"
-echo "Repo: $REPO_ROOT"
+echo -e "${BLUE}=== xKOR_3RR0R Installer v9 ===${RESET}"
+echo "Version: $PROJECT_VERSION  |  Repo: $REPO_ROOT"
+echo "Log:     $XKOR_CURRENT_LOG"
 echo
 
-# â”€â”€ 1. Fix line endings and permissions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-info "Fixing file permissions..."
+# Step 1: Check for previous install and clean it
+step "Checking for previous installation..."
+if manifest_exists; then
+    warn "Previous install found (v$(manifest_get_one VERSION)) -- cleaning up..."
+    run_cleanup
+elif [[ -d "$XKOR_INSTALL_DIR" ]]; then
+    warn "Install dir found without manifest -- running fallback cleanup..."
+    run_cleanup
+else
+    info "No previous installation found"
+fi
+
+# Step 2: Fix permissions
+step "Fixing file permissions..."
 find "$REPO_ROOT" -type f -name "*.sh" -exec sed -i 's/\r$//' {} \;
 find "$REPO_ROOT" -type f -name "*.sh" -exec chmod +x {} \;
 ok "Permissions fixed"
 
-# â”€â”€ 2. System update + install all dependencies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-info "Installing system dependencies..."
+# Step 3: Refresh mirrors
+step "Refreshing pacman mirrors..."
+pacman -Sy --noconfirm reflector 2>/dev/null || true
+if command -v reflector &>/dev/null; then
+    reflector --country "Czech Republic,Slovakia,Austria,Germany,Poland" \
+        --age 12 --protocol https --sort rate \
+        --save /etc/pacman.d/mirrorlist 2>/dev/null \
+        && ok "Mirrorlist updated" \
+        || warn "reflector failed -- using existing mirrors"
+fi
+
+# Step 4: System packages
+step "Installing system dependencies..."
 pacman -Syu --noconfirm
 pacman -S --noconfirm --needed \
     nodejs npm \
     xorg-server xorg-xinit xorg-xauth xorg-xrandr xorg-xset xorg-xdpyinfo \
-    mesa \
-    plymouth \
-    pam \
-    unclutter \
-    pamtester
+    mesa plymouth pam unclutter pamtester
+command -v pamtester > /dev/null || fail "pamtester install failed"
+ok "System packages installed  |  pamtester: $(pamtester --version 2>&1 | head -1)"
 
-# Verify pamtester installed correctly
-command -v pamtester > /dev/null || fail "pamtester failed to install. Check pacman logs."
-ok "All system dependencies installed"
-ok "pamtester: $(pamtester --version 2>&1 | head -1)"
+# Step 5: Copy project
+step "Copying project to $XKOR_INSTALL_DIR..."
+mkdir -p "$XKOR_INSTALL_DIR"
+cp -r "$REPO_ROOT"/* "$XKOR_INSTALL_DIR/"
+find "$XKOR_INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
+ok "Project copied"
 
-# â”€â”€ 3. Copy project to /opt/xkor_3rr0r â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-info "Copying project to $INSTALL_DIR..."
-rm -rf "$INSTALL_DIR"
-mkdir -p "$INSTALL_DIR"
-cp -r "$REPO_ROOT"/* "$INSTALL_DIR/"
+# Step 6: Init manifest
+step "Initializing manifest..."
+manifest_init "$PROJECT_VERSION" "$REPO_ROOT"
+manifest_record "DIR"     "$XKOR_INSTALL_DIR"
+manifest_record "SERVICE" "xkor-login.service"
+manifest_record "SYMLINK" "$XKOR_BIN"
+manifest_record "PLYMOUTH" "xkor"
+ok "Manifest: $XKOR_MANIFEST_FILE"
 
-# Force correct permissions on scripts inside install dir
-find "$INSTALL_DIR" -type f -name "*.sh" -exec chmod +x {} \;
-ok "Project copied to $INSTALL_DIR"
-
-# â”€â”€ 4. Install main app npm dependencies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-info "Installing main app dependencies (npm install)..."
-cd "$INSTALL_DIR"
-
-# Clear any old npm cache that could pull wrong packages
+# Step 7: npm install
+step "Installing Node.js dependencies..."
+cd "$XKOR_INSTALL_DIR"
 npm cache clean --force 2>/dev/null || true
-
 npm install
-ok "Main app npm install complete"
+ok "npm install complete"
 
-# â”€â”€ 5. Rebuild node-pty for Electron â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-info "Rebuilding node-pty for Electron ABI..."
-if [ -f "node_modules/@electron/rebuild/lib/cli.js" ]; then
+# Step 8: Rebuild node-pty
+step "Rebuilding node-pty for Electron ABI..."
+if [[ -f "node_modules/@electron/rebuild/lib/cli.js" ]]; then
     node node_modules/@electron/rebuild/lib/cli.js -f -w node-pty \
         && touch node_modules/.node-pty-rebuilt \
-        && ok "node-pty rebuilt for Electron" \
-        || echo -e "${YELLOW}[ WARN ] node-pty rebuild failed -- terminals may not work${RESET}"
+        && ok "node-pty rebuilt" \
+        || warn "node-pty rebuild failed -- terminals may not work"
 else
-    echo -e "${YELLOW}[ WARN ] @electron/rebuild not found, skipping${RESET}"
+    warn "@electron/rebuild not found, skipping"
 fi
 
-# â”€â”€ 6. Login app: verify no external deps needed â”€â”€â”€â”€â”€â”€â”€â”€â”€
-info "Verifying login app..."
-cd "$INSTALL_DIR/os/login"
-
-# Wipe node_modules to ensure no stale authenticate-pam remains
+# Step 9: Verify login app
+step "Verifying login app..."
+cd "$XKOR_INSTALL_DIR/os/login"
 rm -rf node_modules
-
-# package.json has no dependencies -- this just creates node_modules dir
 npm install --ignore-scripts
-ok "Login app ready (no external dependencies)"
+grep -q "authenticate-pam" pam.js && fail "pam.js still references authenticate-pam"
+grep -q "pamtester" pam.js        || fail "pam.js does not use pamtester"
+node --check login.js             || fail "login.js has syntax errors"
+ok "Login app verified"
 
-# Verify pam.js uses pamtester, not authenticate-pam
-if grep -q "authenticate-pam" pam.js; then
-    fail "pam.js still references authenticate-pam! Push fixes first."
-fi
-if grep -q "pamtester" pam.js; then
-    ok "pam.js verified: using pamtester"
-else
-    fail "pam.js does not reference pamtester. Check the file."
-fi
+# Step 10: Install xkor CLI
+step "Installing xkor CLI..."
+cp "$XKOR_INSTALL_DIR/os/xkor" "$XKOR_BIN"
+chmod +x "$XKOR_BIN"
+ok "CLI installed: xkor help"
 
-# Quick syntax check on login.js
-node --check login.js && ok "login.js syntax OK" || fail "login.js has syntax errors"
-
-# â”€â”€ 7. Install systemd service â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-info "Installing systemd service..."
-cp "$INSTALL_DIR/os/systemd/xkor-login.service" /etc/systemd/system/
+# Step 11: systemd service
+step "Installing systemd service..."
+cp "$XKOR_INSTALL_DIR/os/systemd/xkor-login.service" "$XKOR_SERVICE_LOGIN"
 systemctl daemon-reload
 systemctl enable xkor-login.service
 ok "xkor-login.service enabled"
 
-# â”€â”€ 8. Install Plymouth theme â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-info "Installing Plymouth theme..."
-if [ -d "$INSTALL_DIR/os/plymount/xkor" ]; then
-    cp -r "$INSTALL_DIR/os/plymount/xkor" /usr/share/plymouth/themes/
-    plymouth-set-default-theme -R xkor 2>/dev/null \
-        && ok "Plymouth theme installed" \
-        || echo -e "${YELLOW}[ WARN ] Plymouth theme set failed (non-fatal)${RESET}"
+# Step 12: Plymouth theme
+step "Installing Plymouth theme..."
+if [[ -d "$XKOR_INSTALL_DIR/os/plymount/xkor" ]]; then
+    cp -r "$XKOR_INSTALL_DIR/os/plymount/xkor" /usr/share/plymouth/themes/
+    plymouth-set-default-theme -R xkor 2>/dev/null && ok "Plymouth installed" || warn "Plymouth set failed"
 else
-    echo -e "${YELLOW}[ WARN ] Plymouth theme not found, skipping${RESET}"
+    warn "Plymouth theme directory not found"
 fi
 
-# â”€â”€ 9. Final verification â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-echo
-echo -e "${BLUE}=== Post-install verification ===${RESET}"
+# Step 13: Final verify
+run_verify
 
-command -v node       > /dev/null && ok "node:       $(node --version)" || fail "node not found"
-command -v npm        > /dev/null && ok "npm:        $(npm --version)"  || fail "npm not found"
-command -v pamtester  > /dev/null && ok "pamtester:  installed"         || fail "pamtester not found"
-command -v startx     > /dev/null && ok "startx:     installed"         || fail "startx not found"
-command -v unclutter  > /dev/null && ok "unclutter:  installed"         || fail "unclutter not found"
-
-test -f "$INSTALL_DIR/os/login/login.js"        && ok "login.js:   found" || fail "login.js missing"
-test -f "$INSTALL_DIR/os/login/pam.js"          && ok "pam.js:     found" || fail "pam.js missing"
-test -f "$INSTALL_DIR/os/login/start-login.sh"  && ok "start-login.sh: found" || fail "start-login.sh missing"
-test -f "$INSTALL_DIR/os/xorg/xkor-session.sh"  && ok "xkor-session.sh: found" || fail "xkor-session.sh missing"
-systemctl is-enabled xkor-login.service > /dev/null \
-    && ok "xkor-login.service: enabled" \
-    || fail "xkor-login.service not enabled"
-
-echo
 echo -e "${GREEN}=== Installation complete ===${RESET}"
-echo "Everything verified. Reboot to start xKOR_3RR0R."
+echo "sudo reboot"
 echo
-echo "  sudo reboot"
-echo
-echo "If black screen after reboot:"
-echo "  Ctrl+Alt+F2 -> login ->"
-echo "  sudo systemctl disable xkor-login.service"
-echo "  sudo systemctl enable --now sddm && sudo reboot"
+echo "After reboot, manage with: xkor help"
+echo "Emergency recovery: Ctrl+Alt+F2 -> sudo systemctl disable xkor-login.service -> sudo systemctl enable --now sddm -> sudo reboot"
