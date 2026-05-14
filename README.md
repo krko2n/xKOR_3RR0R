@@ -20,7 +20,7 @@ Real terminals. Live system data. Full desktop replacement.<br>
 
 <br>
 
-[GET STARTED](#installation) &nbsp;Ă‚Â·&nbsp; [FEATURES](#features) &nbsp;Ă‚Â·&nbsp; [OS MODE](#os-mode) &nbsp;Ă‚Â·&nbsp; [RECOVERY](#emergency-recovery) &nbsp;Ă‚Â·&nbsp; [LIVE PAGE](https://krko2n.github.io/xKOR_3RR0R)
+[GET STARTED](#installation) &nbsp;·&nbsp; [FEATURES](#features) &nbsp;·&nbsp; [OS MODE](#os-mode) &nbsp;·&nbsp; [RECOVERY](#emergency-recovery) &nbsp;·&nbsp; [LIVE PAGE](https://krko2n.github.io/xKOR_3RR0R)
 
 </div>
 
@@ -35,24 +35,24 @@ xKOR_3RR0R turns your Linux machine into a sci-fi hacker workstation. Two operat
 | **Launch** | `bash run.sh` | automatic on boot |
 | **Login** | built-in UI | PAM on TTY1 |
 | **Session** | window on desktop | dedicated Xorg |
-| **Boot animation** | Ă˘â‚¬â€ť | Plymouth theme |
-| **Replaces desktop** | Ă˘â‚¬â€ť | YES |
+| **Boot animation** | — | Plymouth theme |
+| **Replaces desktop** | — | YES |
 
 ---
 
 ## FEATURES
 
-**TERMINALS** Ă˘â‚¬â€ť Multiple real PTY shell instances via `node-pty`. Three simultaneous sessions. Actual bash, not emulated.
+**TERMINALS** — Multiple real PTY shell instances via `node-pty`. Three simultaneous sessions. Actual bash, not emulated.
 
-**SYSTEM GRAPHS** Ă˘â‚¬â€ť Live CPU, RAM, network and temperature graphs. Canvas rendering at 200ms refresh. Neon color-coded per metric.
+**SYSTEM GRAPHS** — Live CPU, RAM, network and temperature graphs. Canvas rendering at 200ms refresh. Neon color-coded per metric.
 
-**AI PANEL** Ă˘â‚¬â€ť Toggle with `F2`. Connects to any OpenAI-compatible backend. Default: local Ollama with llama3. No cloud required.
+**AI PANEL** — Toggle with `F2`. Connects to any OpenAI-compatible backend. Default: local Ollama with llama3. No cloud required.
 
-**FILE MANAGER** Ă˘â‚¬â€ť Browse, rename, delete, copy and paste. Right-click context menu. Opens files directly in the active terminal.
+**FILE MANAGER** — Browse, rename, delete, copy and paste. Right-click context menu. Opens files directly in the active terminal.
 
-**3D GLOBE** Ă˘â‚¬â€ť Rotating world map with threat zone markers. 60fps canvas animation.
+**3D GLOBE** — Rotating world map with threat zone markers. 60fps canvas animation.
 
-**KEYBOARD VISUALIZER** Ă˘â‚¬â€ť Full on-screen keyboard. Lights up physical keys as you type. Click to input.
+**KEYBOARD VISUALIZER** — Full on-screen keyboard. Lights up physical keys as you type. Click to input.
 
 ---
 
@@ -114,13 +114,13 @@ When installed, xKOR_3RR0R becomes your entire desktop:
 POWER ON
   |-- GRUB
   |-- kernel
-  |-- Plymouth Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ xKOR boot animation
-  |-- systemd Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬  xkor-login.service on TTY1
+  |-- Plymouth ──────────── xKOR boot animation
+  |-- systemd ────────────  xkor-login.service on TTY1
   |                         (replaces getty@tty1)
-  |-- login.js Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬  ASCII banner + PAM auth
+  |-- login.js ───────────  ASCII banner + PAM auth
   |     |
-  |     |-- [FAIL] Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬ service restarts, prompt again
-  |     |-- [OK] Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬Ă˘â€ťâ‚¬  loading.sh glitch animation ~4s
+  |     |-- [FAIL] ──────── service restarts, prompt again
+  |     |-- [OK] ─────────  loading.sh glitch animation ~4s
   |                              |
   |                         startx xkor-session.sh
   |                              |
@@ -133,7 +133,7 @@ POWER ON
 
 ## CONFIGURATION
 
-**AI backend** Ă˘â‚¬â€ť `config/ai-endpoint.json`
+**AI backend** — `config/ai-endpoint.json`
 
 ```json
 {
@@ -144,7 +144,7 @@ POWER ON
 
 Default is [Ollama](https://ollama.ai) running locally. Change `endpoint` and `model` for any OpenAI-compatible API.
 
-**Login credentials** Ă˘â‚¬â€ť `config/user.json`
+**Login credentials** — `config/user.json`
 
 ```json
 {
@@ -166,10 +166,10 @@ Default is [Ollama](https://ollama.ai) running locally. Change `endpoint` and `m
 | Backend | Express + WebSocket on port 3001 |
 | System monitoring | `/proc/` + `/sys/` direct reads |
 | Frontend | Vanilla JS + custom CSS |
-| PAM auth | pamtester Ă˘â‚¬â€ť no native compilation |
+| PAM auth | pamtester — no native compilation |
 | Boot animation | Plymouth theme |
 | Build | @electron/rebuild ^3.7.2 |
-| Languages | 69% JS Ă‚Â· 14% Shell Ă‚Â· 12% CSS Ă‚Â· 6% HTML |
+| Languages | 69% JS · 14% Shell · 12% CSS · 6% HTML |
 
 ---
 
@@ -267,10 +267,9 @@ npm start
 
 <div align="center">
 
-MIT License Ă‚Â· Ă‚Â© 2026 [krko2n](https://github.com/krko2n)
+MIT License · © 2026 [krko2n](https://github.com/krko2n)
 
 [![GitHub](https://img.shields.io/badge/krko2n-00ff9f?style=for-the-badge&label=GITHUB&labelColor=0d0d0d&logo=github&logoColor=white)](https://github.com/krko2n)
 [![Stars](https://img.shields.io/github/stars/krko2n/xKOR_3RR0R?style=for-the-badge&label=STARS&labelColor=0d0d0d&color=00d4ff&logo=github&logoColor=white)](https://github.com/krko2n/xKOR_3RR0R/stargazers)
 
 </div>
-
