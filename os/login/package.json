@@ -1,7 +1,7 @@
 {
   "name": "xkor-login",
   "version": "1.0.0",
-  "description": "Custom TTY login screen for xKOR_3RR0R OS mode",
+  "description": "xKOR_3RR0R TTY login screen",
   "main": "login.js",
   "scripts": {
     "start": "node login.js"
