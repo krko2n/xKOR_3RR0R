@@ -4,7 +4,7 @@
 
 <br>
 
-[![License](https://img.shields.io/badge/MIT-00ff9f?style=for-the-badge&label=LICENSE&labelColor=0d0d0d)](LICENSE)
+[![License](https://img.shields.io/badge/MIT-00ff9f?style=for-the-badge&label=LICENSE&labelColor=#1D1065)](LICENSE)
 [![Platform](https://img.shields.io/badge/ARCH%20LINUX-1793d1?style=for-the-badge&label=PLATFORM&labelColor=0d0d0d&logo=archlinux&logoColor=1793d1)](https://archlinux.org)
 [![Electron](https://img.shields.io/badge/ELECTRON%2034-47848f?style=for-the-badge&label=BUILT%20WITH&labelColor=0d0d0d&logo=electron&logoColor=47848f)](https://electronjs.org)
 [![Node](https://img.shields.io/badge/NODE%2018+-339933?style=for-the-badge&label=REQUIRES&labelColor=0d0d0d&logo=node.js&logoColor=339933)](https://nodejs.org)
@@ -178,48 +178,104 @@ Default is [Ollama](https://ollama.ai) running locally. Change `endpoint` and `m
 <details>
 <summary>expand</summary>
 
-```
-xKOR_3RR0R/
-|
-|-- run.sh                    quick launcher
-|-- setup.sh                  App Mode one-time setup
-|-- package.json
-|-- AGENT.md                  AI context file
-|
-|-- config/
-|   |-- ai-endpoint.json
-|   `-- user.json
-|
-|-- backend/
-|   |-- server.js             Express + WS, port 3001
-|   |-- ai/proxy.js
-|   |-- fs/                   list / read / write / delete / rename
-|   |-- system/               cpu / ram / net / temp
-|   `-- terminal/pty.js       node-pty session manager
-|
-|-- src/
-|   |-- main.js               Electron main process
-|   |-- preload.js            context bridge
-|   `-- renderer/
-|       |-- index.html
-|       |-- css/              theme, layout, login, terminal, ai ...
-|       `-- js/               login, boot, ui, terminal, graphs,
-|                             globe, ai, filemanager, keyboard, tabs
-|
-`-- os/
-    |-- install.sh
-    |-- unistall.sh
-    |-- loading/loading.sh    glitch animation
-    |-- login/                TTY login app (plain Node.js)
-    |   |-- login.js
-    |   |-- pam.js
-    |   `-- start-login.sh
-    |-- plymount/             Plymouth theme
-    |-- systemd/
-    |   `-- xkor-login.service
-    `-- xorg/
-        |-- xkor-session.sh
-        `-- .xinitrc
+```xKOR_3RR0R/
+├── .github/
+│   └── workflows/
+│       └── count-lines.yml
+├── assets/
+│   ├── branding/
+│   ├── fonts/
+│   ├── globe/
+│   │   └── worldmap.json
+│   ├── icons/
+│   ├── images/
+│   └── sounds/
+├── backend/
+│   ├── ai/
+│   │   └── proxy.js
+│   ├── fs/
+│   │   ├── delete.js
+│   │   ├── list.js
+│   │   ├── read.js
+│   │   ├── rename.js
+│   │   └── write.js
+│   ├── system/
+│   │   ├── cpu.js
+│   │   ├── net.js
+│   │   ├── ram.js
+│   │   └── temp.js
+│   └── terminal/
+│       └── pty.js
+├── badges/
+│   ├── counts.json
+│   └── files.json
+├── config/
+│   ├── ai-endpoint.json
+│   └── user.json
+├── docs/
+│   └── index.html
+├── os/
+│   ├── lib/
+│   │   ├── cleanup.sh
+│   │   ├── manifest.sh
+│   │   ├── verify.sh
+│   │   └── xkor-lib.sh
+│   ├── loading/
+│   │   └── loading.sh
+│   ├── login/
+│   │   ├── login.js
+│   │   ├── package.json
+│   │   ├── pam.js
+│   │   └── start-login.sh
+│   ├── plymount/
+│   │   ├── plymount-theme.sh
+│   │   └── xkor/
+│   │       ├── xkor.plymouth
+│   │       └── xkor.script
+│   ├── systemd/
+│   │   ├── xkor-login.service
+│   │   └── xkor-ui.service
+│   └── xorg/
+│       ├── .xinitrc
+│       └── xkor-session.sh
+├── src/
+│   ├── main.js
+│   ├── preload.js
+│   └── renderer/
+│       ├── css/
+│       │   ├── ai.css
+│       │   ├── boot.css
+│       │   ├── filemanager.css
+│       │   ├── globe.css
+│       │   ├── graphs.css
+│       │   ├── keyboard.css
+│       │   ├── layout.css
+│       │   ├── login.css
+│       │   ├── terminal.css
+│       │   └── theme.css
+│       └── js/
+│           ├── ai.js
+│           ├── boot.js
+│           ├── filemanager.js
+│           ├── globe.js
+│           ├── graphs.js
+│           ├── keyboard.js
+│           ├── login.js
+│           ├── tabs.js
+│           ├── terminal.js
+│           └── ui.js
+├── .gitattributes
+├── .gitignore
+├── AGENT.md
+├── fixGuide.pdf
+├── INSTALL.md
+├── LINES.md
+├── logo.png
+├── logo_with_text.png
+├── package.json
+├── README.md
+├── run.sh
+└── setup.sh
 ```
 
 </details>
