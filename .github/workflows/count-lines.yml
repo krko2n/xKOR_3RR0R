@@ -18,7 +18,7 @@ jobs:
       - name: Install cloc
         run: sudo apt-get install -y cloc
 
-      - name: Count lines
+      - name: Count lines (markdown)
         run: |
           cloc . \
             --exclude-dir=node_modules,.git,dist,build \
@@ -26,10 +26,43 @@ jobs:
             --md \
             --out=LINES.md
 
-      - name: Commit LINES.md
+      - name: Generate badges
+        run: |
+          cloc . \
+            --exclude-dir=node_modules,.git,dist,build \
+            --exclude-ext=json,lock \
+            --json \
+            --quiet > cloc_output.json
+
+          CODE=$(jq '.SUM.code' cloc_output.json)
+          FILES=$(jq '.SUM.nFiles' cloc_output.json)
+
+          mkdir -p badges
+
+          cat > badges/counts.json <<EOF
+          {
+              "label":  "lines",
+              "message":  "$CODE",
+              "schemaVersion":  1,
+              "color":  "ED6BFB"
+          }
+          EOF
+
+          cat > badges/files.json <<EOF
+          {
+              "label":  "files",
+              "message":  "$FILES",
+              "schemaVersion":  1,
+              "color":  "4603A1"
+          }
+          EOF
+
+          rm -f cloc_output.json
+
+      - name: Commit LINES.md + badges
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add LINES.md
-          git diff --cached --quiet || git commit -m "chore: update line count [skip ci]"
+          git add LINES.md badges/counts.json badges/files.json
+          git diff --cached --quiet || git commit -m "chore: update line count and badges [skip ci]"
           git push
