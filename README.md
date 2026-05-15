@@ -181,214 +181,123 @@ pm run docs:tree.
 <!-- TREE_START -->
 
 <details open>
-<summary><strong>xKOR_3RR0R/</strong></summary>
+<summary><strong style="color:#00ff9f">xKOR_3RR0R/</strong></summary>
 
-    .gitattributes
-    <details open>
-    <summary><strong>.github/</strong></summary>
-
-        <details>
-        <summary><strong>workflows/</strong></summary>
-
-            count-lines.yml
-        </details>
-    </details>
-    .gitignore
-    AGENT.md
-    <details open>
-    <summary><strong>assets/</strong></summary>
-
-        <details>
-        <summary><strong>branding/</strong></summary>
-
-            .gitkeep
-        </details>
-        <details>
-        <summary><strong>fonts/</strong></summary>
-
-            .gitkeep
-        </details>
-        <details>
-        <summary><strong>globe/</strong></summary>
-
-            worldmap.json
-        </details>
-        <details>
-        <summary><strong>icons/</strong></summary>
-
-            .gitkeep
-        </details>
-        <details>
-        <summary><strong>images/</strong></summary>
-
-            .gitkeep
-        </details>
-        <details>
-        <summary><strong>sounds/</strong></summary>
-
-            .gitkeep
-        </details>
-    </details>
-    <details open>
-    <summary><strong>backend/</strong></summary>
-
-        <details>
-        <summary><strong>ai/</strong></summary>
-
-            proxy.js  <em>(Forwards prompts to Ollama or any OpenAI-compatible backend.)</em>
-        </details>
-        <details>
-        <summary><strong>fs/</strong></summary>
-
-            delete.js
-            list.js
-            read.js
-            rename.js
-            write.js
-        </details>
-        server.js  <em>(Express + WebSocket server (port 3001). Serves FS, AI, auth APIs and PTY terminals.)</em>
-        <details>
-        <summary><strong>system/</strong></summary>
-
-            cpu.js
-            net.js
-            ram.js
-            temp.js
-        </details>
-        <details>
-        <summary><strong>terminal/</strong></summary>
-
-            pty.js  <em>(Manages node-pty sessions. create/write/onData/removeCallback.)</em>
-        </details>
-    </details>
-    <details open>
-    <summary><strong>badges/</strong></summary>
-
-        counts.json
-        files.json
-    </details>
-    <details open>
-    <summary><strong>config/</strong></summary>
-
-        ai-endpoint.json
-        user.json
-    </details>
-    <details open>
-    <summary><strong>docs/</strong></summary>
-
-        index.html
-    </details>
-    fixGuide.pdf
-    INSTALL.md
-    LINES.md
-    logo.png
-    logo_with_text.png
-    <details open>
-    <summary><strong>os/</strong></summary>
-
-        clean-arch.sh
-        install.sh  <em>(Full OS Mode installer for Arch Linux. Installs deps, systemd service, Plymouth.)</em>
-        <details>
-        <summary><strong>lib/</strong></summary>
-
-            cleanup.sh
-            manifest.sh
-            verify.sh
-            xkor-lib.sh
-        </details>
-        <details>
-        <summary><strong>loading/</strong></summary>
-
-            loading.sh
-        </details>
-        <details>
-        <summary><strong>login/</strong></summary>
-
-            login.js  <em>(TTY login app: ASCII banner, readline prompts, startx on success.)</em>
-            package.json
-            pam.js
-            start-login.sh
-        </details>
-        <details>
-        <summary><strong>plymount/</strong></summary>
-
-            plymount-theme.sh
-            <details>
-            <summary><strong>xkor/</strong></summary>
-
-                xkor.plymouth
-                xkor.script
-            </details>
-        </details>
-        repair.sh  <em>(Repair tool for OS Mode: rechecks deps, reinstalls service.)</em>
-        <details>
-        <summary><strong>systemd/</strong></summary>
-
-            xkor-login.service
-            xkor-ui.service
-        </details>
-        uninstall.sh
-        unistall.sh
-        xkor
-        <details>
-        <summary><strong>xorg/</strong></summary>
-
-            .xinitrc
-            xkor-session.sh
-        </details>
-    </details>
-    package.json
-    README.md
-    run.sh  <em>(Quick launcher: npm install, electron-rebuild node-pty, then npm start.)</em>
-    <details open>
-    <summary><strong>scripts/</strong></summary>
-
-        generate-tree.mjs
-    </details>
-    setup.sh  <em>(One-time setup for App Mode on any Linux distro.)</em>
-    <details open>
-    <summary><strong>src/</strong></summary>
-
-        main.js  <em>(Electron entry point. Creates fullscreen BrowserWindow, starts backend.)</em>
-        preload.js  <em>(WebSocket bridge. Exposes window.xkor.send() / onBackend() via contextBridge.)</em>
-        <details>
-        <summary><strong>renderer/</strong></summary>
-
-            <details>
-            <summary><strong>css/</strong></summary>
-
-                ai.css
-                boot.css
-                filemanager.css
-                globe.css
-                graphs.css
-                keyboard.css
-                layout.css
-                login.css
-                terminal.css
-                theme.css
-            </details>
-            index.html  <em>(Main HTML shell: login, boot, app UI with 3 terminals + globe + graphs.)</em>
-            <details>
-            <summary><strong>js/</strong></summary>
-
-                ai.js
-                boot.js
-                filemanager.js
-                globe.js
-                graphs.js
-                keyboard.js
-                login.js  <em>(Login screen UI. POSTs to /auth, dispatches xkor-auth event on success.)</em>
-                tabs.js
-                terminal.js  <em>(xterm.js terminal instances (3 sessions). WebSocket PTY bridge.)</em>
-                ui.js
-            </details>
-        </details>
-    </details>
+```
+├── .gitattributes
+├── .github/
+│   └── workflows/
+│       └── count-lines.yml
+├── .gitignore
+├── AGENT.md
+├── assets/
+│   ├── branding/
+│   ├── fonts/
+│   ├── globe/
+│   │   └── worldmap.json
+│   ├── icons/
+│   ├── images/
+│   └── sounds/
+├── backend/
+│   ├── ai/
+│   │   └── proxy.js  -- Forwards prompts to Ollama or any OpenAI-compat..
+│   ├── fs/
+│   │   ├── delete.js
+│   │   ├── list.js
+│   │   ├── read.js
+│   │   ├── rename.js
+│   │   └── write.js
+│   ├── server.js  -- Express + WebSocket server
+│   ├── system/
+│   │   ├── cpu.js
+│   │   ├── net.js
+│   │   ├── ram.js
+│   │   └── temp.js
+│   └── terminal/
+│       └── pty.js  -- Manages node-pty sessions. create/write/onData/..
+├── badges/
+│   ├── counts.json
+│   └── files.json
+├── config/
+│   ├── ai-endpoint.json
+│   └── user.json
+├── docs/
+│   └── index.html
+├── fixGuide.pdf
+├── INSTALL.md
+├── LINES.md
+├── logo.png
+├── logo_with_text.png
+├── os/
+│   ├── clean-arch.sh
+│   ├── install.sh  -- Full OS Mode installer for Arch Linux. Installs..
+│   ├── lib/
+│   │   ├── cleanup.sh
+│   │   ├── manifest.sh
+│   │   ├── verify.sh
+│   │   └── xkor-lib.sh
+│   ├── loading/
+│   │   └── loading.sh
+│   ├── login/
+│   │   ├── login.js  -- TTY login app: ASCII banner, readline prompts, ..
+│   │   ├── package.json
+│   │   ├── pam.js
+│   │   └── start-login.sh
+│   ├── plymount/
+│   │   ├── plymount-theme.sh
+│   │   └── xkor/
+│   │       ├── xkor.plymouth
+│   │       └── xkor.script
+│   ├── repair.sh
+│   ├── systemd/
+│   │   ├── xkor-login.service
+│   │   └── xkor-ui.service
+│   ├── uninstall.sh
+│   ├── unistall.sh
+│   ├── xkor
+│   └── xorg/
+│       ├── .xinitrc
+│       └── xkor-session.sh
+├── package.json
+├── README.md
+├── run.sh  -- Quick launcher: npm install, electron-rebuild n..
+├── scripts/
+│   └── generate-tree.mjs
+├── setup.sh  -- One-time setup for App Mode on any Linux distro.
+└── src/
+    ├── main.js  -- Electron entry point. Creates fullscreen Browse..
+    ├── preload.js  -- WebSocket bridge. Exposes window.xkor.send() / ..
+    └── renderer/
+        ├── css/
+        │   ├── ai.css
+        │   ├── boot.css
+        │   ├── filemanager.css
+        │   ├── globe.css
+        │   ├── graphs.css
+        │   ├── keyboard.css
+        │   ├── layout.css
+        │   ├── login.css
+        │   ├── terminal.css
+        │   └── theme.css
+        ├── index.html  -- Main HTML shell: login, boot, app UI with 3 ter..
+        └── js/
+            ├── ai.js
+            ├── boot.js
+            ├── filemanager.js
+            ├── globe.js
+            ├── graphs.js
+            ├── keyboard.js
+            ├── login.js  -- Login screen UI. POSTs to /auth, dispatches xko..
+            ├── tabs.js
+            ├── terminal.js  -- xterm.js terminal instances (3 sessions). WebSo..
+            └── ui.js
+```
 
 </details>
 
 <!-- TREE_END -->
+
+
 
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generates clean collapsible HTML <details> file tree in README.md
+// Generates clean text file tree in README.md between TREE_START / TREE_END markers.
 // Usage: node scripts/generate-tree.mjs
 
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
@@ -9,12 +9,11 @@ const ROOT = process.cwd();
 const README_PATH = join(ROOT, "README.md");
 const START_MARKER = "<!-- TREE_START -->";
 const END_MARKER = "<!-- TREE_END -->";
-const IGNORE = new Set([".DS_Store", "node_modules", ".git", "dist", ".opencode"]);
+const IGNORE = new Set([".DS_Store", "node_modules", ".git", "dist", ".opencode", ".gitkeep"]);
 
 const KEY_FILES = new Set([
-  "server.js", "main.js", "preload.js", "proxy.js", "pty.js",
-  "run.sh", "setup.sh", "install.sh", "repair.sh",
-  "index.html", "terminal.js", "login.js",
+  "server.js","main.js","preload.js","proxy.js","pty.js",
+  "run.sh","setup.sh","install.sh","index.html","terminal.js","login.js"
 ]);
 
 const SUMMARY_RE = /^\s*(\/\/|#|--)\s*@summary:\s*(.+)$/m;
@@ -23,80 +22,82 @@ function getSummary(filePath) {
   try {
     const head = readFileSync(filePath, "utf8").split("\n").slice(0, 40).join("\n");
     const m = head.match(SUMMARY_RE);
-    return m ? m[2].trim() : null;
-  } catch { return null; }
-}
-
-function escHtml(s) {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    if (m) {
+      let d = m[2].trim();
+      d = d.replace(/ \(port 3001\).*$/, "");
+      d = d.replace(/, then npm start/, "");
+      if (d.length > 50) d = d.slice(0, 47) + "..";
+      return d;
+    }
+  } catch { }
+  return null;
 }
 
 function list(abs) {
   return readdirSync(abs).filter(n => !IGNORE.has(n)).sort((a, b) => a.localeCompare(b));
 }
 
-function walk(absPath, depth) {
-  const name = absPath.split(/[/\\]/).pop();
-  const indent = "    ".repeat(depth + 1);
-  const stats = statSync(absPath);
-  const result = [];
-
-  if (stats.isDirectory()) {
-    const kids = list(absPath);
-    const openAttr = "";
-    result.push(indent + `<details${openAttr}>`);
-    result.push(indent + `<summary><strong>${escHtml(name)}/</strong></summary>`);
-    result.push("");
-    for (let i = 0; i < kids.length; i++) {
-      result.push(...walk(join(absPath, kids[i]), depth + 1));
-    }
-    result.push(indent + `</details>`);
-    return result;
-  }
-
-  const line = indent + escHtml(name);
-  const summary = KEY_FILES.has(name) ? getSummary(absPath) : null;
-  if (summary) {
-    result.push(line + `  <em>(${escHtml(summary)})</em>`);
-  } else {
-    result.push(line);
-  }
-  return result;
-}
-
-function build() {
+function buildTree(absPath, prefix) {
+  const items = list(absPath);
   const lines = [];
-  lines.push("<details open>");
-  lines.push("<summary><strong>xKOR_3RR0R/</strong></summary>");
-  lines.push("");
-  const all = list(ROOT);
-  for (let i = 0; i < all.length; i++) {
-    const abs = join(ROOT, all[i]);
-    const stats = statSync(abs);
+  for (let i = 0; i < items.length; i++) {
+    const name = items[i];
+    const full = join(absPath, name);
+    const last = i === items.length - 1;
+    const branch = last ? "L¦¦ " : "+¦¦ ";
+    const line = prefix + branch + name;
+    const stats = statSync(full);
+
     if (stats.isDirectory()) {
-      const kids = list(abs);
-      lines.push(`    <details open>`);
-      lines.push(`    <summary><strong>${escHtml(all[i])}/</strong></summary>`);
-      lines.push("");
-      for (let j = 0; j < kids.length; j++) {
-        lines.push(...walk(join(abs, kids[j]), 1));
-      }
-      lines.push("    </details>");
+      lines.push(line + "/");
+      const childPrefix = prefix + (last ? "    " : "-   ");
+      lines.push(...buildTree(full, childPrefix));
     } else {
-      const line = "    " + escHtml(all[i]);
-      const summary = KEY_FILES.has(all[i]) ? getSummary(abs) : null;
-      if (summary) {
-        lines.push(line + `  <em>(${escHtml(summary)})</em>`);
-      } else {
-        lines.push(line);
+      let out = line;
+      if (KEY_FILES.has(name)) {
+        const s = getSummary(full);
+        if (s) out += "  -- " + s;
       }
+      lines.push(out);
     }
   }
-  lines.push("</details>");
   return lines;
 }
 
 function replace() {
+  const rootItems = list(ROOT);
+  const tree = [];
+  for (let i = 0; i < rootItems.length; i++) {
+    const name = rootItems[i];
+    const full = join(ROOT, name);
+    const last = i === rootItems.length - 1;
+    const branch = last ? "L¦¦ " : "+¦¦ ";
+    const line = branch + name;
+    const stats = statSync(full);
+
+    if (stats.isDirectory()) {
+      tree.push(line + "/");
+      const prefix = last ? "    " : "-   ";
+      tree.push(...buildTree(full, prefix));
+    } else {
+      let out = line;
+      if (KEY_FILES.has(name)) {
+        const s = getSummary(full);
+        if (s) out += "  -- " + s;
+      }
+      tree.push(out);
+    }
+  }
+
+  const block = [
+    START_MARKER, "",
+    "<details open>",
+    '<summary><strong style="color:#00ff9f">xKOR_3RR0R/</strong></summary>', "",
+    "```", ...tree, "```", "",
+    "</details>", "",
+    END_MARKER
+  ].join("\n");
+
   const readme = readFileSync(README_PATH, "utf8");
   const s = readme.indexOf(START_MARKER);
   const e = readme.indexOf(END_MARKER);
@@ -104,10 +105,8 @@ function replace() {
     console.error("ERROR: Add markers to README.md");
     process.exit(1);
   }
-  const block = [START_MARKER, "", ...build(), "", END_MARKER].join("\n");
   writeFileSync(README_PATH, readme.slice(0, s) + block + readme.slice(e + END_MARKER.length));
-  console.log("OK: Clean tree generated in README.md");
+  console.log("OK: Clean text tree generated");
 }
 
 replace();
-
