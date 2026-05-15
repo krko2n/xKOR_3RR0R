@@ -84,7 +84,12 @@ function grant() {
 
     // Start X session as the authenticated user (not root!)
     // X server refuses to start as root by default on Arch.
-    execSync("su -l " + username + " -c 'startx /opt/xkor_3rr0r/os/xorg/xkor-session.sh'", { stdio: "inherit" });
+    try {
+      execSync("su -l " + username + " -c 'startx /opt/xkor_3rr0r/os/xorg/xkor-session.sh'", { stdio: "inherit" });
+    } catch (e) {
+      console.error(center(RED + "X session failed: " + e.message + RESET));
+      setTimeout(() => { phase = "username"; username = ""; password = ""; statusMsg = ""; draw(); }, 3000);
+    }
   }, 600);
 }
 

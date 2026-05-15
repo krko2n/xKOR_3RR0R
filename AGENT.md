@@ -365,6 +365,10 @@ devDependencies:
 - start-login.sh + install.sh: nastaveni `Xwrapper.config: allowed_users=anybody`
   (X server defaultne blokuje start jako root)
 - xkor-session.sh: odstranen redundantni cleanup X lock (dela login.js)
+- xkor-session.sh: pridan `XDG_RUNTIME_DIR=/run/user/$(id -u)` + mkdir
+  (reseni "XDG_RUNTIME_DIR is not set" pro Electron stabilitu v Xorg session)
+- login.js: `su -l` obaleno try/catch — pri selhani X serveru se vrati na login obrazovku
+- README: emergency recovery rozsireno o Hyprland navod (XDG_RUNTIME_DIR, fix hyprland.conf)
 
 ### OPRAVENO (agent v8 — badge system)
 - badges/counts.json + files.json: opraveny na realne hodnoty (4135 lines, 72 files)

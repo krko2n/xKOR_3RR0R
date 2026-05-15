@@ -339,17 +339,37 @@ pm run docs:tree.
 
 ## EMERGENCY RECOVERY
 
-Black screen with blinking cursor after OS Mode install:
+Black screen or failed login after OS Mode install:
 
 ```bash
 # switch to TTY
 Ctrl + Alt + F2
 
-# log in, then:
+# log in, then disable xKOR:
 sudo systemctl disable xkor-login.service
+sudo systemctl stop xkor-login.service
+```
+
+### If you use a display manager (SDDM/GDM/LightDM):
+
+```bash
 sudo systemctl enable --now sddm    # or gdm / lightdm
 sudo reboot
 ```
+
+### If you use Hyprland (Wayland, no display manager):
+
+XDG_RUNTIME_DIR must be set when starting from TTY:
+
+```bash
+# In ~/.bash_profile or before launching Hyprland:
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+Hyprland
+```
+
+Also fix the `dwindle:pseudotile` error — edit `~/.config/hypr/hyprland.conf`
+and replace or remove lines containing `dwindle:pseudotile`.
+Then reload: `hyprctl reload`
 
 ---
 

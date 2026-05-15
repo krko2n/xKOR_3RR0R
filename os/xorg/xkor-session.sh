@@ -5,6 +5,13 @@
 export DISPLAY=:0
 export HOME=$(getent passwd $(whoami) | cut -d: -f6)
 export XAUTHORITY=$HOME/.Xauthority
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+
+# Ensure runtime dir exists
+if [ ! -d "$XDG_RUNTIME_DIR" ]; then
+    mkdir -p "$XDG_RUNTIME_DIR"
+    chmod 700 "$XDG_RUNTIME_DIR"
+fi
 
 # Disable screensaver / power management
 xset s off 2>/dev/null
