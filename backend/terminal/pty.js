@@ -33,4 +33,8 @@ function onData(cb) {
   callbacks.push(cb);
 }
 
-module.exports = { create, write, onData };
+function removeCallback(cb) {
+  callbacks = callbacks.filter(c => c !== cb);
+}
+
+module.exports = { create, write, onData, removeCallback };

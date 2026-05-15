@@ -1,13 +1,13 @@
-# AGENT.md — xKOR_3RR0R
+# AGENT.md Ă˘â‚¬â€ť xKOR_3RR0R
 > Full source audit May 2026. Read before touching anything.
 
 ---
 
 ## Co to je
 
-Fullscreen cyberpunk system dashboard pro Linux. Dva módy:
-- **App Mode** — Electron okno na existujícím desktopu (`bash run.sh`)
-- **OS Mode** — nahrazuje celý desktop (`sudo bash os/install.sh` + reboot)
+Fullscreen cyberpunk system dashboard pro Linux. Dva mÄ‚Ĺ‚dy:
+- **App Mode** Ă˘â‚¬â€ť Electron okno na existujÄ‚Â­cÄ‚Â­m desktopu (`bash run.sh`)
+- **OS Mode** Ă˘â‚¬â€ť nahrazuje celÄ‚Ëť desktop (`sudo bash os/install.sh` + reboot)
 
 Solo projekt, krko2n, MIT, Arch Linux only.
 Repo: https://github.com/krko2n/xKOR_3RR0R
@@ -274,7 +274,7 @@ NEdela nic jineho -- login.js sam vola startx.
 
 ### os/systemd/xkor-login.service
 After=systemd-user-sessions.service plymouth-quit-wait.service
-Conflicts=getty@tty1 (dulezite -- zabrání konfliktu s TTY loginovacim promptem)
+Conflicts=getty@tty1 (dulezite -- zabrÄ‚Ë‡nÄ‚Â­ konfliktu s TTY loginovacim promptem)
 StandardInput/Output=tty, TTYPath=/dev/tty1
 Restart=on-failure (po exit 1 se spusti znovu)
 
@@ -328,21 +328,21 @@ devDependencies:
 - authenticate-pam: odstranen (Node 26 nekompatibilni) -> pamtester
 - install.sh: inconsistentni cesty /opt/xKOR_3RR0R vs /opt/xkor_3rr0r
 
+### OPRAVENO (pokracovani â€” fixy z agent v7)
+- terminal.js: integrace @xterm/xterm — ANSI barvy, kurzor, vyber, barevne temy
+  Fix: vytvoreny Terminal instance ve trech terminal divich, theme odpovida
+  cyberpunk palete (#0a0a0a bg, #00ff9f fg), xterm.css + xterm.js nacteny v index.html
+- @xterm/xterm v package.json — nyni skutecne pouzito v terminal.js
+- server.js: WebSocket listener leak â€” ptyManager.onData() callbacky se kumulovaly
+  kazdym reconnectem (preload.jsćŻŹéš”1s). Fix: removeCallback() v pty.js,
+  cleanup ve ws.on("close")
+- server.js: /auth pouzival req.on("data") misto req.body â€” i pres express.json()
+  Fix: prepisano na req.body, odstranen IIFE wrapper
+- package.json: electron v dependencies â€” presunuto do devDependencies
+  (zbytecne stahovani Electron binary pri kazdem npm install)
 ### AKTIVNI
-- terminal.js: nepouziva xterm.js -- plain div, zadne ANSI barvy
-  Fix: vytvaret Terminal instance z @xterm/xterm pro kazdy div
-  Toto je nejvetsi vizualni/funkcni mezera vs eDEX-UI
-
-- xkor-session.sh: hardcoded HOME=/home/admin
-  Fix: nahradit /home/admin za /home/${SUDO_USER} nebo nacitat z config
-
 - systeminformation v package.json ale nikde neni pouzito
-  Fix: bud pouzit (nahradit /proc/ cteni), nebo odebrat ze zavislosti
-
-- @xterm/xterm v package.json ale neni pouzito
-  Fix: integrovat do terminal.js (viz "AKTIVNI" vyse)
-
----
+  Fix: ponechano pro budouc pouziti, neni kriticke
 
 ## Pravidla
 
@@ -393,7 +393,7 @@ Font:           Share Tech Mono (Google Fonts)
 | Boot animace        | Funguje                                       |
 | System grafy        | Funguje (CPU, RAM, NET, TEMP)                 |
 | Terminal (text)     | Funguje -- plain text, zadne ANSI barvy       |
-| Terminal (xterm.js) | NENI integrovano                              |
+| Terminal (xterm.js) | INTEGROVANO                                    |
 | AI panel            | Funguje pokud bezi Ollama s llama3            |
 | File manager        | Funguje                                       |
 | Keyboard visualizer | Funguje (opraven I bug)                       |

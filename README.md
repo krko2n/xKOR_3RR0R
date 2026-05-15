@@ -174,112 +174,183 @@ Default is [Ollama](https://ollama.ai) running locally. Change `endpoint` and `m
 
 ## PROJECT STRUCTURE
 
-<details>
-<summary>expand</summary>
+<details open>
+<summary><strong>xKOR_3RR0R/</strong></summary>
 
-```xKOR_3RR0R/
-├── .github/
-│   └── workflows/
-│       └── count-lines.yml
-├── assets/
-│   ├── branding/
-│   ├── fonts/
-│   ├── globe/
-│   │   └── worldmap.json
-│   ├── icons/
-│   ├── images/
-│   └── sounds/
-├── backend/
-│   ├── ai/
-│   │   └── proxy.js
-│   ├── fs/
-│   │   ├── delete.js
-│   │   ├── list.js
-│   │   ├── read.js
-│   │   ├── rename.js
-│   │   └── write.js
-│   ├── system/
-│   │   ├── cpu.js
-│   │   ├── net.js
-│   │   ├── ram.js
-│   │   └── temp.js
-│   └── terminal/
-│       └── pty.js
-├── badges/
-│   ├── counts.json
-│   └── files.json
-├── config/
-│   ├── ai-endpoint.json
-│   └── user.json
-├── docs/
-│   └── index.html
-├── os/
-│   ├── lib/
-│   │   ├── cleanup.sh
-│   │   ├── manifest.sh
-│   │   ├── verify.sh
-│   │   └── xkor-lib.sh
-│   ├── loading/
-│   │   └── loading.sh
-│   ├── login/
-│   │   ├── login.js
-│   │   ├── package.json
-│   │   ├── pam.js
-│   │   └── start-login.sh
-│   ├── plymount/
-│   │   ├── plymount-theme.sh
-│   │   └── xkor/
-│   │       ├── xkor.plymouth
-│   │       └── xkor.script
-│   ├── systemd/
-│   │   ├── xkor-login.service
-│   │   └── xkor-ui.service
-│   └── xorg/
-│       ├── .xinitrc
-│       └── xkor-session.sh
-├── src/
-│   ├── main.js
-│   ├── preload.js
-│   └── renderer/
-│       ├── css/
-│       │   ├── ai.css
-│       │   ├── boot.css
-│       │   ├── filemanager.css
-│       │   ├── globe.css
-│       │   ├── graphs.css
-│       │   ├── keyboard.css
-│       │   ├── layout.css
-│       │   ├── login.css
-│       │   ├── terminal.css
-│       │   └── theme.css
-│       └── js/
-│           ├── ai.js
-│           ├── boot.js
-│           ├── filemanager.js
-│           ├── globe.js
-│           ├── graphs.js
-│           ├── keyboard.js
-│           ├── login.js
-│           ├── tabs.js
-│           ├── terminal.js
-│           └── ui.js
-├── .gitattributes
-├── .gitignore
-├── AGENT.md
-├── fixGuide.pdf
-├── INSTALL.md
-├── LINES.md
-├── logo.png
-├── logo_with_text.png
-├── package.json
-├── README.md
-├── run.sh
-└── setup.sh
-```
+- <details><summary><strong>.github/</strong></summary>
+
+  - <details><summary><strong>workflows/</strong></summary>
+
+    - count-lines.yml
+    </details>
+  </details>
+- <details><summary><strong>assets/</strong></summary>
+
+  - <details><summary><strong>branding/</strong></summary>
+
+    - .gitkeep
+    </details>
+  - <details><summary><strong>fonts/</strong></summary>
+
+    - .gitkeep
+    </details>
+  - <details><summary><strong>globe/</strong></summary>
+
+    - worldmap.json
+    </details>
+  - <details><summary><strong>icons/</strong></summary>
+
+    - .gitkeep
+    </details>
+  - <details><summary><strong>images/</strong></summary>
+
+    - .gitkeep
+    </details>
+  - <details><summary><strong>sounds/</strong></summary>
+
+    - .gitkeep
+    </details>
+  </details>
+- <details><summary><strong>backend/</strong></summary>
+
+  - <details><summary><strong>ai/</strong></summary>
+
+    - proxy.js
+    </details>
+  - <details><summary><strong>fs/</strong></summary>
+
+    - delete.js
+    - list.js
+    - read.js
+    - rename.js
+    - write.js
+    </details>
+  - <details><summary><strong>system/</strong></summary>
+
+    - cpu.js
+    - net.js
+    - ram.js
+    - temp.js
+    </details>
+  - <details><summary><strong>terminal/</strong></summary>
+
+    - pty.js
+    </details>
+  - server.js
+  </details>
+- <details><summary><strong>badges/</strong></summary>
+
+  - counts.json
+  - files.json
+  </details>
+- <details><summary><strong>config/</strong></summary>
+
+  - ai-endpoint.json
+  - user.json
+  </details>
+- <details><summary><strong>docs/</strong></summary>
+
+  - index.html
+  </details>
+- <details><summary><strong>os/</strong></summary>
+
+  - <details><summary><strong>lib/</strong></summary>
+
+    - cleanup.sh
+    - manifest.sh
+    - verify.sh
+    - xkor-lib.sh
+    </details>
+  - <details><summary><strong>loading/</strong></summary>
+
+    - loading.sh
+    </details>
+  - <details><summary><strong>login/</strong></summary>
+
+    - login.js
+    - package.json
+    - pam.js
+    - start-login.sh
+    </details>
+  - <details><summary><strong>plymount/</strong></summary>
+
+    - plymount-theme.sh
+    - <details><summary><strong>xkor/</strong></summary>
+
+      - xkor.plymouth
+      - xkor.script
+      </details>
+    </details>
+  - <details><summary><strong>systemd/</strong></summary>
+
+    - xkor-login.service
+    - xkor-ui.service
+    </details>
+  - <details><summary><strong>xorg/</strong></summary>
+
+    - .xinitrc
+    - xkor-session.sh
+    </details>
+  - clean-arch.sh
+  - install.sh
+  - repair.sh
+  - uninstall.sh
+  - unistall.sh
+  - <details><summary><strong>xkor/</strong></summary>
+
+    </details>
+  </details>
+- <details><summary><strong>src/</strong></summary>
+
+  - <details><summary><strong>renderer/</strong></summary>
+
+    - <details><summary><strong>css/</strong></summary>
+
+      - ai.css
+      - boot.css
+      - filemanager.css
+      - globe.css
+      - graphs.css
+      - keyboard.css
+      - layout.css
+      - login.css
+      - terminal.css
+      - theme.css
+      </details>
+    - <details><summary><strong>js/</strong></summary>
+
+      - ai.js
+      - boot.js
+      - filemanager.js
+      - globe.js
+      - graphs.js
+      - keyboard.js
+      - login.js
+      - tabs.js
+      - terminal.js
+      - ui.js
+      </details>
+    - index.html
+    </details>
+  - main.js
+  - preload.js
+  </details>
+- .gitattributes
+- .gitignore
+- AGENT.md
+- fixGuide.pdf
+- INSTALL.md
+- LINES.md
+- logo.png
+- logo_with_text.png
+- package.json
+- README.md
+- run.sh
+- setup.sh
 
 </details>
 
----
+------
 
 ## KEYBOARD SHORTCUTS
 

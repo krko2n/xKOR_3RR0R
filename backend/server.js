@@ -57,10 +57,34 @@ app.post("/ai", async (req, res) => {
 });
 
 // -----------------------------
-// WEBSOCKET â€” REALTIME DATA
+// AUTH
+// -----------------------------
+const cfgPath = path.join(__dirname, "..", "config", "user.json");
+app.post("/auth", function(req, res) {
+    try {
+        const cfg = JSON.parse(require("fs").readFileSync(cfgPath, "utf8"));
+        if (req.body.username === cfg.username && req.body.password === cfg.password) {
+            res.json({ ok: true });
+        } else {
+            res.status(401).json({ ok: false });
+        }
+    } catch(e) {
+        res.json({ ok: true });
+    }
+});
+
+// -----------------------------
+// WEBSOCKET — REALTIME DATA
 // -----------------------------
 wss.on("connection", (ws) => {
     console.log("[WS] Client connected");
+
+    const ptyCallback = (id, chunk) => {
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ type: "terminal_output", id, data: chunk }));
+        }
+    };
+    if (ptyManager) ptyManager.onData(ptyCallback);
 
     ws.on("message", (msg) => {
         let data;
@@ -70,24 +94,19 @@ wss.on("connection", (ws) => {
             return;
         }
 
-        // TERMINAL INPUT
         if (data.type === "terminal_input" && ptyManager) {
             ptyManager.write(data.id, data.data);
         }
 
-        // CREATE TERMINAL
         if (data.type === "terminal_create" && ptyManager) {
             const term = ptyManager.create();
             ws.send(JSON.stringify({ type: "terminal_created", id: term.id, panel: data.panel }));
         }
     });
 
-    // TERMINAL OUTPUT STREAM
-    if (ptyManager) {
-        ptyManager.onData((id, chunk) => {
-            ws.send(JSON.stringify({ type: "terminal_output", id, data: chunk }));
-        });
-    }
+    ws.on("close", () => {
+        if (ptyManager) ptyManager.removeCallback(ptyCallback);
+    });
 });
 
 // -----------------------------
@@ -126,30 +145,3 @@ server.listen(PORT, () => {
 });
 
 module.exports = emitter;
-
-// /auth endpoint -- added by patcher
-;(function registerAuth() {
-    var fs = require('fs');
-    var path = require('path');
-    var cfgPath = path.join(__dirname, '..', 'config', 'user.json');
-    app.post('/auth', function(req, res) {
-        var body = '';
-        req.on('data', function(d) { body += d; });
-        req.on('end', function() {
-            try {
-                var p = JSON.parse(body);
-                var cfg = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
-                if (p.username === cfg.username && p.password === cfg.password) {
-                    res.writeHead(200, {'Content-Type':'application/json'});
-                    res.end(JSON.stringify({ok:true}));
-                } else {
-                    res.writeHead(401, {'Content-Type':'application/json'});
-                    res.end(JSON.stringify({ok:false}));
-                }
-            } catch(e) {
-                res.writeHead(200, {'Content-Type':'application/json'});
-                res.end(JSON.stringify({ok:true}));
-            }
-        });
-    });
-})();

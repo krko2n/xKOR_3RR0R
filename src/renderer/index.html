@@ -20,10 +20,11 @@
     <link rel="stylesheet" href="css/graphs.css">
     <link rel="stylesheet" href="css/globe.css">
     <link rel="stylesheet" href="css/login.css">
+
+    <link rel="stylesheet" href="../../../node_modules/@xterm/xterm/css/xterm.css">
 </head>
 
 <body>
-  <div class="login-subtitle">SYSTEM ACCESS REQUIRED</div><div class="login-field"><label for="login-user">USERNAME</label><input type="text" id="login-user" autocomplete="off"></div><div class="login-field"><label for="login-pass">PASSWORD</label><input type="password" id="login-pass"></div><button id="login-btn">AUTHENTICATE</button><div id="login-error"></div></div></div>
 
 <!-- ========================= -->
 <!-- LOGIN SCREEN              -->
@@ -33,15 +34,15 @@
     <div id="login-box">
         <div id="login-logo">xKOR_3RR0R</div>
         <div id="login-subtitle">SECURE TERMINAL INTERFACE</div>
-        <div id="login-version">v1.0.0 &nbsp;·&nbsp; AUTHENTICATED ACCESS ONLY</div>
+        <div id="login-version">v1.0.0 &middot; AUTHENTICATED ACCESS ONLY</div>
         <div id="login-divider"></div>
         <div class="login-field">
             <label>USER IDENTIFIER</label>
-            <input type="text" id="login-user" autocomplete="off" spellcheck="false" placeholder="——————">
+            <input type="text" id="login-user" autocomplete="off" spellcheck="false" placeholder="------">
         </div>
         <div class="login-field">
             <label>ACCESS KEY</label>
-            <input type="password" id="login-pass" autocomplete="off" placeholder="——————">
+            <input type="password" id="login-pass" autocomplete="off" placeholder="------">
         </div>
         <button id="login-btn">[ AUTHENTICATE ]</button>
         <div id="login-status"></div>
@@ -112,6 +113,7 @@
 
 <script src="js/login.js"></script>
 <script src="js/boot.js"></script>
+<script src="../../../node_modules/@xterm/xterm/lib/xterm.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/tabs.js"></script>
 <script src="js/terminal.js"></script>

@@ -4,6 +4,7 @@ let terminalElements = {
     term3: document.getElementById("term3")
 };
 
+let xtermInstances = {};
 let terminalSessions = {
     term1: null,
     term2: null,
@@ -12,7 +13,50 @@ let terminalSessions = {
 
 let activeTerminal = "term1";
 
-// CREATE TERMINAL SESSION
+function createXtermInstance(name) {
+    const term = new Terminal({
+        cursorBlink: true,
+        cursorStyle: "block",
+        fontSize: 14,
+        fontFamily: "\"Share Tech Mono\", monospace",
+        theme: {
+            background: "#0a0a0a",
+            foreground: "#00ff9f",
+            cursor: "#00ff9f",
+            selectionBackground: "#00ff9f40",
+            black: "#000000",
+            red: "#ff0033",
+            green: "#00ff9f",
+            yellow: "#ffaa00",
+            blue: "#00d4ff",
+            magenta: "#ff00ff",
+            cyan: "#00d4ff",
+            white: "#c0c0c0",
+            brightBlack: "#333333",
+            brightRed: "#ff0033",
+            brightGreen: "#00ff9f",
+            brightYellow: "#ffaa00",
+            brightBlue: "#00d4ff",
+            brightMagenta: "#ff00ff",
+            brightCyan: "#00d4ff",
+            brightWhite: "#ffffff"
+        }
+    });
+
+    term.open(terminalElements[name]);
+    term.onData((data) => {
+        const sessionId = terminalSessions[activeTerminal];
+        if (sessionId) {
+            window.xkor.send({
+                type: "terminal_input",
+                id: sessionId,
+                data: data
+            });
+        }
+    });
+    xtermInstances[name] = term;
+}
+
 function createTerminalSession(name) {
     window.xkor.send({
         type: "terminal_create",
@@ -20,13 +64,12 @@ function createTerminalSession(name) {
     });
 }
 
-// HANDLE BACKEND EVENTS
 window.xkor.onBackend((data) => {
 
     if (data.type === "terminal_created") {
         const panel = data.panel;
         terminalSessions[panel] = data.id;
-        console.log(`[TERM] ${panel} session = ${data.id}`);
+        console.log("[TERM] " + panel + " session = " + data.id);
     }
 
     if (data.type === "terminal_output") {
@@ -36,13 +79,11 @@ window.xkor.onBackend((data) => {
 
         if (!panel) return;
 
-        const el = terminalElements[panel];
-        el.textContent += data.data;
-        el.scrollTop = el.scrollHeight;
+        const term = xtermInstances[panel];
+        if (term) term.write(data.data);
     }
 });
 
-// SEND INPUT
 function sendToTerminal(text) {
     const sessionId = terminalSessions[activeTerminal];
     if (!sessionId) return;
@@ -54,7 +95,6 @@ function sendToTerminal(text) {
     });
 }
 
-// KEYBOARD INPUT
 document.addEventListener("keydown", (e) => {
     if (e.altKey) {
         if (e.key === "1") switchTerminal("term1");
@@ -62,15 +102,8 @@ document.addEventListener("keydown", (e) => {
         if (e.key === "3") switchTerminal("term3");
         return;
     }
-
-    if (document.activeElement.id === "ai-input") return;
-
-    if (e.key.length === 1) sendToTerminal(e.key);
-    if (e.key === "Enter") sendToTerminal("\r");
-    if (e.key === "Backspace") sendToTerminal("\x7f");
 });
 
-// SWITCH TERMINAL
 function switchTerminal(name) {
     activeTerminal = name;
 
@@ -78,10 +111,14 @@ function switchTerminal(name) {
     terminalElements[name].style.display = "block";
 
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    document.querySelector(`[data-tab="${name}"]`).classList.add("active");
+    document.querySelector("[data-tab=\"" + name + "\"]").classList.add("active");
+
+    if (xtermInstances[name]) xtermInstances[name].focus();
 }
 
-// INIT
+createXtermInstance("term1");
+createXtermInstance("term2");
+createXtermInstance("term3");
 createTerminalSession("term1");
 createTerminalSession("term2");
 createTerminalSession("term3");

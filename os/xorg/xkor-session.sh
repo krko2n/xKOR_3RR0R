@@ -3,8 +3,8 @@
 # Called by startx from login.js after successful PAM auth.
 
 export DISPLAY=:0
-export HOME=/home/admin
-export XAUTHORITY=/home/admin/.Xauthority
+export HOME=$(getent passwd $(whoami) | cut -d: -f6)
+export XAUTHORITY=$HOME/.Xauthority
 
 # Disable screensaver / power management
 xset s off
