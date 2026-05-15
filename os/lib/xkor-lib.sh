@@ -25,6 +25,7 @@ XKOR_SAFE_PREFIXES=(
     "/etc/systemd/system/xkor-ui.service"
     "/usr/share/plymouth/themes/xkor"
     "/usr/local/bin/xkor"
+    "/usr/bin/xkor"
     "/tmp/xkor_3rr0r"
 )
 

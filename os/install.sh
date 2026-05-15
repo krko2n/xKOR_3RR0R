@@ -59,9 +59,30 @@ pacman -Syu --noconfirm
 pacman -S --noconfirm --needed \
     nodejs npm \
     xorg-server xorg-xinit xorg-xauth xorg-xrandr xorg-xset xorg-xdpyinfo \
-    mesa plymouth pam unclutter pamtester
-command -v pamtester > /dev/null || fail "pamtester install failed"
-ok "System packages installed  |  pamtester: $(pamtester --version 2>&1 | head -1)"
+    mesa plymouth pam unclutter \
+    git base-devel
+ok "System packages installed"
+
+# pamtester is AUR-only -- install via yay
+step "Installing pamtester from AUR..."
+if ! command -v pamtester &>/dev/null; then
+    # Install yay if not present
+    if ! command -v yay &>/dev/null; then
+        info "Installing yay (AUR helper)..."
+        YAYDIR=$(mktemp -d)
+        git clone https://aur.archlinux.org/yay.git "$YAYDIR"
+        # yay must be built as non-root
+        BUILD_USER="${SUDO_USER:-admin}"
+        chown -R "$BUILD_USER:$BUILD_USER" "$YAYDIR"
+        su -c "cd $YAYDIR && makepkg -si --noconfirm" "$BUILD_USER"
+        rm -rf "$YAYDIR"
+    fi
+    # Install pamtester as non-root via yay
+    BUILD_USER="${SUDO_USER:-admin}"
+    su -c "yay -S pamtester --noconfirm" "$BUILD_USER"
+fi
+command -v pamtester > /dev/null || fail "pamtester install failed -- install manually: yay -S pamtester"
+ok "pamtester: $(pamtester --version 2>&1 | head -1)"
 
 # Step 5: Copy project
 step "Copying project to $XKOR_INSTALL_DIR..."
