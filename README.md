@@ -105,6 +105,29 @@ sudo bash unistall.sh
 
 ---
 
+## UPGRADE
+
+### App Mode
+
+```bash
+cd xKOR_3RR0R
+git pull
+npm install
+bash run.sh
+```
+
+### OS Mode
+
+```bash
+cd xKOR_3RR0R/os
+sudo bash upgrade.sh
+sudo reboot
+```
+
+`upgrade.sh` pulls the latest version from GitHub, discards local changes, then runs `install.sh` which re-copies everything to `/opt/xkor_3rr0r` and reinstalls dependencies.
+
+---
+
 ## OS MODE
 
 When installed, xKOR_3RR0R becomes your entire desktop:
@@ -335,8 +358,9 @@ sudo reboot
 npm install
 npm start
 
-# terminals blank? node-pty needs rebuild:
-node node_modules/@electron/rebuild/lib/cli.js -f -w node-pty
+# terminals blank? node-pty needs rebuild (uses programmatic API
+# to avoid ESM/yargs bug on Node 16):
+node -e "const{rebuild}=require('@electron/rebuild');rebuild({buildPath:process.cwd(),force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})"
 npm start
 ```
 
