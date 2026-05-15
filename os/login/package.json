@@ -1,4 +1,3 @@
-# @summary: Dependencies for the TTY login app (standalone Node.js).
 {
   "name": "xkor-login",
   "version": "1.0.0",

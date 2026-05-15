@@ -340,6 +340,13 @@ devDependencies:
   Fix: prepisano na req.body, odstranen IIFE wrapper
 - package.json: electron v dependencies â€” presunuto do devDependencies
   (zbytecne stahovani Electron binary pri kazdem npm install)
+### OPRAVENO (agent v9 — config, rebuild, package.json fixes)
+- os/login/package.json: odstranen `#` komentar (nevalidni JSON — NPM padal na `JSON.parse Unexpected token '#'`)
+- run.sh + os/install.sh: nahrazeno volani `electron-rebuild` CLI za programaticke API
+  (@electron/rebuild v3.6.0 ma ESM/yargs bug: `require is not defined` na Node 16)
+- Guard checky v run.sh + install.sh: `cli.js` -> `rebuilder.js` (zmena po prechodu na programaticke API)
+- fix-all.sh: vytvoren a po commitu smazan (byl urceny jen pro tento agent run)
+
 ### OPRAVENO (agent v8 — badge system)
 - badges/counts.json + files.json: opraveny na realne hodnoty (4135 lines, 72 files)
 - README: endpoint badge (ne static) — dynamicky nacita z JSONu

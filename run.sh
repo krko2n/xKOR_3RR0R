@@ -24,11 +24,11 @@ fi
 # Rebuild node-pty for Electron AFTER npm install (local binary exists then)
 if [ ! -f "node_modules/.node-pty-rebuilt" ]; then
     echo "[INFO] Rebuilding node-pty for Electron..."
-    if [ ! -f "node_modules/.bin/electron-rebuild" ]; then
-        echo "[ERROR] electron-rebuild not found. Run: npm install"
+    if [ ! -f "node_modules/@electron/rebuild/lib/module/rebuilder.js" ]; then
+        echo "[ERROR] @electron/rebuild not found. Run: npm install"
         exit 1
     fi
-    ./node_modules/.bin/electron-rebuild -f -w node-pty
+    node -e "require(process.cwd()+'/node_modules/@electron/rebuild/lib/module/rebuilder').rebuild({buildPath:process.cwd(),force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})"
     touch node_modules/.node-pty-rebuilt
     echo "[OK]   node-pty rebuilt"
 else

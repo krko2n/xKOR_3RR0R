@@ -109,8 +109,8 @@ ok "npm install complete"
 
 # Step 8: Rebuild node-pty
 step "Rebuilding node-pty for Electron ABI..."
-if [[ -f "node_modules/@electron/rebuild/lib/cli.js" ]]; then
-    node node_modules/@electron/rebuild/lib/cli.js -f -w node-pty \
+if [[ -f "node_modules/@electron/rebuild/lib/module/rebuilder.js" ]]; then
+    node -e "require(process.cwd()+'/node_modules/@electron/rebuild/lib/module/rebuilder').rebuild({buildPath:process.cwd(),force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})" \
         && touch node_modules/.node-pty-rebuilt \
         && ok "node-pty rebuilt" \
         || warn "node-pty rebuild failed -- terminals may not work"
