@@ -415,3 +415,7 @@ Font:           Share Tech Mono (Google Fonts)
 | Plymouth tema       | Nainstalovano, zalezi na grub konfiguraci     |
 | node-pty rebuild    | Reseno v run.sh a install.sh                  |
 
+
+
+## Push rule
+ALWAYS git pull --rebase origin main before git push.
