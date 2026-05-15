@@ -63,6 +63,19 @@ pacman -S --noconfirm --needed \
     git base-devel
 ok "System packages installed"
 
+# Step 4b: Ensure X server allows non-root users
+step "Configuring X server permissions..."
+XWRAPPER="/etc/X11/Xwrapper.config"
+if [ -f "$XWRAPPER" ]; then
+    if ! grep -q "allowed_users=anybody" "$XWRAPPER"; then
+        sed -i 's/allowed_users=.*/allowed_users=anybody/' "$XWRAPPER" 2>/dev/null || true
+    fi
+else
+    echo 'allowed_users=anybody' > "$XWRAPPER"
+    chmod 644 "$XWRAPPER"
+fi
+ok "X server allows non-root sessions"
+
 # pamtester is AUR-only -- install via yay
 step "Installing pamtester from AUR..."
 if ! command -v pamtester &>/dev/null; then

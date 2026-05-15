@@ -76,10 +76,15 @@ function grant() {
     console.clear();
     console.log(center(`${GREEN}${BOLD}ACCESS GRANTED. Loading system...${RESET}`));
 
+    // Clean stale X locks
     try { execSync("rm -f /tmp/.X0-lock /tmp/.X11-unix/X0", { stdio: "ignore" }); } catch {}
 
+    // Run loading animation (still as root)
     execSync("/opt/xkor_3rr0r/os/loading/loading.sh", { stdio: "inherit" });
-    execSync("startx /opt/xkor_3rr0r/os/xorg/xkor-session.sh", { stdio: "inherit" });
+
+    // Start X session as the authenticated user (not root!)
+    // X server refuses to start as root by default on Arch.
+    execSync("su -l " + username + " -c 'startx /opt/xkor_3rr0r/os/xorg/xkor-session.sh'", { stdio: "inherit" });
   }, 600);
 }
 

@@ -360,6 +360,11 @@ devDependencies:
   pokud chybi (reseni "Electron failed to install correctly")
 - run.sh + os/install.sh: rebuild nyni explicitne predava `electronVersion` z `electron/package.json`
   (reseni "Expected a string version for electron version, got undefined" na Node.js 26)
+- login.js: `startx` volano pres `su -l <user> -c "startx ..."` — X server musi bezet pod
+  authenticated user, ne pod rootem (jinak "unable to open display :0")
+- start-login.sh + install.sh: nastaveni `Xwrapper.config: allowed_users=anybody`
+  (X server defaultne blokuje start jako root)
+- xkor-session.sh: odstranen redundantni cleanup X lock (dela login.js)
 
 ### OPRAVENO (agent v8 — badge system)
 - badges/counts.json + files.json: opraveny na realne hodnoty (4135 lines, 72 files)

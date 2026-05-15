@@ -1,13 +1,10 @@
 #!/bin/bash
 # xKOR_3RR0R - Xorg session script
-# Called by startx from login.js after successful PAM auth.
+# Called by startx from login.js (running as authenticated user via su -l).
 
 export DISPLAY=:0
 export HOME=$(getent passwd $(whoami) | cut -d: -f6)
 export XAUTHORITY=$HOME/.Xauthority
-
-# Clean stale X locks from previous crashes
-rm -f /tmp/.X0-lock /tmp/.X11-unix/X0
 
 # Disable screensaver / power management
 xset s off 2>/dev/null
