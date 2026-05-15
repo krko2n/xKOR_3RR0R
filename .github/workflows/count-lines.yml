@@ -57,12 +57,16 @@ jobs:
           }
           EOF
 
+          # Update static badge URLs in README (no shields.io caching)
+          sed -i "s|badge/lines-[0-9]*-|badge/lines-$CODE-|" README.md
+          sed -i "s|badge/files-[0-9]*-|badge/files-$FILES-|" README.md
+
           rm -f cloc_output.json
 
-      - name: Commit LINES.md + badges
+      - name: Commit LINES.md + badges + README
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add LINES.md badges/counts.json badges/files.json
+          git add LINES.md badges/counts.json badges/files.json README.md
           git diff --cached --quiet || git commit -m "chore: update line count and badges [skip ci]"
           git push
