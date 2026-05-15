@@ -75,8 +75,9 @@ bash run.sh
 git clone https://github.com/krko2n/xKOR_3RR0R
 cd xKOR_3RR0R/os
 sudo bash install.sh
-sudo reboot
 ```
+
+No reboot needed — the login screen starts automatically on TTY1.
 
 <details>
 <summary>what the installer does</summary>
@@ -90,8 +91,9 @@ sudo reboot
 [  05  ]  electron-rebuild -f -w node-pty    rebuild native module
 [  06  ]  npm install  (os/login/)           login app deps
 [  07  ]  systemctl enable xkor-login        register service
-[  08  ]  plymouth-set-default-theme xkor    boot animation
-          log -> /var/log/xkor_3rr0r/
+[  08  ]  systemctl start xkor-login         start now (no reboot)
+[  09  ]  plymouth-set-default-theme xkor    boot animation
+           log -> /var/log/xkor_3rr0r/
 ```
 
 </details>
@@ -121,10 +123,9 @@ bash run.sh
 ```bash
 cd xKOR_3RR0R/os
 sudo bash upgrade.sh
-sudo reboot
 ```
 
-`upgrade.sh` pulls the latest version from GitHub, discards local changes, then runs `install.sh` which re-copies everything to `/opt/xkor_3rr0r` and reinstalls dependencies.
+`upgrade.sh` pulls the latest version from GitHub, discards local changes, then runs `install.sh` which re-copies everything to `/opt/xkor_3rr0r`, reinstalls dependencies, and starts the login screen on TTY1 automatically.
 
 ---
 

@@ -151,11 +151,16 @@ else
     warn "Plymouth theme directory not found"
 fi
 
-# Step 13: Final verify
+# Step 13: Start service immediately (no reboot needed)
+step "Starting xKOR login service..."
+systemctl restart xkor-login.service 2>/dev/null || \
+    warn "Could not start service — start manually: sudo systemctl start xkor-login.service"
+
+# Step 14: Final verify
 run_verify
 
 echo -e "${GREEN}=== Installation complete ===${RESET}"
-echo "sudo reboot"
+echo "xKOR login screen should appear on TTY1 now."
 echo
-echo "After reboot, manage with: xkor help"
+echo "Manage with: xkor help"
 echo "Emergency recovery: Ctrl+Alt+F2 -> sudo systemctl disable xkor-login.service -> sudo systemctl enable --now sddm -> sudo reboot"

@@ -350,6 +350,9 @@ devDependencies:
 - run.sh + os/install.sh: opravena cesta — `require('@electron/rebuild')` misto
   `require('.../lib/module/rebuilder')` (ta cesta neexistuje)
 - fix-all.sh: vytvoren a po commitu smazan (byl urceny jen pro tento agent run)
+- os/install.sh: po dokonceni automaticky spousti `xkor-login.service` — neni treba reboot
+- README: odstranen `sudo reboot` z navodu, pridan UPGRADE section
+- os/upgrade.sh: aktualizovan header — neni treba reboot
 
 ### OPRAVENO (agent v8 — badge system)
 - badges/counts.json + files.json: opraveny na realne hodnoty (4135 lines, 72 files)

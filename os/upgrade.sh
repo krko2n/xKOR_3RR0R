@@ -3,6 +3,8 @@
 # Usage: bash os/upgrade.sh
 # OR after install: sudo xkor upgrade
 #
+# No reboot needed — install.sh starts the login screen on TTY1.
+#
 # Steps:
 #   1. Verify git repo
 #   2. Discard local changes
