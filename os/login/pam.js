@@ -1,7 +1,6 @@
-# @summary: PAM authentication via pamtester binary.
 'use strict';
 // PAM authentication via pamtester (system binary).
-// Replaces authenticate-pam which cannot compile on Node.js 22+.
+// Replaces auth-pam (incompatible with Node.js 22+).
 // Requires: sudo pacman -S pamtester (added to install.sh)
 
 const { spawn } = require('child_process');

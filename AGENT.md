@@ -340,11 +340,15 @@ devDependencies:
   Fix: prepisano na req.body, odstranen IIFE wrapper
 - package.json: electron v dependencies â€” presunuto do devDependencies
   (zbytecne stahovani Electron binary pri kazdem npm install)
-### OPRAVENO (agent v9 — config, rebuild, package.json fixes)
+### OPRAVENO (agent v9 — config, rebuild, package.json fixes, v3 ESM/node-pty opravy)
 - os/login/package.json: odstranen `#` komentar (nevalidni JSON — NPM padal na `JSON.parse Unexpected token '#'`)
-- run.sh + os/install.sh: nahrazeno volani `electron-rebuild` CLI za programaticke API
+- os/login/login.js: `# @summary` -> `// @summary` (`#` bez `!` je nevalidni JS — Node.js hlasil syntax error)
+- os/login/pam.js: zmenen komentar aby neobsahoval retezec `authenticate-pam`
+  (install.sh grepu `grep -q "authenticate-pam" pam.js` failoval)
+- run.sh + os/install.sh: nahrazeno `electron-rebuild` CLI za programaticke API
   (@electron/rebuild v3.6.0 ma ESM/yargs bug: `require is not defined` na Node 16)
-- Guard checky v run.sh + install.sh: `cli.js` -> `rebuilder.js` (zmena po prechodu na programaticke API)
+- run.sh + os/install.sh: opravena cesta — `require('@electron/rebuild')` misto
+  `require('.../lib/module/rebuilder')` (ta cesta neexistuje)
 - fix-all.sh: vytvoren a po commitu smazan (byl urceny jen pro tento agent run)
 
 ### OPRAVENO (agent v8 — badge system)

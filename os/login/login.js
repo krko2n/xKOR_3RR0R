@@ -1,4 +1,4 @@
-# @summary: TTY login app: ASCII banner, readline prompts, startx on success.
+// @summary: TTY login app: ASCII banner, readline prompts, startx on success.
 const readline = require("readline");
 const pam = require("./pam");
 

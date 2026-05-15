@@ -24,11 +24,8 @@ fi
 # Rebuild node-pty for Electron AFTER npm install (local binary exists then)
 if [ ! -f "node_modules/.node-pty-rebuilt" ]; then
     echo "[INFO] Rebuilding node-pty for Electron..."
-    if [ ! -f "node_modules/@electron/rebuild/lib/module/rebuilder.js" ]; then
-        echo "[ERROR] @electron/rebuild not found. Run: npm install"
-        exit 1
-    fi
-    node -e "require(process.cwd()+'/node_modules/@electron/rebuild/lib/module/rebuilder').rebuild({buildPath:process.cwd(),force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})"
+    # Use programmatic API to avoid ESM/yargs bug in @electron/rebuild CLI (Node 16)
+    node -e "const{rebuild}=require('@electron/rebuild');rebuild({buildPath:process.cwd(),force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})"
     touch node_modules/.node-pty-rebuilt
     echo "[OK]   node-pty rebuilt"
 else
