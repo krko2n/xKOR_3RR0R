@@ -353,6 +353,11 @@ devDependencies:
 - os/install.sh: po dokonceni automaticky spousti `xkor-login.service` — neni treba reboot
 - README: odstranen `sudo reboot` z navodu, pridan UPGRADE section
 - os/upgrade.sh: aktualizovan header — neni treba reboot
+- os/login/login.js: kompletne prepisan — centrovani (vertikalne + horizontalne), ANSI barvy,
+  heslo zobrazovano jako hvezdicky, raw stdin mod pro plnou kontrolu vstupu,
+  cleanup stale X locks (/tmp/.X0-lock) pred startx
+- os/xorg/xkor-session.sh: cleanup stale X locks, fallback reinstalace Electron binary
+  pokud chybi (reseni "Electron failed to install correctly")
 
 ### OPRAVENO (agent v8 — badge system)
 - badges/counts.json + files.json: opraveny na realne hodnoty (4135 lines, 72 files)
