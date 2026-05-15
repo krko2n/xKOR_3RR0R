@@ -22,6 +22,10 @@ case "$cmd" in
         [[ $EUID -ne 0 ]] && exec sudo "$0" repair "$@"
         exec bash "$OS_DIR/repair.sh" "$@"
         ;;
+    upgrade)
+        [[ $EUID -ne 0 ]] && exec sudo "$0" upgrade "$@"
+        exec bash "$OS_DIR/upgrade.sh" "$@"
+        ;;
     clean-install)
         [[ $EUID -ne 0 ]] && exec sudo "$0" clean-install "$@"
         bash "$OS_DIR/uninstall.sh"
@@ -54,6 +58,7 @@ case "$cmd" in
         echo ""
         echo "  install        Full installation"
         echo "  uninstall      Remove everything (--remove-logs to also delete logs)"
+        echo "  upgrade        Pull latest + reinstall"
         echo "  clean-install  Uninstall then fresh install"
         echo "  repair         Fix broken install without reinstalling"
         echo "  status         Show installation status"
