@@ -341,15 +341,16 @@ devDependencies:
 - package.json: electron v dependencies â€” presunuto do devDependencies
   (zbytecne stahovani Electron binary pri kazdem npm install)
 ### OPRAVENO (agent v8 — badge system)
-- badges/counts.json: opraveno ze 4133 na 4135 (code lines) — puvodne 7102 (total lines vc. blanks)
-- badges/files.json: opraveno z 81 na 72 (realny pocet textovych souboru)
-- README.md: badge zmeneny z endpoint (shields.io cache) na staticky format
-  (https://img.shields.io/badge/lines-{code}-ED6BFB?style=...)
-- .github/workflows/count-lines.yml: pridan krok "Generate badges" ktery:
+- badges/counts.json + files.json: opraveny na realne hodnoty (4135 lines, 72 files)
+- README: endpoint badge (ne static) — dynamicky nacita z JSONu
+- Cache problem: shields.io cachuje endpoint badge az 24h. Reseni:
+  workflow prida &v=${{ github.run_id }} do badge URL v README
+  (kazdy push ma unikatni URL → shields.io fetchne znovu)
+- .github/workflows/count-lines.yml: krok "Generate badges":
   1. spusti cloc --json
-  2. vygeneruje badges/counts.json a badges/files.json
-  3. sed updatuje README.md badge hodnoty (static = bez cache)
-  4. commituje LINES.md + both badgy + README
+  2. vygeneruje badges/counts.json + badges/files.json
+  3. sed updatuje README — vymeni cast [^)]* za URL s &v={run_id}
+  4. commituje LINES.md + badgy + README
 
 ### AKTIVNI
 - systeminformation v package.json ale nikde neni pouzito

@@ -57,9 +57,9 @@ jobs:
           }
           EOF
 
-          # Update static badge URLs in README (no shields.io caching)
-          sed -i "s|badge/lines-[0-9]*-|badge/lines-$CODE-|" README.md
-          sed -i "s|badge/files-[0-9]*-|badge/files-$FILES-|" README.md
+          # Bust shields.io cache: replace counts.json→) with fresh URL + unique run_id
+          sed -i "s|\(counts\.json\)[^)]*|\1\\&style=for-the-badge\\&labelColor=000000\\&v=${{ github.run_id }}|g" README.md
+          sed -i "s|\(files\.json\)[^)]*|\1\\&style=for-the-badge\\&labelColor=000000\\&v=${{ github.run_id }}|g" README.md
 
           rm -f cloc_output.json
 
