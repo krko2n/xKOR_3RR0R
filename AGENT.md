@@ -358,6 +358,8 @@ devDependencies:
   cleanup stale X locks (/tmp/.X0-lock) pred startx
 - os/xorg/xkor-session.sh: cleanup stale X locks, fallback reinstalace Electron binary
   pokud chybi (reseni "Electron failed to install correctly")
+- run.sh + os/install.sh: rebuild nyni explicitne predava `electronVersion` z `electron/package.json`
+  (reseni "Expected a string version for electron version, got undefined" na Node.js 26)
 
 ### OPRAVENO (agent v8 — badge system)
 - badges/counts.json + files.json: opraveny na realne hodnoty (4135 lines, 72 files)

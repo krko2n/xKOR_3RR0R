@@ -109,9 +109,9 @@ ok "npm install complete"
 
 # Step 8: Rebuild node-pty
 step "Rebuilding node-pty for Electron ABI..."
-# Use programmatic API to avoid ESM/yargs bug in @electron/rebuild CLI (Node 16)
-if node -e "require('@electron/rebuild')" 2>/dev/null; then
-    node -e "const{rebuild}=require('@electron/rebuild');rebuild({buildPath:process.cwd(),force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})" \
+# Pass explicit electronVersion to avoid "got undefined" error on Node 26
+if node -e "require('@electron/rebuild')" 2>/dev/null && node -e "require('electron/package.json')" 2>/dev/null; then
+    node -e "const ev=require('electron/package.json').version;const{rebuild}=require('@electron/rebuild');rebuild({buildPath:process.cwd(),electronVersion:ev,force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})" \
         && touch node_modules/.node-pty-rebuilt \
         && ok "node-pty rebuilt" \
         || warn "node-pty rebuild failed -- terminals may not work"

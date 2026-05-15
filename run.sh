@@ -24,8 +24,8 @@ fi
 # Rebuild node-pty for Electron AFTER npm install (local binary exists then)
 if [ ! -f "node_modules/.node-pty-rebuilt" ]; then
     echo "[INFO] Rebuilding node-pty for Electron..."
-    # Use programmatic API to avoid ESM/yargs bug in @electron/rebuild CLI (Node 16)
-    node -e "const{rebuild}=require('@electron/rebuild');rebuild({buildPath:process.cwd(),force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})"
+    # Pass explicit electronVersion to avoid "got undefined" error on Node 26
+    node -e "const ev=require('electron/package.json').version;const{rebuild}=require('@electron/rebuild');rebuild({buildPath:process.cwd(),electronVersion:ev,force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})"
     touch node_modules/.node-pty-rebuilt
     echo "[OK]   node-pty rebuilt"
 else
