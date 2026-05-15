@@ -1,3 +1,4 @@
+// @summary: Forwards prompts to Ollama or any OpenAI-compatible backend.
 // fetch() is built into Node.js 18+ -- no external package needed
 const config = require("../../config/ai-endpoint.json");
 

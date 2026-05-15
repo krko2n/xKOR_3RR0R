@@ -1,3 +1,4 @@
+# @summary: PAM authentication via pamtester binary.
 'use strict';
 // PAM authentication via pamtester (system binary).
 // Replaces authenticate-pam which cannot compile on Node.js 22+.

@@ -1,3 +1,4 @@
+# @summary: Quick launcher: npm install, electron-rebuild node-pty, then npm start.
 #!/bin/bash
 # xKOR_3RR0R - Quick Launcher
 # Usage: bash run.sh [--dev]

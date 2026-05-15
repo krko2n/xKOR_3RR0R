@@ -1,3 +1,4 @@
+# @summary: Repair tool for OS Mode: rechecks deps, reinstalls service.
 #!/bin/bash
 # xKOR_3RR0R - Repair mode
 # Fixes broken install without re-copying files

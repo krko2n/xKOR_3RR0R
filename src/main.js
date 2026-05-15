@@ -1,3 +1,4 @@
+// @summary: Electron entry point. Creates fullscreen BrowserWindow, starts backend.
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
 

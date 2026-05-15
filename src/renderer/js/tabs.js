@@ -1,3 +1,4 @@
+// @summary: Tab switching between 3 terminals and web panel.
 document.querySelectorAll(".tab").forEach(tab => {
     tab.onclick = () => {
         document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));

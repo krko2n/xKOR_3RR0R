@@ -1,3 +1,4 @@
+// @summary: Manages node-pty sessions. create/write/onData/removeCallback.
 const pty = require("node-pty");
 const os = require("os");
 

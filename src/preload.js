@@ -1,3 +1,4 @@
+// @summary: WebSocket bridge. Exposes window.xkor.send() / onBackend() via contextBridge.
 const { contextBridge } = require("electron");
 
 let ws = null;
@@ -15,7 +16,7 @@ function connectWS() {
   };
 
   ws.onclose = () => {
-    console.log("[WS] Disconnected — retrying...");
+    console.log("[WS] Disconnected â€” retrying...");
     setTimeout(connectWS, 1000);
   };
 }

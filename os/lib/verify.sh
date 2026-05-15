@@ -1,3 +1,4 @@
+# @summary: Verifies system requirements: root, Arch, dependencies.
 #!/bin/bash
 # xKOR_3RR0R - Verification library
 

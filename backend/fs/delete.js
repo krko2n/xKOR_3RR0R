@@ -1,3 +1,4 @@
+// @summary: Deletes a file via unlinkSync.
 const fs = require("fs");
 
 module.exports = function ({ path }) {

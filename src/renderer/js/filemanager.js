@@ -1,5 +1,6 @@
+// @summary: File browser with navigate, rename, delete, copy/paste.
 /* ============================================================
-   FILE MANAGER — xKOR_3RR0R
+   FILE MANAGER â€” xKOR_3RR0R
    - Click navigation
    - Context menu (rename, delete, copy, paste)
    - Drag & drop

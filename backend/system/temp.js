@@ -1,3 +1,4 @@
+// @summary: Reads /sys/class/thermal/thermal_zone0/temp for CPU temp.
 const fs = require("fs");
 
 module.exports = async function () {

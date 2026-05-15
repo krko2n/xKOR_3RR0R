@@ -1,3 +1,4 @@
+// @summary: Reads file content via readFileSync.
 const fs = require("fs");
 
 module.exports = function (path) {

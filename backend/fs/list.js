@@ -1,3 +1,4 @@
+// @summary: Reads directory contents, returns [{name, type}].
 const fs = require("fs");
 
 module.exports = function (dir) {

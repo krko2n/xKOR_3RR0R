@@ -1,3 +1,4 @@
+# @summary: Full OS Mode installer for Arch Linux. Installs deps, systemd service, Plymouth.
 #!/bin/bash
 # xKOR_3RR0R OS Mode Installer v9
 # Usage: sudo bash os/install.sh  OR  sudo xkor install

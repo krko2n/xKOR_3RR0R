@@ -1,5 +1,6 @@
+// @summary: 3D rotating world map with threat zone markers. 60fps canvas.
 /* ============================================================
-   ROTATING GLOBE — xKOR_3RR0R
+   ROTATING GLOBE â€” xKOR_3RR0R
    - 60 FPS rotation
    - Neon cyberpunk style
    - Threat zones (Ukraine, Middle East, Taiwan)

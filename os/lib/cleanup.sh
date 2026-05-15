@@ -1,3 +1,4 @@
+# @summary: Cleanup routines for uninstall and repair.
 #!/bin/bash
 # xKOR_3RR0R - Cleanup library
 # Works even if: repo deleted, install interrupted, manifest missing

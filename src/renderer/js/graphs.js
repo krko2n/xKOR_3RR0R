@@ -1,5 +1,6 @@
+// @summary: Real-time CPU/RAM/NET/TEMP canvas graphs. 200ms updates.
 /* ============================================================
-   REALTIME GRAPHS — xKOR_3RR0R
+   REALTIME GRAPHS â€” xKOR_3RR0R
    CPU: 200ms
    RAM: 200ms
    NET: 300ms

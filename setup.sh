@@ -1,38 +1,39 @@
+# @summary: One-time setup for App Mode on any Linux distro.
 #!/usr/bin/env bash
-# ╔══════════════════════════════════════════════════════════════════╗
-# ║         xKOR_3RR0R — FULL SETUP SCRIPT                          ║
-# ║         Run once after git clone: bash setup.sh                 ║
-# ╚══════════════════════════════════════════════════════════════════╝
+# â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
+# â•‘         xKOR_3RR0R â€” FULL SETUP SCRIPT                          â•‘
+# â•‘         Run once after git clone: bash setup.sh                 â•‘
+# â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•ť
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
-# ── Colors ──────────────────────────────────────────────────────────
+# â”€â”€ Colors â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 RED='\033[0;31m'; GREEN='\033[0;32m'; CYAN='\033[0;36m'
 YELLOW='\033[1;33m'; BOLD='\033[1m'; DIM='\033[2m'; NC='\033[0m'
 
-step() { echo -e "\n${CYAN}${BOLD}▸ $1${NC}"; }
-ok()   { echo -e "  ${GREEN}✓${NC}  $1"; }
+step() { echo -e "\n${CYAN}${BOLD}â–¸ $1${NC}"; }
+ok()   { echo -e "  ${GREEN}âś“${NC}  $1"; }
 warn() { echo -e "  ${YELLOW}!${NC}  $1"; }
-fail() { echo -e "\n${RED}✗ FATAL: $1${NC}\n"; exit 1; }
+fail() { echo -e "\n${RED}âś— FATAL: $1${NC}\n"; exit 1; }
 
 clear
 echo -e "${CYAN}"
 cat << 'ART'
-  ██╗  ██╗██╗  ██╗ ██████╗ ██████╗      ██╗██████╗ ██████╗  ██████╗ ██████╗
-  ╚██╗██╔╝██║ ██╔╝██╔═══██╗██╔══██╗     ╚═╝╚════██╗██╔══██╗██╔═══██╗██╔══██╗
-   ╚███╔╝ █████╔╝ ██║   ██║██████╔╝        ╔═══╝██╔╝██████╔╝██║   ██║██████╔╝
-   ██╔██╗ ██╔═██╗ ██║   ██║██╔══██╗        ╔═══╝██╔╝╚═════╝ ██║   ██║██╔══██╗
-  ██╔╝ ██╗██║  ██╗╚██████╔╝██║  ██║        ███████╔╝         ╚██████╔╝██║  ██║
-  ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝       ╚══════╝           ╚═════╝ ╚═╝  ╚═╝
+  â–â–â•—  â–â–â•—â–â–â•—  â–â–â•— â–â–â–â–â–â–â•— â–â–â–â–â–â–â•—      â–â–â•—â–â–â–â–â–â–â•— â–â–â–â–â–â–â•—  â–â–â–â–â–â–â•— â–â–â–â–â–â–â•—
+  â•šâ–â–â•—â–â–â•”â•ťâ–â–â•‘ â–â–â•”â•ťâ–â–â•”â•â•â•â–â–â•—â–â–â•”â•â•â–â–â•—     â•šâ•â•ťâ•šâ•â•â•â•â–â–â•—â–â–â•”â•â•â–â–â•—â–â–â•”â•â•â•â–â–â•—â–â–â•”â•â•â–â–â•—
+   â•šâ–â–â–â•”â•ť â–â–â–â–â–â•”â•ť â–â–â•‘   â–â–â•‘â–â–â–â–â–â–â•”â•ť        â•”â•â•â•â•ťâ–â–â•”â•ťâ–â–â–â–â–â–â•”â•ťâ–â–â•‘   â–â–â•‘â–â–â–â–â–â–â•”â•ť
+   â–â–â•”â–â–â•— â–â–â•”â•â–â–â•— â–â–â•‘   â–â–â•‘â–â–â•”â•â•â–â–â•—        â•”â•â•â•â•ťâ–â–â•”â•ťâ•šâ•â•â•â•â•â•ť â–â–â•‘   â–â–â•‘â–â–â•”â•â•â–â–â•—
+  â–â–â•”â•ť â–â–â•—â–â–â•‘  â–â–â•—â•šâ–â–â–â–â–â–â•”â•ťâ–â–â•‘  â–â–â•‘        â–â–â–â–â–â–â–â•”â•ť         â•šâ–â–â–â–â–â–â•”â•ťâ–â–â•‘  â–â–â•‘
+  â•šâ•â•ť  â•šâ•â•ťâ•šâ•â•ť  â•šâ•â•ť â•šâ•â•â•â•â•â•ť â•šâ•â•ť  â•šâ•â•ť       â•šâ•â•â•â•â•â•â•ť           â•šâ•â•â•â•â•â•ť â•šâ•â•ť  â•šâ•â•ť
 ART
 echo -e "${NC}"
-echo -e "  ${DIM}Setup script — applies all bug fixes, creates login screen, configures autostart${NC}"
+echo -e "  ${DIM}Setup script â€” applies all bug fixes, creates login screen, configures autostart${NC}"
 echo ""
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 1. PREREQUISITES
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 step "Checking prerequisites"
 
 command -v node &>/dev/null || fail "Node.js not found. Install Node.js 18+ from https://nodejs.org"
@@ -46,9 +47,9 @@ ok "npm $(npm --version)"
 command -v python3 &>/dev/null || fail "python3 required for patching files."
 ok "python3 found"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 2. LINUX BUILD DEPS
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     step "Checking Linux build dependencies"
     MISSING=()
@@ -64,9 +65,9 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
     ok "Build dependencies satisfied"
 fi
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 3. LOGIN CREDENTIALS
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 step "Configure login screen credentials"
 echo ""
 echo -e "  ${DIM}Set a username and password for the xKOR_3RR0R lock screen.${NC}"
@@ -91,14 +92,14 @@ cat > config/user.json << USERJSON
     "password": "${LOGIN_PASS}"
 }
 USERJSON
-ok "Credentials saved → config/user.json"
+ok "Credentials saved â†’ config/user.json"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 4. FIX: backend/ai/proxy.js  (remove node-fetch)
-# ════════════════════════════════════════════════════════════════════
-step "Fix #1 — removing broken node-fetch dependency"
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+step "Fix #1 â€” removing broken node-fetch dependency"
 cat > backend/ai/proxy.js << 'ENDPROXY'
-// fetch() is built into Node.js 18+ — no external package needed
+// fetch() is built into Node.js 18+ â€” no external package needed
 const config = require("../../config/ai-endpoint.json");
 
 module.exports = async function (prompt) {
@@ -115,18 +116,18 @@ module.exports = async function (prompt) {
     }
 };
 ENDPROXY
-ok "backend/ai/proxy.js — node-fetch removed, using global fetch()"
+ok "backend/ai/proxy.js â€” node-fetch removed, using global fetch()"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 5. FIX: backend/server.js  (add /auth endpoint)
-# ════════════════════════════════════════════════════════════════════
-step "Fix #2 — adding /auth endpoint to backend"
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+step "Fix #2 â€” adding /auth endpoint to backend"
 python3 << 'PYEOF'
 with open("backend/server.js", "r", encoding="utf-8") as f:
     content = f.read()
 
 if '"/auth"' in content or "'/auth'" in content:
-    print("  /auth endpoint already present — skipped")
+    print("  /auth endpoint already present â€” skipped")
 else:
     auth_block = '''// -----------------------------
 // AUTH ENDPOINT
@@ -157,16 +158,16 @@ app.post("/auth", (req, res) => {
         f.write(content)
     print("  /auth endpoint added to backend/server.js")
 PYEOF
-ok "backend/server.js — /auth endpoint ready"
+ok "backend/server.js â€” /auth endpoint ready"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 6. WRITE: src/renderer/css/login.css
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 step "Writing login screen CSS"
 mkdir -p src/renderer/css
 cat > src/renderer/css/login.css << 'ENDCSS'
 /* ============================================================
-   xKOR_3RR0R — LOGIN SCREEN
+   xKOR_3RR0R â€” LOGIN SCREEN
    ============================================================ */
 
 #login-screen {
@@ -387,14 +388,14 @@ cat > src/renderer/css/login.css << 'ENDCSS'
 ENDCSS
 ok "src/renderer/css/login.css written"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 7. WRITE: src/renderer/js/login.js
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 step "Writing login screen JS"
 cat > src/renderer/js/login.js << 'ENDJS'
 /* ============================================================
-   xKOR_3RR0R — LOGIN SCREEN
-   Runs before boot.js — holds boot until auth passes
+   xKOR_3RR0R â€” LOGIN SCREEN
+   Runs before boot.js â€” holds boot until auth passes
    ============================================================ */
 
 // Signal boot.js to wait for us
@@ -409,7 +410,7 @@ window.xkorAuthPending = true;
     const status  = document.getElementById("login-status");
 
     if (!screen) {
-        // Login screen HTML not present — skip auth, boot normally
+        // Login screen HTML not present â€” skip auth, boot normally
         window.xkorAuthPending = false;
         window.dispatchEvent(new Event("xkor-auth"));
         return;
@@ -428,7 +429,7 @@ window.xkorAuthPending = true;
     });
     btn.addEventListener("click", doLogin);
 
-    // ── Core auth function ─────────────────────────────────────
+    // â”€â”€ Core auth function â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     async function doLogin() {
         const username = userInp.value.trim();
         const password = passInp.value;
@@ -460,7 +461,7 @@ window.xkorAuthPending = true;
                 btn.disabled = false;
             }
         } catch {
-            // Backend not ready yet — retry in 1s
+            // Backend not ready yet â€” retry in 1s
             setStatus("CONNECTING TO BACKEND...", "dim");
             setTimeout(() => {
                 btn.disabled = false;
@@ -470,7 +471,7 @@ window.xkorAuthPending = true;
         }
     }
 
-    // ── Auth success: release boot ────────────────────────────
+    // â”€â”€ Auth success: release boot â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function grantAccess() {
         screen.classList.add("fade-out");
         screen.addEventListener("animationend", () => {
@@ -482,7 +483,7 @@ window.xkorAuthPending = true;
         window.dispatchEvent(new Event("xkor-auth"));
     }
 
-    // ── Helpers ────────────────────────────────────────────────
+    // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function setStatus(msg, cls = "") {
         status.textContent = msg;
         status.className = cls;
@@ -498,9 +499,9 @@ window.xkorAuthPending = true;
 ENDJS
 ok "src/renderer/js/login.js written"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 8. PATCH: src/renderer/js/boot.js  (wait for xkor-auth event)
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 step "Patching boot.js to wait for login"
 python3 << 'PYEOF'
 with open("src/renderer/js/boot.js", "r", encoding="utf-8") as f:
@@ -518,15 +519,15 @@ if old_call in content and "xkor-auth" not in content:
     content = content.replace(old_call, new_call)
     with open("src/renderer/js/boot.js", "w", encoding="utf-8") as f:
         f.write(content)
-    print("  boot.js patched — will wait for auth")
+    print("  boot.js patched â€” will wait for auth")
 else:
-    print("  boot.js already patched or structure differs — skipped")
+    print("  boot.js already patched or structure differs â€” skipped")
 PYEOF
 ok "src/renderer/js/boot.js patched"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 9. PATCH: src/renderer/index.html  (CSP + font + login HTML)
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 step "Patching index.html (CSP, font, login screen)"
 python3 << 'PYEOF'
 import re
@@ -536,7 +537,7 @@ with open("src/renderer/index.html", "r", encoding="utf-8") as f:
 
 changes = []
 
-# ── Fix CSP ──────────────────────────────────────────────────────
+# â”€â”€ Fix CSP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 csp_re = re.compile(r'<meta http-equiv="Content-Security-Policy"[^>]+>', re.DOTALL)
 new_csp = (
     '<meta http-equiv="Content-Security-Policy"\n'
@@ -550,7 +551,7 @@ if csp_re.search(html):
     html = csp_re.sub(new_csp, html)
     changes.append("CSP fixed (HTTP + font CDNs allowed)")
 
-# ── Add Google Fonts ───────────────────────────────────────────
+# â”€â”€ Add Google Fonts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 fonts = (
     '    <link rel="preconnect" href="https://fonts.googleapis.com">\n'
     '    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
@@ -563,7 +564,7 @@ if "fonts.googleapis.com/css2?family=Share+Tech+Mono" not in html:
     )
     changes.append("Google Fonts (Share Tech Mono) added")
 
-# ── Add login.css link ────────────────────────────────────────
+# â”€â”€ Add login.css link â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if 'css/login.css' not in html:
     html = html.replace(
         '<link rel="stylesheet" href="css/globe.css">',
@@ -571,7 +572,7 @@ if 'css/login.css' not in html:
     )
     changes.append("login.css linked")
 
-# ── Add login.js FIRST (before boot.js) ──────────────────────
+# â”€â”€ Add login.js FIRST (before boot.js) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if 'js/login.js' not in html:
     html = html.replace(
         '<script src="js/boot.js"></script>',
@@ -579,7 +580,7 @@ if 'js/login.js' not in html:
     )
     changes.append("login.js linked (before boot.js)")
 
-# ── Inject login screen HTML ──────────────────────────────────
+# â”€â”€ Inject login screen HTML â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 login_html = '''
 <!-- ========================= -->
 <!-- LOGIN SCREEN              -->
@@ -589,15 +590,15 @@ login_html = '''
     <div id="login-box">
         <div id="login-logo">xKOR_3RR0R</div>
         <div id="login-subtitle">SECURE TERMINAL INTERFACE</div>
-        <div id="login-version">v1.0.0 &nbsp;·&nbsp; AUTHENTICATED ACCESS ONLY</div>
+        <div id="login-version">v1.0.0 &nbsp;Â·&nbsp; AUTHENTICATED ACCESS ONLY</div>
         <div id="login-divider"></div>
         <div class="login-field">
             <label>USER IDENTIFIER</label>
-            <input type="text" id="login-user" autocomplete="off" spellcheck="false" placeholder="——————">
+            <input type="text" id="login-user" autocomplete="off" spellcheck="false" placeholder="â€”â€”â€”â€”â€”â€”">
         </div>
         <div class="login-field">
             <label>ACCESS KEY</label>
-            <input type="password" id="login-pass" autocomplete="off" placeholder="——————">
+            <input type="password" id="login-pass" autocomplete="off" placeholder="â€”â€”â€”â€”â€”â€”">
         </div>
         <button id="login-btn">[ AUTHENTICATE ]</button>
         <div id="login-status"></div>
@@ -615,31 +616,31 @@ with open("src/renderer/index.html", "w", encoding="utf-8") as f:
     f.write(html)
 
 for c in changes:
-    print(f"  ✓ {c}")
+    print(f"  âś“ {c}")
 PYEOF
 ok "src/renderer/index.html fully patched"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 10. npm install
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 step "Installing npm dependencies"
 npm install
 ok "npm install complete"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 11. Rebuild node-pty for Electron
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 step "Rebuilding node-pty for Electron (this takes a minute)"
 npm run postinstall 2>&1 || {
-    warn "postinstall script failed — trying fallback"
+    warn "postinstall script failed â€” trying fallback"
     npx @electron/rebuild -f -w node-pty 2>&1 \
         || fail "node-pty rebuild failed. Check build-essential is installed."
 }
 ok "node-pty rebuilt successfully"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 12. Create launcher script
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 step "Creating launcher"
 LAUNCH_SCRIPT="$SCRIPT_DIR/xkor-launch.sh"
 cat > "$LAUNCH_SCRIPT" << LAUNCHEOF
@@ -650,9 +651,9 @@ LAUNCHEOF
 chmod +x "$LAUNCH_SCRIPT"
 ok "xkor-launch.sh created"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # 13. Autostart on desktop login
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 step "Setting up autostart on login"
 
 AUTOSTART_DIR="$HOME/.config/autostart"
@@ -677,19 +678,19 @@ DESKTOPEOF
 ok "Autostart configured: ~/.config/autostart/xkor3rr0r.desktop"
 ok "App will launch automatically on next desktop login"
 
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 # DONE
-# ════════════════════════════════════════════════════════════════════
+# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 echo ""
 echo -e "${CYAN}${BOLD}"
-echo "  ╔══════════════════════════════════════════════════════╗"
-echo "  ║           SETUP COMPLETE                             ║"
-echo "  ╠══════════════════════════════════════════════════════╣"
-echo -e "  ║  ${NC}Run now:    ${BOLD}npm start${NC}${CYAN}${BOLD}                                ║"
-echo -e "  ║  ${NC}Or:         ${BOLD}bash xkor-launch.sh${NC}${CYAN}${BOLD}                     ║"
-echo -e "  ║  ${NC}Autostart:  next login ${BOLD}✓${NC}${CYAN}${BOLD}                            ║"
-echo -e "  ║  ${NC}Login user: ${BOLD}${LOGIN_USER}${NC}${CYAN}${BOLD}                                   ║"
-echo -e "  ║                                                    ║"
-echo -e "  ║  ${NC}${DIM}AI panel: edit config/ai-endpoint.json${NC}${CYAN}${BOLD}           ║"
-echo "  ╚══════════════════════════════════════════════════════╝"
+echo "  â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—"
+echo "  â•‘           SETUP COMPLETE                             â•‘"
+echo "  â• â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•Ł"
+echo -e "  â•‘  ${NC}Run now:    ${BOLD}npm start${NC}${CYAN}${BOLD}                                â•‘"
+echo -e "  â•‘  ${NC}Or:         ${BOLD}bash xkor-launch.sh${NC}${CYAN}${BOLD}                     â•‘"
+echo -e "  â•‘  ${NC}Autostart:  next login ${BOLD}âś“${NC}${CYAN}${BOLD}                            â•‘"
+echo -e "  â•‘  ${NC}Login user: ${BOLD}${LOGIN_USER}${NC}${CYAN}${BOLD}                                   â•‘"
+echo -e "  â•‘                                                    â•‘"
+echo -e "  â•‘  ${NC}${DIM}AI panel: edit config/ai-endpoint.json${NC}${CYAN}${BOLD}           â•‘"
+echo "  â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•ť"
 echo -e "${NC}"

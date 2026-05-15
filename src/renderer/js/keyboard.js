@@ -1,5 +1,6 @@
+// @summary: On-screen keyboard visualizer. Lights up physical keys.
 /* ============================================================
-   ON-SCREEN KEYBOARD — xKOR_3RR0R
+   ON-SCREEN KEYBOARD â€” xKOR_3RR0R
    - Full keyboard
    - SHIFT / CTRL / ALT / CAPS
    - Physical key highlight

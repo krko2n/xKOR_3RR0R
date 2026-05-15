@@ -1,3 +1,4 @@
+# @summary: Xorg session: sets DISPLAY, disables screensaver, starts Electron.
 #!/bin/bash
 # xKOR_3RR0R - Xorg session script
 # Called by startx from login.js after successful PAM auth.

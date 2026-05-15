@@ -1,3 +1,4 @@
+// @summary: Writes file content via writeFileSync.
 const fs = require("fs");
 
 module.exports = function ({ path, content }) {

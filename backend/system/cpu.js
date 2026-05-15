@@ -1,3 +1,4 @@
+// @summary: Reads /proc/stat for CPU idle/total tick counts.
 const fs = require("fs");
 
 module.exports = async function () {

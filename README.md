@@ -175,151 +175,125 @@ Default is [Ollama](https://ollama.ai) running locally. Change `endpoint` and `m
 
 ## PROJECT STRUCTURE
 
-<details open>
-<summary><span style="color:#00ff9f;font-weight:bold">xKOR_3RR0R/</span></summary>
+Generated from @summary comments via 
+pm run docs:tree.
 
-├── <details><summary><span style="color:#00d4ff;font-weight:bold">.github/</span></summary>
-│   └── <details><summary><span style="color:#00d4ff;font-weight:bold">workflows/</span></summary>
-│       └── <span style="color:#e6c07b">count-lines.yml</span>
-│   </details>
-</details>
-├── <details><summary><span style="color:#00d4ff;font-weight:bold">assets/</span></summary>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">branding/</span></summary>
-│   │   └── <span style="color:#888">.gitkeep</span>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">fonts/</span></summary>
-│   │   └── <span style="color:#888">.gitkeep</span>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">globe/</span></summary>
-│   │   └── <span style="color:#e6c07b">worldmap.json</span>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">icons/</span></summary>
-│   │   └── <span style="color:#888">.gitkeep</span>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">images/</span></summary>
-│   │   └── <span style="color:#888">.gitkeep</span>
-│   </details>
-│   └── <details><summary><span style="color:#00d4ff;font-weight:bold">sounds/</span></summary>
-│       └── <span style="color:#888">.gitkeep</span>
-│   </details>
-</details>
-├── <details><summary><span style="color:#00d4ff;font-weight:bold">backend/</span></summary>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">ai/</span></summary>
-│   │   └── <span style="color:#f0db4f">proxy.js</span>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">fs/</span></summary>
-│   │   ├── <span style="color:#f0db4f">delete.js</span>
-│   │   ├── <span style="color:#f0db4f">list.js</span>
-│   │   ├── <span style="color:#f0db4f">read.js</span>
-│   │   ├── <span style="color:#f0db4f">rename.js</span>
-│   │   └── <span style="color:#f0db4f">write.js</span>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">system/</span></summary>
-│   │   ├── <span style="color:#f0db4f">cpu.js</span>
-│   │   ├── <span style="color:#f0db4f">net.js</span>
-│   │   ├── <span style="color:#f0db4f">ram.js</span>
-│   │   └── <span style="color:#f0db4f">temp.js</span>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">terminal/</span></summary>
-│   │   └── <span style="color:#f0db4f">pty.js</span>
-│   </details>
-│   └── <span style="color:#f0db4f">server.js</span>
-</details>
-├── <details><summary><span style="color:#00d4ff;font-weight:bold">badges/</span></summary>
-│   ├── <span style="color:#e6c07b">counts.json</span>
-│   └── <span style="color:#e6c07b">files.json</span>
-</details>
-├── <details><summary><span style="color:#00d4ff;font-weight:bold">config/</span></summary>
-│   ├── <span style="color:#e6c07b">ai-endpoint.json</span>
-│   └── <span style="color:#e6c07b">user.json</span>
-</details>
-├── <details><summary><span style="color:#00d4ff;font-weight:bold">docs/</span></summary>
-│   └── <span style="color:#e34c26">index.html</span>
-</details>
-├── <details><summary><span style="color:#00d4ff;font-weight:bold">os/</span></summary>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">lib/</span></summary>
-│   │   ├── <span style="color:#89e051">cleanup.sh</span>
-│   │   ├── <span style="color:#89e051">manifest.sh</span>
-│   │   ├── <span style="color:#89e051">verify.sh</span>
-│   │   └── <span style="color:#89e051">xkor-lib.sh</span>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">loading/</span></summary>
-│   │   └── <span style="color:#89e051">loading.sh</span>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">login/</span></summary>
-│   │   ├── <span style="color:#f0db4f">login.js</span>
-│   │   ├── <span style="color:#e6c07b">package.json</span>
-│   │   ├── <span style="color:#f0db4f">pam.js</span>
-│   │   └── <span style="color:#89e051">start-login.sh</span>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">plymount/</span></summary>
-│   │   ├── <span style="color:#89e051">plymount-theme.sh</span>
-│   │   └── <details><summary><span style="color:#00d4ff;font-weight:bold">xkor/</span></summary>
-│   │       ├── <span style="color:#aaa">xkor.plymouth</span>
-│   │       └── <span style="color:#aaa">xkor.script</span>
-│   │   </details>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">systemd/</span></summary>
-│   │   ├── <span style="color:#aaa">xkor-login.service</span>
-│   │   └── <span style="color:#aaa">xkor-ui.service</span>
-│   </details>
-│   ├── <details><summary><span style="color:#00d4ff;font-weight:bold">xorg/</span></summary>
-│   │   ├── <span style="color:#888">.xinitrc</span>
-│   │   └── <span style="color:#89e051">xkor-session.sh</span>
-│   </details>
-│   ├── <span style="color:#89e051">clean-arch.sh</span>
-│   ├── <span style="color:#89e051">install.sh</span>
-│   ├── <span style="color:#89e051">repair.sh</span>
-│   ├── <span style="color:#89e051">uninstall.sh</span>
-│   ├── <span style="color:#89e051">unistall.sh</span>
-│   └── <details><summary><span style="color:#00d4ff;font-weight:bold">xkor/</span></summary>
-│   </details>
-</details>
-├── <details><summary><span style="color:#00d4ff;font-weight:bold">src/</span></summary>
-│   ├── <span style="color:#f0db4f">main.js</span>
-│   ├── <span style="color:#f0db4f">preload.js</span>
-│   └── <details><summary><span style="color:#00d4ff;font-weight:bold">renderer/</span></summary>
-│       ├── <details><summary><span style="color:#00d4ff;font-weight:bold">css/</span></summary>
-│       │   ├── <span style="color:#563d7c">ai.css</span>
-│       │   ├── <span style="color:#563d7c">boot.css</span>
-│       │   ├── <span style="color:#563d7c">filemanager.css</span>
-│       │   ├── <span style="color:#563d7c">globe.css</span>
-│       │   ├── <span style="color:#563d7c">graphs.css</span>
-│       │   ├── <span style="color:#563d7c">keyboard.css</span>
-│       │   ├── <span style="color:#563d7c">layout.css</span>
-│       │   ├── <span style="color:#563d7c">login.css</span>
-│       │   ├── <span style="color:#563d7c">terminal.css</span>
-│       │   └── <span style="color:#563d7c">theme.css</span>
-│       </details>
-│       ├── <details><summary><span style="color:#00d4ff;font-weight:bold">js/</span></summary>
-│       │   ├── <span style="color:#f0db4f">ai.js</span>
-│       │   ├── <span style="color:#f0db4f">boot.js</span>
-│       │   ├── <span style="color:#f0db4f">filemanager.js</span>
-│       │   ├── <span style="color:#f0db4f">globe.js</span>
-│       │   ├── <span style="color:#f0db4f">graphs.js</span>
-│       │   ├── <span style="color:#f0db4f">keyboard.js</span>
-│       │   ├── <span style="color:#f0db4f">login.js</span>
-│       │   ├── <span style="color:#f0db4f">tabs.js</span>
-│       │   ├── <span style="color:#f0db4f">terminal.js</span>
-│       │   └── <span style="color:#f0db4f">ui.js</span>
-│       </details>
-│       └── <span style="color:#e34c26">index.html</span>
-│   </details>
-</details>
-├── <span style="color:#888">.gitattributes</span>
-├── <span style="color:#888">.gitignore</span>
-├── <span style="color:#aaa">AGENT.md</span>
-├── <span style="color:#aaa">fixGuide.pdf</span>
-├── <span style="color:#aaa">INSTALL.md</span>
-├── <span style="color:#aaa">LINES.md</span>
-├── <span style="color:#aaa">logo.png</span>
-├── <span style="color:#aaa">logo_with_text.png</span>
-├── <span style="color:#e6c07b">package.json</span>
-├── <span style="color:#aaa">README.md</span>
-├── <span style="color:#89e051">run.sh</span>
-└── <span style="color:#89e051">setup.sh</span>
-
-</details>
+<!-- TREE_START -->
+```text
+.gitattributes
+.github/
+└── workflows/
+    └── count-lines.yml
+.gitignore
+AGENT.md
+assets/
+├── branding/
+│   └── .gitkeep
+├── fonts/
+│   └── .gitkeep
+├── globe/
+│   └── worldmap.json
+├── icons/
+│   └── .gitkeep
+├── images/
+│   └── .gitkeep
+└── sounds/
+    └── .gitkeep
+backend/
+├── ai/
+│   └── proxy.js                            # Forwards prompts to Ollama or any OpenAI-compatible backend.
+├── fs/
+│   ├── delete.js                           # Deletes a file via unlinkSync.
+│   ├── list.js                             # Reads directory contents, returns [{name, type}].
+│   ├── read.js                             # Reads file content via readFileSync.
+│   ├── rename.js                           # Renames/moves a file via renameSync.
+│   └── write.js                            # Writes file content via writeFileSync.
+├── server.js                               # Express + WebSocket server (port 3001). Serves FS, AI, auth APIs and PTY terminals.
+├── system/
+│   ├── cpu.js                              # Reads /proc/stat for CPU idle/total tick counts.
+│   ├── net.js                              # Reads /proc/net/dev, dynamically finds first non-loopback interface.
+│   ├── ram.js                              # Reads /proc/meminfo for MemTotal/MemFree.
+│   └── temp.js                             # Reads /sys/class/thermal/thermal_zone0/temp for CPU temp.
+└── terminal/
+    └── pty.js                              # Manages node-pty sessions. create/write/onData/removeCallback.
+badges/
+├── counts.json
+└── files.json
+config/
+├── ai-endpoint.json
+└── user.json
+docs/
+└── index.html
+fixGuide.pdf
+INSTALL.md
+LINES.md
+logo.png
+logo_with_text.png
+os/
+├── clean-arch.sh                           # Cleans Arch Linux package cache and orphaned deps.
+├── install.sh                              # Full OS Mode installer for Arch Linux. Installs deps, systemd service, Plymouth.
+├── lib/
+│   ├── cleanup.sh                          # Cleanup routines for uninstall and repair.
+│   ├── manifest.sh                         # File manifest for integrity checks.
+│   ├── verify.sh                           # Verifies system requirements: root, Arch, dependencies.
+│   └── xkor-lib.sh                         # Shared library of bash functions for OS scripts.
+├── loading/
+│   └── loading.sh                          # Glitch-style loading animation after PAM auth.
+├── login/
+│   ├── login.js                            # TTY login app: ASCII banner, readline prompts, startx on success.
+│   ├── package.json                        # Dependencies for the TTY login app (standalone Node.js).
+│   ├── pam.js                              # PAM authentication via pamtester binary.
+│   └── start-login.sh                      # Entrypoint for TTY1 login: cd, install deps, exec login.js.
+├── plymount/
+│   ├── plymount-theme.sh                   # Installs Plymouth boot animation theme.
+│   └── xkor/
+│       ├── xkor.plymouth
+│       └── xkor.script
+├── repair.sh                               # Repair tool for OS Mode: rechecks deps, reinstalls service.
+├── systemd/
+│   ├── xkor-login.service
+│   └── xkor-ui.service
+├── uninstall.sh                            # Removes xKOR_3RR0R OS Mode: disables service, deletes /opt/xkor_3rr0r.
+├── unistall.sh                             # Duplicate of uninstall.sh (typo preserved for compatibility).
+├── xkor
+└── xorg/
+    ├── .xinitrc
+    └── xkor-session.sh                     # Xorg session: sets DISPLAY, disables screensaver, starts Electron.
+package.json
+README.md
+run.sh                                      # Quick launcher: npm install, electron-rebuild node-pty, then npm start.
+scripts/
+└── generate-tree.mjs
+setup.sh                                    # One-time setup for App Mode on any Linux distro.
+src/
+├── main.js                                 # Electron entry point. Creates fullscreen BrowserWindow, starts backend.
+├── preload.js                              # WebSocket bridge. Exposes window.xkor.send() / onBackend() via contextBridge.
+└── renderer/
+    ├── css/
+    │   ├── ai.css
+    │   ├── boot.css
+    │   ├── filemanager.css
+    │   ├── globe.css
+    │   ├── graphs.css
+    │   ├── keyboard.css
+    │   ├── layout.css
+    │   ├── login.css
+    │   ├── terminal.css
+    │   └── theme.css
+    ├── index.html                          # Main HTML shell: login, boot, app UI with 3 terminals + globe + graphs.
+    └── js/
+        ├── ai.js                           # AI chat panel. Toggle with F2, POST prompt to /ai endpoint.
+        ├── boot.js                         # Boot animation sequence. Guards setTimeout/setInterval until auth.
+        ├── filemanager.js                  # File browser with navigate, rename, delete, copy/paste.
+        ├── globe.js                        # 3D rotating world map with threat zone markers. 60fps canvas.
+        ├── graphs.js                       # Real-time CPU/RAM/NET/TEMP canvas graphs. 200ms updates.
+        ├── keyboard.js                     # On-screen keyboard visualizer. Lights up physical keys.
+        ├── login.js                        # Login screen UI. POSTs to /auth, dispatches xkor-auth event on success.
+        ├── tabs.js                         # Tab switching between 3 terminals and web panel.
+        ├── terminal.js                     # xterm.js terminal instances (3 sessions). WebSocket PTY bridge.
+        └── ui.js                           # Subscribes to backend stats events, updates graph data.
+```
+<!-- TREE_END -->
 ---
 
 ## KEYBOARD SHORTCUTS

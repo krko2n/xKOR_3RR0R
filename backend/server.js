@@ -1,3 +1,4 @@
+// @summary: Express + WebSocket server (port 3001). Serves FS, AI, auth APIs and PTY terminals.
 const express = require("express");
 const http = require("http");
 const WebSocket = require("ws");
@@ -74,7 +75,7 @@ app.post("/auth", function(req, res) {
 });
 
 // -----------------------------
-// WEBSOCKET — REALTIME DATA
+// WEBSOCKET â€” REALTIME DATA
 // -----------------------------
 wss.on("connection", (ws) => {
     console.log("[WS] Client connected");

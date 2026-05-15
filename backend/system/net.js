@@ -1,3 +1,4 @@
+// @summary: Reads /proc/net/dev, dynamically finds first non-loopback interface.
 const fs = require("fs");
 
 module.exports = async function () {

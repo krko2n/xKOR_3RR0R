@@ -1,3 +1,4 @@
+// @summary: Renames/moves a file via renameSync.
 const fs = require("fs");
 
 module.exports = function ({ oldPath, newPath }) {

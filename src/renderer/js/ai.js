@@ -1,5 +1,6 @@
+// @summary: AI chat panel. Toggle with F2, POST prompt to /ai endpoint.
 /* ============================================================
-   AI PANEL — xKOR_3RR0R
+   AI PANEL â€” xKOR_3RR0R
    - Toggle F2
    - Animated messages
    - Loading indicator

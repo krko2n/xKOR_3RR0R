@@ -1,3 +1,4 @@
+// @summary: xterm.js terminal instances (3 sessions). WebSocket PTY bridge.
 let terminalElements = {
     term1: document.getElementById("term1"),
     term2: document.getElementById("term2"),

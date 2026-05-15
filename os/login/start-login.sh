@@ -1,3 +1,4 @@
+# @summary: Entrypoint for TTY1 login: cd, install deps, exec login.js.
 #!/bin/bash
 # xKOR_3RR0R - Login launcher
 # Called by xkor-login.service. No downloads happen here.

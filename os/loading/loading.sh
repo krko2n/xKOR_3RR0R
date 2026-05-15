@@ -1,3 +1,4 @@
+# @summary: Glitch-style loading animation after PAM auth.
 #!/bin/bash
 clear
 echo -e "\e[31mSYSTEM FAILURE DETECTED\e[0m"

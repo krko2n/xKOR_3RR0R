@@ -1,3 +1,4 @@
+# @summary: Cleans Arch Linux package cache and orphaned deps.
 #!/bin/bash
 
 LOG_DIR="/var/log/xkor_3rr0r"

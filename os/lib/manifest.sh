@@ -1,3 +1,4 @@
+# @summary: File manifest for integrity checks.
 #!/bin/bash
 # xKOR_3RR0R - Manifest library
 # Tracks everything the installer creates.

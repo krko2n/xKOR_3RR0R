@@ -1,3 +1,4 @@
+// @summary: Login screen UI. POSTs to /auth, dispatches xkor-auth event on success.
 /* ============================================================
    xKOR_3RR0R - LOGIN SCREEN
    Uses #login-screen div (not #login-overlay)
@@ -17,7 +18,7 @@ window.xkorAuthPending = true;
                   document.getElementById('login-status');
 
     if (!screen) {
-        // No login screen in HTML â€” skip auth, go straight to boot
+        // No login screen in HTML Ă˘â‚¬â€ť skip auth, go straight to boot
         window.xkorAuthPending = false;
         window.dispatchEvent(new Event('xkor-auth'));
         return;
@@ -66,7 +67,7 @@ window.xkorAuthPending = true;
                 screen.style.opacity = '0';
                 setTimeout(function() {
                     screen.style.display = 'none';
-                    // dispatch 'xkor-auth' â€” matches boot.js addEventListener
+                    // dispatch 'xkor-auth' Ă˘â‚¬â€ť matches boot.js addEventListener
                     window.xkorAuthPending = false;
                     window.dispatchEvent(new Event('xkor-auth'));
                 }, 600);
