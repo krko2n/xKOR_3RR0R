@@ -179,121 +179,187 @@ Generated from @summary comments via
 pm run docs:tree.
 
 <!-- TREE_START -->
-```text
-.gitattributes
-.github/
-└── workflows/
-    └── count-lines.yml
-.gitignore
-AGENT.md
-assets/
-├── branding/
-│   └── .gitkeep
-├── fonts/
-│   └── .gitkeep
-├── globe/
-│   └── worldmap.json
-├── icons/
-│   └── .gitkeep
-├── images/
-│   └── .gitkeep
-└── sounds/
-    └── .gitkeep
-backend/
-├── ai/
-│   └── proxy.js                            # Forwards prompts to Ollama or any OpenAI-compatible backend.
-├── fs/
-│   ├── delete.js                           # Deletes a file via unlinkSync.
-│   ├── list.js                             # Reads directory contents, returns [{name, type}].
-│   ├── read.js                             # Reads file content via readFileSync.
-│   ├── rename.js                           # Renames/moves a file via renameSync.
-│   └── write.js                            # Writes file content via writeFileSync.
-├── server.js                               # Express + WebSocket server (port 3001). Serves FS, AI, auth APIs and PTY terminals.
-├── system/
-│   ├── cpu.js                              # Reads /proc/stat for CPU idle/total tick counts.
-│   ├── net.js                              # Reads /proc/net/dev, dynamically finds first non-loopback interface.
-│   ├── ram.js                              # Reads /proc/meminfo for MemTotal/MemFree.
-│   └── temp.js                             # Reads /sys/class/thermal/thermal_zone0/temp for CPU temp.
-└── terminal/
-    └── pty.js                              # Manages node-pty sessions. create/write/onData/removeCallback.
-badges/
-├── counts.json
-└── files.json
-config/
-├── ai-endpoint.json
-└── user.json
-docs/
-└── index.html
-fixGuide.pdf
-INSTALL.md
-LINES.md
-logo.png
-logo_with_text.png
-os/
-├── clean-arch.sh                           # Cleans Arch Linux package cache and orphaned deps.
-├── install.sh                              # Full OS Mode installer for Arch Linux. Installs deps, systemd service, Plymouth.
-├── lib/
-│   ├── cleanup.sh                          # Cleanup routines for uninstall and repair.
-│   ├── manifest.sh                         # File manifest for integrity checks.
-│   ├── verify.sh                           # Verifies system requirements: root, Arch, dependencies.
-│   └── xkor-lib.sh                         # Shared library of bash functions for OS scripts.
-├── loading/
-│   └── loading.sh                          # Glitch-style loading animation after PAM auth.
-├── login/
-│   ├── login.js                            # TTY login app: ASCII banner, readline prompts, startx on success.
-│   ├── package.json                        # Dependencies for the TTY login app (standalone Node.js).
-│   ├── pam.js                              # PAM authentication via pamtester binary.
-│   └── start-login.sh                      # Entrypoint for TTY1 login: cd, install deps, exec login.js.
-├── plymount/
-│   ├── plymount-theme.sh                   # Installs Plymouth boot animation theme.
-│   └── xkor/
-│       ├── xkor.plymouth
-│       └── xkor.script
-├── repair.sh                               # Repair tool for OS Mode: rechecks deps, reinstalls service.
-├── systemd/
-│   ├── xkor-login.service
-│   └── xkor-ui.service
-├── uninstall.sh                            # Removes xKOR_3RR0R OS Mode: disables service, deletes /opt/xkor_3rr0r.
-├── unistall.sh                             # Duplicate of uninstall.sh (typo preserved for compatibility).
-├── xkor
-└── xorg/
-    ├── .xinitrc
-    └── xkor-session.sh                     # Xorg session: sets DISPLAY, disables screensaver, starts Electron.
-package.json
-README.md
-run.sh                                      # Quick launcher: npm install, electron-rebuild node-pty, then npm start.
-scripts/
-└── generate-tree.mjs
-setup.sh                                    # One-time setup for App Mode on any Linux distro.
-src/
-├── main.js                                 # Electron entry point. Creates fullscreen BrowserWindow, starts backend.
-├── preload.js                              # WebSocket bridge. Exposes window.xkor.send() / onBackend() via contextBridge.
-└── renderer/
-    ├── css/
-    │   ├── ai.css
-    │   ├── boot.css
-    │   ├── filemanager.css
-    │   ├── globe.css
-    │   ├── graphs.css
-    │   ├── keyboard.css
-    │   ├── layout.css
-    │   ├── login.css
-    │   ├── terminal.css
-    │   └── theme.css
-    ├── index.html                          # Main HTML shell: login, boot, app UI with 3 terminals + globe + graphs.
-    └── js/
-        ├── ai.js                           # AI chat panel. Toggle with F2, POST prompt to /ai endpoint.
-        ├── boot.js                         # Boot animation sequence. Guards setTimeout/setInterval until auth.
-        ├── filemanager.js                  # File browser with navigate, rename, delete, copy/paste.
-        ├── globe.js                        # 3D rotating world map with threat zone markers. 60fps canvas.
-        ├── graphs.js                       # Real-time CPU/RAM/NET/TEMP canvas graphs. 200ms updates.
-        ├── keyboard.js                     # On-screen keyboard visualizer. Lights up physical keys.
-        ├── login.js                        # Login screen UI. POSTs to /auth, dispatches xkor-auth event on success.
-        ├── tabs.js                         # Tab switching between 3 terminals and web panel.
-        ├── terminal.js                     # xterm.js terminal instances (3 sessions). WebSocket PTY bridge.
-        └── ui.js                           # Subscribes to backend stats events, updates graph data.
-```
+
+<details open>
+<summary><strong>xKOR_3RR0R/</strong></summary>
+
+├── .gitattributes
+├── <details><summary><strong>.github/</strong></summary>
+
+│   └── <details><summary><strong>workflows/</strong></summary>
+
+│       └── count-lines.yml
+    </details>
+  </details>
+├── .gitignore
+├── AGENT.md
+├── <details><summary><strong>assets/</strong></summary>
+
+│   ├── <details><summary><strong>branding/</strong></summary>
+
+│   │   └── .gitkeep
+    </details>
+│   ├── <details><summary><strong>fonts/</strong></summary>
+
+│   │   └── .gitkeep
+    </details>
+│   ├── <details><summary><strong>globe/</strong></summary>
+
+│   │   └── worldmap.json
+    </details>
+│   ├── <details><summary><strong>icons/</strong></summary>
+
+│   │   └── .gitkeep
+    </details>
+│   ├── <details><summary><strong>images/</strong></summary>
+
+│   │   └── .gitkeep
+    </details>
+│   └── <details><summary><strong>sounds/</strong></summary>
+
+│       └── .gitkeep
+    </details>
+  </details>
+├── <details><summary><strong>backend/</strong></summary>
+
+│   ├── <details><summary><strong>ai/</strong></summary>
+
+│   │   └── proxy.js <span style="color:#888"># Forwards prompts to Ollama or any OpenAI-compatible backend.</span>
+    </details>
+│   ├── <details><summary><strong>fs/</strong></summary>
+
+│   │   ├── delete.js <span style="color:#888"># Deletes a file via unlinkSync.</span>
+│   │   ├── list.js <span style="color:#888"># Reads directory contents, returns [{name, type}].</span>
+│   │   ├── read.js <span style="color:#888"># Reads file content via readFileSync.</span>
+│   │   ├── rename.js <span style="color:#888"># Renames/moves a file via renameSync.</span>
+│   │   └── write.js <span style="color:#888"># Writes file content via writeFileSync.</span>
+    </details>
+│   ├── server.js <span style="color:#888"># Express + WebSocket server (port 3001). Serves FS, AI, auth APIs and PTY terminals.</span>
+│   ├── <details><summary><strong>system/</strong></summary>
+
+│   │   ├── cpu.js <span style="color:#888"># Reads /proc/stat for CPU idle/total tick counts.</span>
+│   │   ├── net.js <span style="color:#888"># Reads /proc/net/dev, dynamically finds first non-loopback interface.</span>
+│   │   ├── ram.js <span style="color:#888"># Reads /proc/meminfo for MemTotal/MemFree.</span>
+│   │   └── temp.js <span style="color:#888"># Reads /sys/class/thermal/thermal_zone0/temp for CPU temp.</span>
+    </details>
+│   └── <details><summary><strong>terminal/</strong></summary>
+
+│       └── pty.js <span style="color:#888"># Manages node-pty sessions. create/write/onData/removeCallback.</span>
+    </details>
+  </details>
+├── <details><summary><strong>badges/</strong></summary>
+
+│   ├── counts.json
+│   └── files.json
+  </details>
+├── <details><summary><strong>config/</strong></summary>
+
+│   ├── ai-endpoint.json
+│   └── user.json
+  </details>
+├── <details><summary><strong>docs/</strong></summary>
+
+│   └── index.html
+  </details>
+├── fixGuide.pdf
+├── INSTALL.md
+├── LINES.md
+├── logo.png
+├── logo_with_text.png
+├── <details><summary><strong>os/</strong></summary>
+
+│   ├── clean-arch.sh <span style="color:#888"># Cleans Arch Linux package cache and orphaned deps.</span>
+│   ├── install.sh <span style="color:#888"># Full OS Mode installer for Arch Linux. Installs deps, systemd service, Plymouth.</span>
+│   ├── <details><summary><strong>lib/</strong></summary>
+
+│   │   ├── cleanup.sh <span style="color:#888"># Cleanup routines for uninstall and repair.</span>
+│   │   ├── manifest.sh <span style="color:#888"># File manifest for integrity checks.</span>
+│   │   ├── verify.sh <span style="color:#888"># Verifies system requirements: root, Arch, dependencies.</span>
+│   │   └── xkor-lib.sh <span style="color:#888"># Shared library of bash functions for OS scripts.</span>
+    </details>
+│   ├── <details><summary><strong>loading/</strong></summary>
+
+│   │   └── loading.sh <span style="color:#888"># Glitch-style loading animation after PAM auth.</span>
+    </details>
+│   ├── <details><summary><strong>login/</strong></summary>
+
+│   │   ├── login.js <span style="color:#888"># TTY login app: ASCII banner, readline prompts, startx on success.</span>
+│   │   ├── package.json <span style="color:#888"># Dependencies for the TTY login app (standalone Node.js).</span>
+│   │   ├── pam.js <span style="color:#888"># PAM authentication via pamtester binary.</span>
+│   │   └── start-login.sh <span style="color:#888"># Entrypoint for TTY1 login: cd, install deps, exec login.js.</span>
+    </details>
+│   ├── <details><summary><strong>plymount/</strong></summary>
+
+│   │   ├── plymount-theme.sh <span style="color:#888"># Installs Plymouth boot animation theme.</span>
+│   │   └── <details><summary><strong>xkor/</strong></summary>
+
+│   │       ├── xkor.plymouth
+│   │       └── xkor.script
+      </details>
+    </details>
+│   ├── repair.sh <span style="color:#888"># Repair tool for OS Mode: rechecks deps, reinstalls service.</span>
+│   ├── <details><summary><strong>systemd/</strong></summary>
+
+│   │   ├── xkor-login.service
+│   │   └── xkor-ui.service
+    </details>
+│   ├── uninstall.sh <span style="color:#888"># Removes xKOR_3RR0R OS Mode: disables service, deletes /opt/xkor_3rr0r.</span>
+│   ├── unistall.sh <span style="color:#888"># Duplicate of uninstall.sh (typo preserved for compatibility).</span>
+│   ├── xkor
+│   └── <details><summary><strong>xorg/</strong></summary>
+
+│       ├── .xinitrc
+│       └── xkor-session.sh <span style="color:#888"># Xorg session: sets DISPLAY, disables screensaver, starts Electron.</span>
+    </details>
+  </details>
+├── package.json
+├── README.md
+├── run.sh <span style="color:#888"># Quick launcher: npm install, electron-rebuild node-pty, then npm start.</span>
+├── <details><summary><strong>scripts/</strong></summary>
+
+│   └── generate-tree.mjs
+  </details>
+├── setup.sh <span style="color:#888"># One-time setup for App Mode on any Linux distro.</span>
+└── <details><summary><strong>src/</strong></summary>
+
+    ├── main.js <span style="color:#888"># Electron entry point. Creates fullscreen BrowserWindow, starts backend.</span>
+    ├── preload.js <span style="color:#888"># WebSocket bridge. Exposes window.xkor.send() / onBackend() via contextBridge.</span>
+    └── <details><summary><strong>renderer/</strong></summary>
+
+        ├── <details><summary><strong>css/</strong></summary>
+
+        │   ├── ai.css
+        │   ├── boot.css
+        │   ├── filemanager.css
+        │   ├── globe.css
+        │   ├── graphs.css
+        │   ├── keyboard.css
+        │   ├── layout.css
+        │   ├── login.css
+        │   ├── terminal.css
+        │   └── theme.css
+      </details>
+        ├── index.html <span style="color:#888"># Main HTML shell: login, boot, app UI with 3 terminals + globe + graphs.</span>
+        └── <details><summary><strong>js/</strong></summary>
+
+            ├── ai.js <span style="color:#888"># AI chat panel. Toggle with F2, POST prompt to /ai endpoint.</span>
+            ├── boot.js <span style="color:#888"># Boot animation sequence. Guards setTimeout/setInterval until auth.</span>
+            ├── filemanager.js <span style="color:#888"># File browser with navigate, rename, delete, copy/paste.</span>
+            ├── globe.js <span style="color:#888"># 3D rotating world map with threat zone markers. 60fps canvas.</span>
+            ├── graphs.js <span style="color:#888"># Real-time CPU/RAM/NET/TEMP canvas graphs. 200ms updates.</span>
+            ├── keyboard.js <span style="color:#888"># On-screen keyboard visualizer. Lights up physical keys.</span>
+            ├── login.js <span style="color:#888"># Login screen UI. POSTs to /auth, dispatches xkor-auth event on success.</span>
+            ├── tabs.js <span style="color:#888"># Tab switching between 3 terminals and web panel.</span>
+            ├── terminal.js <span style="color:#888"># xterm.js terminal instances (3 sessions). WebSocket PTY bridge.</span>
+            └── ui.js <span style="color:#888"># Subscribes to backend stats events, updates graph data.</span>
+      </details>
+    </details>
+  </details>
+
+</details>
+
 <!-- TREE_END -->
+
 ---
 
 ## KEYBOARD SHORTCUTS

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// Auto-generates file tree for README.md between TREE_START / TREE_END markers.
+// Generates collapsible HTML <details> file tree in README.md
 // Usage: node scripts/generate-tree.mjs
-// Based on: https://medium.com/@virgiliuweb/how-to-auto-generate-a-readme-file-tree-with-file-descriptions
+// Reads @summary comments from file headers (first 40 lines).
+// Replaces content between <!-- TREE_START --> and <!-- TREE_END --> markers.
 
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -10,10 +11,7 @@ const ROOT = process.cwd();
 const README_PATH = join(ROOT, "README.md");
 const START_MARKER = "<!-- TREE_START -->";
 const END_MARKER = "<!-- TREE_END -->";
-
-const COMMENT_COLUMN = 44;
 const IGNORE = new Set([".DS_Store", "node_modules", ".git", "dist", ".opencode"]);
-
 const SUMMARY_RE = /^\s*(\/\/|#|--)\s*@summary:\s*(.+)$/m;
 
 function getSummary(filePath) {
@@ -24,69 +22,87 @@ function getSummary(filePath) {
   } catch { return null; }
 }
 
+function escHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 function list(abs) {
   return readdirSync(abs).filter(n => !IGNORE.has(n)).sort((a, b) => a.localeCompare(b));
 }
 
-function fmt(disp, sum) {
-  return sum ? disp + " ".repeat(Math.max(1, COMMENT_COLUMN - disp.length)) + "# " + sum : disp;
-}
-
 function walk(absPath, depth, isLastArr) {
   const name = absPath.split(/[/\\]/).pop();
-  const indent = "-   ".repeat(Math.max(0, depth));
+  const indent = "  ".repeat(depth + 1);
   const prefix = depth === 0 ? "" : (isLastArr?.[depth - 1] ? "    " : "-   ");
 
-  // Build the full prefix array for this item's children
   const childLast = isLastArr ? [...isLastArr] : [];
   if (depth > 0) childLast[depth - 1] = true;
 
   const stats = statSync(absPath);
+  const result = [];
+
   if (stats.isDirectory()) {
     const kids = list(absPath);
-    const result = [];
-    // Draw the directory line
     if (depth === 0) {
-      result.push(`${name}/`);
+      result.push(`<details open>\n<summary><strong>${escHtml(name)}/</strong></summary>\n`);
     } else {
       const branch = isLastArr?.[depth - 1] ? "L¦¦ " : "+¦¦ ";
-      result.push(`${prefix}${branch}${name}/`);
+      result.push(`${prefix}${branch}<details><summary><strong>${escHtml(name)}/</strong></summary>\n`);
     }
     for (let i = 0; i < kids.length; i++) {
       const kidPath = join(absPath, kids[i]);
       const last = i === kids.length - 1;
-      // Set the last-child marker for THIS level
       const arr = [...childLast];
       arr[depth] = last;
       result.push(...walk(kidPath, depth + 1, arr));
     }
+    if (depth === 0) {
+      result.push(`</details>\n`);
+    } else {
+      result.push(`${indent}</details>\n`);
+    }
     return result;
   }
 
+  // File
   const branch = isLastArr?.[depth - 1] ? "L¦¦ " : "+¦¦ ";
-  return [`${prefix}${branch}${fmt(name, getSummary(absPath))}`];
+  const line = `${prefix}${branch}${escHtml(name)}`;
+  const summary = getSummary(absPath);
+  if (summary) {
+    return [`${line} <span style="color:#888"># ${escHtml(summary)}</span>\n`];
+  }
+  return [`${line}\n`];
 }
 
 function build() {
   const lines = [];
+  lines.push("<details open>\n<summary><strong>xKOR_3RR0R/</strong></summary>\n");
   const all = list(ROOT);
-
   for (let i = 0; i < all.length; i++) {
     const name = all[i];
     const abs = join(ROOT, name);
     const stats = statSync(abs);
     if (stats.isDirectory()) {
       const kids = list(abs);
-      lines.push(`${name}/`);
+      const branch = "+¦¦ ";
+      lines.push(`${branch}<details><summary><strong>${escHtml(name)}/</strong></summary>\n`);
       for (let j = 0; j < kids.length; j++) {
+        const kidPath = join(abs, kids[j]);
         const last = j === kids.length - 1;
-        lines.push(...walk(join(abs, kids[j]), 1, [last]));
+        lines.push(...walk(kidPath, 1, [last]));
       }
+      lines.push(`  </details>\n`);
     } else {
-      lines.push(fmt(name, getSummary(abs)));
+      const line = `${escHtml(name)}`;
+      const summary = getSummary(abs);
+      if (summary) {
+        lines.push(`${line} <span style="color:#888"># ${escHtml(summary)}</span>\n`);
+      } else {
+        lines.push(`${line}\n`);
+      }
     }
   }
-
+  lines.push("</details>\n");
   return lines;
 }
 
@@ -96,12 +112,12 @@ function replace() {
   const e = readme.indexOf(END_MARKER);
   if (s === -1 || e === -1 || e < s) {
     console.error("ERROR: Add markers to README.md:");
-    console.error(`\n${START_MARKER}\n\`\`\`text\n...\n\`\`\`\n${END_MARKER}\n`);
+    console.error(`\n${START_MARKER}\n...\n${END_MARKER}\n`);
     process.exit(1);
   }
-  const block = [START_MARKER, "```text", ...build(), "```", END_MARKER].join("\n");
+  const block = [START_MARKER, "", ...build(), END_MARKER].join("\n");
   writeFileSync(README_PATH, readme.slice(0, s) + block + readme.slice(e + END_MARKER.length));
-  console.log("OK: Tree generated in README.md");
+  console.log("OK: HTML collapsible tree generated in README.md");
 }
 
 replace();
