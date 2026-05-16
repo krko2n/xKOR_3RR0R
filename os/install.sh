@@ -164,6 +164,37 @@ else
     warn "Plymouth theme directory not found"
 fi
 
+# Step 12b: Fix Hyprland config for the real user (if they use Hyprland)
+REAL_USER="${SUDO_USER:-admin}"
+REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+if [[ -n "$REAL_USER" && -d "$REAL_HOME" ]]; then
+    step "Fixing Hyprland config for $REAL_USER..."
+
+    # Fix hyprland.conf — remove outdated dwindl:pseudotile
+    HC="$REAL_HOME/.config/hypr/hyprland.conf"
+    if [[ -f "$HC" ]] && grep -q "dwindle:pseudotile" "$HC" 2>/dev/null; then
+        cp "$HC" "$HC.bak.$(date +%s)"
+        sed -i '/dwindle:pseudotile/d' "$HC"
+        ok "Removed dwindl:pseudotile from $HC"
+    fi
+
+    # Fix XDG_RUNTIME_DIR in bash_profile
+    BP="$REAL_HOME/.bash_profile"
+    if ! grep -q "XDG_RUNTIME_DIR" "$BP" 2>/dev/null; then
+        cat >> "$BP" << 'EOF'
+
+# xKOR / Hyprland
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
+EOF
+        chown "$REAL_USER:$REAL_USER" "$BP"
+        ok "Added XDG_RUNTIME_DIR to $BP"
+    fi
+
+    # Enable user linger for dbus session
+    loginctl enable-linger "$REAL_USER" 2>/dev/null && ok "Linger enabled for $REAL_USER"
+fi
+
 # Step 13: Start service immediately (no reboot needed)
 step "Starting xKOR login service..."
 systemctl restart xkor-login.service 2>/dev/null || \
