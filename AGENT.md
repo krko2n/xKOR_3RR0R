@@ -369,8 +369,13 @@ devDependencies:
   (reseni "XDG_RUNTIME_DIR is not set" pro Electron stabilitu v Xorg session)
 - login.js: `su -l` obaleno try/catch — pri selhani X serveru se vrati na login obrazovku
 - README: emergency recovery rozsireno o Hyprland navod (XDG_RUNTIME_DIR, fix hyprland.conf)
-- install.sh: step 12b — automaticka oprava Hyprland configu pro realneho uzivatele
-  (odstraneni dwindl:pseudotile, pridani XDG_RUNTIME_DIR do .bash_profile, enable-linger)
+- install.sh: step 12b — kompletni oprava Hyprland/Wayland prostredi:
+  - odstraneni dwindl:pseudotile z hyprland.conf
+  - /etc/profile.d/xkor-hyprland.sh (vsechny login shelly, vsechny uzivatele)
+  - ~/.bashrc (interaktivni non-login shelly)
+  - /usr/local/bin/xkor-hyprland (wrapper, vzdy funguje)
+  - explicitni mkdir /run/user/<uid>
+  - loginctl enable-linger
 
 ### OPRAVENO (agent v8 — badge system)
 - badges/counts.json + files.json: opraveny na realne hodnoty (4135 lines, 72 files)

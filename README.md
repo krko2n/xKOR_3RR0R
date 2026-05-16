@@ -359,11 +359,16 @@ sudo reboot
 
 ### If you use Hyprland (Wayland, no display manager):
 
-XDG_RUNTIME_DIR must be set when starting from TTY:
+Installation already sets up environment. Start Hyprland with:
 
 ```bash
-# In ~/.bash_profile or before launching Hyprland:
-export XDG_RUNTIME_DIR=/run/user/$(id -u)
+xkor-hyprland
+```
+
+Or manually from TTY:
+
+```bash
+source /etc/profile.d/xkor-hyprland.sh
 Hyprland
 ```
 

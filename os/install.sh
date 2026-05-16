@@ -164,11 +164,13 @@ else
     warn "Plymouth theme directory not found"
 fi
 
-# Step 12b: Fix Hyprland config for the real user (if they use Hyprland)
+# Step 12b: Fix Hyprland / Wayland environment for the real user
 REAL_USER="${SUDO_USER:-admin}"
+REAL_UID=$(id -u "$REAL_USER" 2>/dev/null || echo 1000)
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+
 if [[ -n "$REAL_USER" && -d "$REAL_HOME" ]]; then
-    step "Fixing Hyprland config for $REAL_USER..."
+    step "Fixing Hyprland/Wayland environment for $REAL_USER..."
 
     # Fix hyprland.conf — remove outdated dwindl:pseudotile
     HC="$REAL_HOME/.config/hypr/hyprland.conf"
@@ -178,20 +180,63 @@ if [[ -n "$REAL_USER" && -d "$REAL_HOME" ]]; then
         ok "Removed dwindl:pseudotile from $HC"
     fi
 
-    # Fix XDG_RUNTIME_DIR in bash_profile
-    BP="$REAL_HOME/.bash_profile"
-    if ! grep -q "XDG_RUNTIME_DIR" "$BP" 2>/dev/null; then
-        cat >> "$BP" << 'EOF'
-
-# xKOR / Hyprland
-export XDG_RUNTIME_DIR=/run/user/$(id -u)
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
+    # 1. System-wide profile.d (covers ALL login shells for ALL users)
+    PROFILE_D="/etc/profile.d/xkor-hyprland.sh"
+    cat > "$PROFILE_D" << 'EOF'
+# xKOR_3RR0R — Hyprland/Wayland environment fix
+# Sourced automatically by /etc/profile for every login shell.
+if [ -z "$XDG_RUNTIME_DIR" ]; then
+    export XDG_RUNTIME_DIR=/run/user/$(id -u)
+    export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus
+fi
+if [ ! -d "$XDG_RUNTIME_DIR" ]; then
+    mkdir -p "$XDG_RUNTIME_DIR" 2>/dev/null
+    chmod 700 "$XDG_RUNTIME_DIR" 2>/dev/null
+fi
 EOF
-        chown "$REAL_USER:$REAL_USER" "$BP"
-        ok "Added XDG_RUNTIME_DIR to $BP"
+    chmod 644 "$PROFILE_D"
+    ok "Created $PROFILE_D"
+
+    # 2. .bashrc (covers interactive non-login shells)
+    RC="$REAL_HOME/.bashrc"
+    if ! grep -q "XDG_RUNTIME_DIR" "$RC" 2>/dev/null; then
+        cat >> "$RC" << 'EOF'
+
+# xKOR_3RR0R — ensure XDG_RUNTIME_DIR for Hyprland/Wayland
+if [ -z "$XDG_RUNTIME_DIR" ]; then
+    export XDG_RUNTIME_DIR=/run/user/$(id -u)
+    export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus
+fi
+EOF
+        chown "$REAL_USER:$REAL_USER" "$RC"
+        ok "Added XDG_RUNTIME_DIR to $RC"
     fi
 
-    # Enable user linger for dbus session
+    # 3. /usr/local/bin/xkor-hyprland — wrapper that always works
+    WRAPPER="/usr/local/bin/xkor-hyprland"
+    cat > "$WRAPPER" << 'EOF'
+#!/bin/bash
+# xKOR_3RR0R — safe Hyprland launcher
+# Sets up environment and starts Hyprland. Run instead of bare "Hyprland".
+export XDG_RUNTIME_DIR=/run/user/$(id -u)
+export DBUS_SESSION_BUS_ADDRESS=unix:path=$XDG_RUNTIME_DIR/bus
+mkdir -p "$XDG_RUNTIME_DIR" 2>/dev/null
+chmod 700 "$XDG_RUNTIME_DIR" 2>/dev/null
+exec Hyprland "$@"
+EOF
+    chmod +x "$WRAPPER"
+    ok "Created $WRAPPER (run: xkor-hyprland)"
+
+    # 4. Create runtime dir explicitly (needed without display manager)
+    RUNTIME_DIR="/run/user/$REAL_UID"
+    if [ ! -d "$RUNTIME_DIR" ]; then
+        mkdir -p "$RUNTIME_DIR"
+        chmod 700 "$RUNTIME_DIR"
+        chown "$REAL_USER:$REAL_USER" "$RUNTIME_DIR"
+        ok "Created $RUNTIME_DIR"
+    fi
+
+    # 5. Enable user linger for dbus session
     loginctl enable-linger "$REAL_USER" 2>/dev/null && ok "Linger enabled for $REAL_USER"
 fi
 
