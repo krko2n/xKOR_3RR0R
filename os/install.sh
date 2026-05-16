@@ -173,11 +173,24 @@ if [[ -n "$REAL_USER" && -d "$REAL_HOME" ]]; then
     step "Fixing Hyprland/Wayland environment for $REAL_USER..."
 
     # Fix hyprland.conf — remove outdated dwindl:pseudotile
-    HC="$REAL_HOME/.config/hypr/hyprland.conf"
-    if [[ -f "$HC" ]] && grep -q "dwindle:pseudotile" "$HC" 2>/dev/null; then
-        cp "$HC" "$HC.bak.$(date +%s)"
-        sed -i '/dwindle:pseudotile/d' "$HC"
-        ok "Removed dwindl:pseudotile from $HC"
+    # Check main config + all files in hyprland.conf.d/
+    for HC in "$REAL_HOME/.config/hypr/hyprland.conf" "$REAL_HOME/.config/hypr/hyprlandd.conf"; do
+        if [[ -f "$HC" ]] && grep -q "dwindle:pseudotile" "$HC" 2>/dev/null; then
+            cp "$HC" "$HC.bak.$(date +%s)"
+            sed -i '/dwindle:pseudotile/d' "$HC"
+            ok "Removed dwindl:pseudotile from $HC"
+        fi
+    done
+    # Also check hyprland.conf.d/ fragments
+    HCD="$REAL_HOME/.config/hypr/hyprland.conf.d"
+    if [[ -d "$HCD" ]]; then
+        for f in "$HCD"/*.conf; do
+            if [[ -f "$f" ]] && grep -q "dwindle:pseudotile" "$f" 2>/dev/null; then
+                cp "$f" "$f.bak.$(date +%s)"
+                sed -i '/dwindle:pseudotile/d' "$f"
+                ok "Removed dwindl:pseudotile from $f"
+            fi
+        done
     fi
 
     # 1. System-wide profile.d (covers ALL login shells for ALL users)

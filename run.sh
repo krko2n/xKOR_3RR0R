@@ -21,6 +21,12 @@ if [ ! -d "node_modules" ]; then
     npm install
 fi
 
+# Ensure Electron binary is present (reinstall if missing)
+if ! node -e "require('electron')" 2>/dev/null; then
+    echo "[INFO] Electron binary missing — reinstalling..."
+    npm install electron@^34.0.0 --save-dev
+fi
+
 # Rebuild node-pty for Electron AFTER npm install (local binary exists then)
 if [ ! -f "node_modules/.node-pty-rebuilt" ]; then
     echo "[INFO] Rebuilding node-pty for Electron..."

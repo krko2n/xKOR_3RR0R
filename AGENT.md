@@ -370,12 +370,15 @@ devDependencies:
 - login.js: `su -l` obaleno try/catch — pri selhani X serveru se vrati na login obrazovku
 - README: emergency recovery rozsireno o Hyprland navod (XDG_RUNTIME_DIR, fix hyprland.conf)
 - install.sh: step 12b — kompletni oprava Hyprland/Wayland prostredi:
-  - odstraneni dwindl:pseudotile z hyprland.conf
+  - odstraneni dwindl:pseudotile z hyprland.conf (vcetne hyprland.conf.d/)
   - /etc/profile.d/xkor-hyprland.sh (vsechny login shelly, vsechny uzivatele)
   - ~/.bashrc (interaktivni non-login shelly)
   - /usr/local/bin/xkor-hyprland (wrapper, vzdy funguje)
   - explicitni mkdir /run/user/<uid>
   - loginctl enable-linger
+- start-login.sh: runtime fallback — oprava hyprland.conf pri kazdem startu login.js
+- run.sh: pridana kontrola Electron binary — automaticky reinstaluje pokud chybi
+  (reseni "Electron failed to install correctly" v App Mode)
 
 ### OPRAVENO (agent v8 — badge system)
 - badges/counts.json + files.json: opraveny na realne hodnoty (4135 lines, 72 files)
