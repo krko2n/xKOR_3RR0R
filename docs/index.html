@@ -521,9 +521,9 @@
 
   <div class="boot-log">
     <div><span class="log-dim">[  SYS  ]</span> &nbsp;initializing xKOR_3RR0R...</div>
-    <div><span class="log-ok">[  OK   ]</span> &nbsp;Electron runtime loaded</div>
-    <div><span class="log-ok">[  OK   ]</span> &nbsp;backend server on port 3001</div>
-    <div><span class="log-ok">[  OK   ]</span> &nbsp;node-pty rebuild verified</div>
+    <div><span class="log-ok">[  OK   ]</span> &nbsp;Tauri v2 runtime loaded</div>
+    <div><span class="log-ok">[  OK   ]</span> &nbsp;Rust backend initialized</div>
+    <div><span class="log-ok">[  OK   ]</span> &nbsp;PTY sessions ready</div>
     <div><span class="log-warn">[ WARN  ]</span> &nbsp;standard desktop not found</div>
     <div><span class="log-ok">[  OK   ]</span> &nbsp;that's intentional&nbsp;<span class="cursor"></span></div>
   </div>
@@ -548,7 +548,7 @@
 
       <div class="mode-cell">
         <div class="mode-name">APP MODE</div>
-        <div class="mode-desc">Run on top of your existing Linux desktop as a regular Electron window. Quick to try, no system changes.</div>
+        <div class="mode-desc">Run on top of your existing Linux desktop as a regular Tauri window. Quick to try, no system changes.</div>
         <div class="mode-row"><span>LAUNCH</span><span>bash run.sh</span></div>
         <div class="mode-row"><span>LOGIN</span><span>built-in UI</span></div>
         <div class="mode-row"><span>REPLACES DE</span><span class="off">--</span></div>
@@ -579,7 +579,7 @@
       <div class="feat">
         <div class="feat-id">MODULE_01</div>
         <div class="feat-name">TERMINALS</div>
-        <div class="feat-desc">Multiple real PTY shell instances via node-pty. Three simultaneous terminals. Actual bash, not emulated.</div>
+        <div class="feat-desc">Multiple real PTY shell instances via Rust PTY manager. Three simultaneous terminals. Actual bash, not emulated.</div>
       </div>
       <div class="feat">
         <div class="feat-id">MODULE_02</div>
@@ -630,10 +630,10 @@
           <div><span class="prompt">$ </span><span class="cmd">bash</span> <span class="arg">run.sh</span></div>
           <div>&nbsp;</div>
           <div><span class="ok">[  OK   ]</span> npm install complete</div>
-          <div><span class="ok">[  OK   ]</span> node-pty rebuilt for Electron ABI</div>
+          <div><span class="ok">[  OK   ]</span> Rust backend built for xKOR_3RR0R</div>
           <div><span class="ok">[  OK   ]</span> launching xKOR_3RR0R...</div>
         </div>
-        <div class="install-note">run.sh handles npm install, electron-rebuild, and npm start automatically.</div>
+        <div class="install-note">run.sh installs Rust, builds the Tauri backend (cargo build --release), and starts the app via npm run dev.</div>
       </div>
 
       <div class="install-content" id="tab-os">
@@ -655,8 +655,8 @@
           <div><span class="prompt">$ </span><span class="cmd">npm install</span></div>
           <div><span class="prompt">$ </span><span class="cmd">npm start</span></div>
           <div>&nbsp;</div>
-          <div><span class="comment"># if terminals show blank (node-pty needs rebuild)</span></div>
-          <div><span class="prompt">$ </span><span class="cmd">node</span> <span class="arg">node_modules/@electron/rebuild/lib/cli.js -f -w node-pty</span></div>
+          <div><span class="comment"># if terminals show blank (rebuild Rust PTY)</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">bash</span> <span class="arg">os/rebuild.sh</span></div>
           <div><span class="prompt">$ </span><span class="cmd">npm start</span></div>
         </div>
         <div class="install-note">F12 opens DevTools &nbsp;·&nbsp; F2 toggles AI panel &nbsp;·&nbsp; config/ holds credentials and AI endpoint</div>
@@ -682,7 +682,7 @@
       <div class="bs-indent">PAM authentication via pamtester</div>
       <div class="bs-step"><span class="bs-tag">FAIL</span><span class="bs-line bs-fail">process.exit(1) &nbsp;→&nbsp; service restarts &nbsp;→&nbsp; prompt again</span></div>
       <div class="bs-step"><span class="bs-tag">OK</span><span class="bs-line bs-ok">loading.sh glitch animation ~4s</span></div>
-      <div class="bs-step"><span class="bs-tag">startx</span><span class="bs-line bs-ok">xkor-session.sh &nbsp;→&nbsp; Electron fullscreen</span></div>
+      <div class="bs-step"><span class="bs-tag">startx</span><span class="bs-line bs-ok">xkor-session.sh &nbsp;→&nbsp; Tauri fullscreen</span></div>
       <div class="bs-step"><span class="bs-tag">READY</span><span class="bs-line bs-ok">ACCESS GRANTED</span></div>
     </div>
   </div>
@@ -696,15 +696,15 @@
 
     <table class="stack-table">
       <tr><th>LAYER</th><th>TECHNOLOGY</th></tr>
-      <tr><td>App shell</td><td>Electron 34</td></tr>
-      <tr><td>Real terminals</td><td>node-pty (native PTY)</td></tr>
+<tr><td>App shell</td><td>Tauri v2 (Rust)</td></tr>
+<tr><td>Real terminals</td><td>Rust PTY (nix crate)</td></tr>
       <tr><td>Backend server</td><td>Express + WebSocket (ws) — port 3001</td></tr>
       <tr><td>System monitoring</td><td>/proc/ + /sys/ direct reads</td></tr>
       <tr><td>Terminal renderer</td><td>@xterm/xterm (integration in progress)</td></tr>
       <tr><td>Frontend</td><td>Vanilla JS + custom CSS</td></tr>
       <tr><td>PAM auth</td><td>pamtester (system binary — no native compilation)</td></tr>
       <tr><td>Boot animation</td><td>Plymouth theme</td></tr>
-      <tr><td>Build</td><td>@electron/rebuild ^3.7.2</td></tr>
+      <tr><td>Build</td><td>cargo build --release (Rust)</td></tr>
       <tr><td>Language split</td><td>69% JS &nbsp;·&nbsp; 14% Shell &nbsp;·&nbsp; 12% CSS &nbsp;·&nbsp; 6% HTML</td></tr>
     </table>
   </div>

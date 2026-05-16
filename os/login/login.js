@@ -79,9 +79,6 @@ function grant() {
     // Clean stale X locks
     try { execSync("rm -f /tmp/.X0-lock /tmp/.X11-unix/X0", { stdio: "ignore" }); } catch {}
 
-    // Run loading animation (still as root)
-    execSync("/opt/xkor_3rr0r/os/loading/loading.sh", { stdio: "inherit" });
-
     // Start X session as the authenticated user (not root!)
     // X server refuses to start as root by default on Arch.
     try {

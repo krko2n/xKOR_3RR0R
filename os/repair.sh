@@ -1,6 +1,6 @@
-# @summary: Repair tool for OS Mode: rechecks deps, reinstalls service.
+# @summary: Repair tool for OS Mode: rechecks deps, rebuilds Rust, reinstalls service.
 #!/bin/bash
-# xKOR_3RR0R - Repair mode
+# xKOR_3RR0R - Repair mode [Tauri]
 # Fixes broken install without re-copying files
 # Usage: sudo bash os/repair.sh  OR  sudo xkor repair
 
@@ -28,12 +28,15 @@ rm -rf node_modules
 npm install --ignore-scripts
 ok "Done"
 
-step "Rebuilding node-pty..."
+step "Rebuilding Tauri Rust backend..."
 cd "$XKOR_INSTALL_DIR"
-if [[ -f "node_modules/@electron/rebuild/lib/cli.js" ]]; then
-    node node_modules/@electron/rebuild/lib/cli.js -f -w node-pty \
-        && touch node_modules/.node-pty-rebuilt \
-        && ok "node-pty rebuilt" || warn "node-pty rebuild failed"
+BUILD_USER="${SUDO_USER:-admin}"
+if [ "$(id -u)" = "0" ] && [ "$BUILD_USER" != "root" ]; then
+    chown -R "$BUILD_USER:$BUILD_USER" "$XKOR_INSTALL_DIR" 2>/dev/null || true
+    su -c "cd '$XKOR_INSTALL_DIR' && bash os/rebuild.sh" "$BUILD_USER" \
+        && ok "Rust rebuild complete" || warn "Rust rebuild failed — run: bash os/rebuild.sh"
+else
+    bash os/rebuild.sh && ok "Rust rebuild complete" || warn "Rust rebuild failed — run: bash os/rebuild.sh"
 fi
 
 step "Re-enabling service..."

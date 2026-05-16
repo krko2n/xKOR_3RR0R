@@ -41,7 +41,7 @@ xKOR_3RR0R turns your Linux machine into a sci-fi hacker workstation. Two operat
 
 ## FEATURES
 
-**TERMINALS** — Multiple real PTY shell instances via `node-pty`. Three simultaneous sessions. Actual bash, not emulated.
+**TERMINALS** — Multiple real PTY shell instances via Rust PTY manager. Three simultaneous sessions. Actual bash, not emulated.
 
 **SYSTEM GRAPHS** — Live CPU, RAM, network and temperature graphs. Canvas rendering at 200ms refresh. Neon color-coded per metric.
 
@@ -155,7 +155,7 @@ POWER ON
   |                              |
   |                         startx xkor-session.sh
   |                              |
-  |                         Electron fullscreen
+                         |                         Tauri fullscreen
   |
   `-- ACCESS GRANTED
 ```
@@ -192,14 +192,14 @@ Default is [Ollama](https://ollama.ai) running locally. Change `endpoint` and `m
 
 | | |
 |--|--|
-| App shell | Electron 34 |
-| Terminals | node-pty (real PTY) |
-| Backend | Express + WebSocket on port 3001 |
+| App shell | Tauri v2 (Rust) |
+| Terminals | Rust PTY (nix crate) |
+| Backend | Tauri IPC (invoke + events) |
 | System monitoring | `/proc/` + `/sys/` direct reads |
 | Frontend | Vanilla JS + custom CSS |
 | PAM auth | pamtester — no native compilation |
 | Boot animation | Plymouth theme |
-| Build | @electron/rebuild ^3.7.2 |
+| Build | cargo build --release (Rust) |
 | Languages | 69% JS · 14% Shell · 12% CSS · 6% HTML |
 
 ---
@@ -292,12 +292,12 @@ pm run docs:tree.
 │       └── xkor-session.sh
 ├── package.json
 ├── README.md
-├── run.sh  -- Quick launcher: npm install, electron-rebuild n..
+├── run.sh  -- Quick launcher: Rust build + Tauri dev
 ├── scripts/
 │   └── generate-tree.mjs
 ├── setup.sh  -- One-time setup for App Mode on any Linux distro.
 └── src/
-    ├── main.js  -- Electron entry point. Creates fullscreen Browse..
+    ├── index.html -- Tauri frontend entry point
     ├── preload.js  -- WebSocket bridge. Exposes window.xkor.send() / ..
     └── renderer/
         ├── css/

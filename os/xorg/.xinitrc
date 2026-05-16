@@ -11,4 +11,11 @@ xset s noblank
 unclutter -root -idle 1 &
 
 cd /opt/xkor_3rr0r
-exec npm start
+XKOR_BIN="src-tauri/target/release/xkor-3rr0r"
+if [ -f "$XKOR_BIN" ]; then
+    exec "$XKOR_BIN"
+else
+    echo "[xKOR] Binary not built — running rebuild.sh..."
+    bash os/rebuild.sh
+    exec "$XKOR_BIN"
+fi

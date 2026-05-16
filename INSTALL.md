@@ -58,8 +58,8 @@ sudo xkor install
   |-- 4. pacman: nodejs npm xorg mesa plymouth pamtester ...
   |-- 5. cp repo -> /opt/xkor_3rr0r
   |-- 6. init manifest at /var/lib/xkor_3rr0r/manifest
-  |-- 7. npm install (main app)
-  |-- 8. electron-rebuild node-pty
+  |-- 7. npm install (@tauri-apps/cli)
+  |-- 8. cargo build --release (Rust backend)
   |-- 9. verify login app (pam.js, syntax check)
   |-- 10. install xkor CLI -> /usr/local/bin/xkor
   |-- 11. enable xkor-login.service
@@ -91,15 +91,15 @@ sudo xkor uninstall
 
 ## Repair Flow
 
-Use when files exist but something is broken (service disabled, node-pty
-not rebuilt, CLI missing, etc.):
+Use when files exist but something is broken (service disabled, Rust backend
+not built, CLI missing, etc.):
 
 ```
 sudo xkor repair
   |
   |-- chmod +x all .sh
   |-- rm -rf os/login/node_modules + npm install
-  |-- electron-rebuild node-pty
+  |-- cargo build --release (Rust backend)
   |-- re-enable xkor-login.service
   |-- reinstall xkor CLI
   `-- run_verify()
