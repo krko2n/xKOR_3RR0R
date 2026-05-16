@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>xKOR_3RR0R</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@5/css/xterm.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/login.css">
+<link rel="stylesheet" href="css/boot.css">
+<link rel="stylesheet" href="css/terminal.css">
+<link rel="stylesheet" href="css/ai.css">
+<link rel="stylesheet" href="css/globe.css">
+<link rel="stylesheet" href="css/graphs.css">
+<link rel="stylesheet" href="css/keyboard.css">
+<link rel="stylesheet" href="css/filemanager.css">
+</head>
+<body>
+
+<div id="login-screen">
+  <div id="login-box">
+    <pre id="login-logo">
+██╗  ██╗██╗  ██╗ ██████╗ ██████╗
+╚██╗██╔╝██║ ██╔╝██╔═══██╗██╔══██╗
+ ╚███╔╝ █████╔╝ ██║   ██║██████╔╝
+ ██╔██╗ ██╔═██╗ ██║   ██║██╔══██╗
+██╔╝ ██╗██║  ██╗╚██████╔╝██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
+    </pre>
+    <div id="login-form">
+      <div class="login-field">
+        <span class="login-label">USER:</span>
+        <input type="text" id="login-username" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="login-field">
+        <span class="login-label">PASSWORD:</span>
+        <input type="password" id="login-password" autocomplete="off" spellcheck="false">
+      </div>
+      <div id="login-status"></div>
+    </div>
+  </div>
+</div>
+
+<div id="boot-screen">
+  <div id="boot-logo">
+    <pre>
+██╗  ██╗██╗  ██╗ ██████╗ ██████╗
+╚██╗██╔╝██║ ██╔╝██╔═══██╗██╔══██╗
+ ╚███╔╝ █████╔╝ ██║   ██║██████╔╝
+ ██╔██╗ ██╔═██╗ ██║   ██║██╔══██╗
+██╔╝ ██╗██║  ██╗╚██████╔╝██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
+    </pre>
+  </div>
+  <div id="boot-log"></div>
+  <div id="boot-progress-bar"><div id="boot-progress-fill"></div></div>
+</div>
+
+<div id="app">
+  <div id="top-bar">
+    <div id="top-left">
+      <span id="top-title">xKOR_3RR0R v1.0.0</span>
+      <span class="sep">|</span>
+      <span id="top-mode">term1</span>
+    </div>
+    <div id="top-tabs">
+      <span class="tab active" data-tab="term1">F1:term</span>
+      <span class="tab" data-tab="term2">F2:term</span>
+      <span class="tab" data-tab="term3">F3:term</span>
+      <span class="tab" data-tab="monitor">F4:mon</span>
+      <span class="tab" data-tab="explorer">F6:files</span>
+      <span class="tab" data-tab="web">F7:web</span>
+      <span class="tab placeholder" data-tab="empty">+</span>
+    </div>
+    <div id="top-right">
+      <span id="top-clock">00:00:00</span>
+      <span class="sep">|</span>
+      <span id="top-uptime">UP 0:00</span>
+    </div>
+  </div>
+
+  <div id="main-grid">
+    <div id="left-panel">
+      <div id="clock-area">
+        <div id="clock-display">00:00:00</div>
+        <div id="clock-uptime">UP TIME: 0d 00:00:00</div>
+      </div>
+      <div id="graphs-area">
+        <div class="graph-row">
+          <span class="graph-label">CPU</span>
+          <canvas id="graph-cpu" class="graph-canvas"></canvas>
+        </div>
+        <div class="graph-row">
+          <span class="graph-label">RAM</span>
+          <canvas id="graph-ram" class="graph-canvas"></canvas>
+        </div>
+        <div class="graph-row">
+          <span class="graph-label">TEMP</span>
+          <canvas id="graph-temp" class="graph-canvas"></canvas>
+        </div>
+      </div>
+      <div id="clipboard-area">
+        <div class="clipboard-title">CLIPBOARD</div>
+        <div class="clipboard-buttons">
+          <button id="clip-copy">[COPY]</button>
+          <button id="clip-paste">[PASTE]</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="center-panel">
+      <div id="terminal-container">
+        <div id="terminal-tabs">
+          <span class="term-tab active" data-term="term1">term1</span>
+          <span class="term-tab" data-term="term2">term2</span>
+          <span class="term-tab" data-term="term3">term3</span>
+        </div>
+        <div id="terminal-box">
+          <div class="term-box active" id="term-box-1"></div>
+          <div class="term-box" id="term-box-2"></div>
+          <div class="term-box" id="term-box-3"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="right-panel">
+      <div id="network-area">
+        <div class="panel-title">NETWORK STATUS</div>
+        <div id="network-content">
+          <span class="net-line">STATE:   <span id="net-state" class="green">OFFLINE</span></span>
+          <span class="net-line">PING:    <span id="net-ping">--</span></span>
+          <span class="net-line">DOWN:    <span id="net-down">--</span></span>
+          <span class="net-line">UP:      <span id="net-up">--</span></span>
+          <span class="net-line">TOTAL:   <span id="net-total">--</span></span>
+        </div>
+      </div>
+      <div id="globe-area">
+        <canvas id="globe-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div id="bottom-bar">
+    <div id="filemanager-area">
+      <div class="panel-title">FILES <span id="fm-path">/home</span></div>
+      <div id="fm-content"></div>
+    </div>
+    <div id="keyboard-area">
+      <div id="keyboard"></div>
+    </div>
+  </div>
+</div>
+
+<div id="ai-panel">
+  <div id="ai-header">xKOR AI v0.1</div>
+  <div id="ai-messages"></div>
+  <div id="ai-input-line">
+    <span id="ai-prompt">⚡ > </span>
+    <input type="text" id="ai-input" spellcheck="false" autocomplete="off">
+  </div>
+</div>
+
+<div id="web-overlay">
+  <div id="web-header">
+    <span id="web-url">⚡ about:blank</span>
+  </div>
+  <div id="web-content"></div>
+  <div id="web-input-line">
+    <span id="web-prompt">⚡ > </span>
+    <input type="text" id="web-input" spellcheck="false" autocomplete="off" placeholder="open &lt;url&gt;">
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@5/lib/xterm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10/lib/addon-fit.js"></script>
+<script src="js/app.js"></script>
+<script src="js/login.js"></script>
+<script src="js/boot.js"></script>
+<script src="js/terminal.js"></script>
+<script src="js/tabs.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/globe.js"></script>
+<script src="js/graphs.js"></script>
+<script src="js/keyboard.js"></script>
+<script src="js/filemanager.js"></script>
+<script src="js/network.js"></script>
+</body>
+</html>

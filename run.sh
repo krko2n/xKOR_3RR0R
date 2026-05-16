@@ -1,47 +1,33 @@
-# @summary: Quick launcher: npm install, electron-rebuild node-pty, then npm start.
 #!/bin/bash
-# xKOR_3RR0R - Quick Launcher
-# Usage: bash run.sh [--dev]
-# After git clone this handles everything:
-#   npm install -> electron-rebuild node-pty -> npm start
-
+# @summary: Quick launcher for Tauri (App Mode). Installs Rust/Tauri, builds, and runs.
 set -e
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
-if ! command -v node &>/dev/null; then
-    echo "[ERROR] Node.js is not installed."
-    echo "        Arch: sudo pacman -S nodejs npm"
+echo "[INFO] xKOR_3RR0R - Tauri Launcher"
+
+if ! command -v rustc &>/dev/null; then
+    echo "[INFO] Installing Rust..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    source "$HOME/.cargo/env"
+fi
+
+if ! command -v cargo &>/dev/null; then
+    echo "[ERROR] Cargo not found after Rust install"
     exit 1
 fi
 
+# Check for Tauri system deps
+if command -v pacman &>/dev/null; then
+    echo "[INFO] Checking system dependencies..."
+    pacman -Q --needed webkit2gtk-4.1 libappindicator-gtk3 librsvg libsoup3 2>/dev/null || \
+    sudo pacman -S --noconfirm --needed webkit2gtk-4.1 libappindicator-gtk3 librsvg libsoup3 2>/dev/null || true
+fi
+
 if [ ! -d "node_modules" ]; then
-    echo "[INFO] Running npm install..."
-    npm install --unsafe-perm
+    echo "[INFO] Installing Node.js deps..."
+    npm install
 fi
 
-# Ensure Electron binary is present (reinstall if missing)
-if ! node -e "require('electron')" 2>/dev/null; then
-    echo "[INFO] Electron binary missing — reinstalling..."
-    npm install electron@^34.0.0 --save-dev --unsafe-perm
-fi
-
-# Rebuild node-pty for Electron AFTER npm install (local binary exists then)
-if [ ! -f "node_modules/.node-pty-rebuilt" ]; then
-    echo "[INFO] Rebuilding node-pty for Electron..."
-    # Pass explicit electronVersion to avoid "got undefined" error on Node 26
-    node -e "const ev=require('electron/package.json').version;const{rebuild}=require('@electron/rebuild');rebuild({buildPath:process.cwd(),electronVersion:ev,force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})"
-    touch node_modules/.node-pty-rebuilt
-    echo "[OK]   node-pty rebuilt"
-else
-    echo "[INFO] node-pty already rebuilt, skipping"
-fi
-
-if [ "$1" = "--dev" ]; then
-    echo "[INFO] Starting in DEV mode..."
-    npm run dev 2>/dev/null || npm start
-else
-    echo "[INFO] Starting xKOR_3RR0R..."
-    npm start
-fi
+echo "[INFO] Building and starting xKOR_3RR0R..."
+npm run dev

@@ -1,0 +1,10 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; overflow:hidden; background:#000; color:#00ff00; font-family:'JetBrains Mono','Courier New',monospace; font-size:14px; line-height:1.4; }
+input, button, textarea { font-family:'JetBrains Mono','Courier New',monospace; background:transparent; color:#00ff00; border:1px solid #0a660a; outline:none; padding:4px 8px; font-size:13px; }
+input:focus, button:focus { border-color:#00ff00; }
+button:hover { background:#0a3300; cursor:pointer; }
+::selection { background:#00ff00; color:#000; }
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:#000; }
+::-webkit-scrollbar-thumb { background:#0a660a; }
+::-webkit-scrollbar-thumb:hover { background:#00ff00; }

@@ -1,38 +1,14 @@
 {
-    "name":  "xkor_3rr0r",
-    "version":  "1.0.0",
-    "description":  "Cyberpunk system dashboard OS",
-    "main":  "src/main.js",
-    "scripts":  {
-                    "start":  "electron .",
-                    "build":  "electron-builder",
-                    "dev":  "electron .",
-                    "docs:tree":  "node scripts/generate-tree.mjs",
-                    "install-linux":  "npm install && npm run postinstall"
-                },
-    "dependencies":  {
-                         "node-pty":  "^1.0.0",
-                         "ws":  "^8.16.0",
-                         "express":  "^4.18.2",
-                         "systeminformation":  "^5.22.3",
-                         "@xterm/xterm":  "^5.5.0"
-                     },
-    "devDependencies":  {
-                            "electron":  "^34.0.0",
-                            "electron-builder":  "^24.6.0",
-                            "@electron/rebuild":  "^3.7.2"
-                        },
-    "build":  {
-                  "appId":  "com.xkor3rror.app",
-                  "productName":  "xKOR_3RR0R",
-                  "directories":  {
-                                      "output":  "dist"
-                                  },
-                  "linux":  {
-                                "target":  [
-                                               "AppImage"
-                                           ],
-                                "category":  "Utility"
-                            }
-              }
+  "name": "xkor_3rr0r",
+  "version": "1.0.0",
+  "description": "xKOR_3RR0R - Cyberpunk System Dashboard OS",
+  "private": true,
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "docs:tree": "node scripts/generate-tree.mjs"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
 }

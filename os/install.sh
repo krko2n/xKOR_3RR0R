@@ -60,8 +60,31 @@ pacman -S --noconfirm --needed \
     nodejs npm \
     xorg-server xorg-xinit xorg-xauth xorg-xrandr xorg-xset xorg-xdpyinfo \
     mesa plymouth pam unclutter \
-    git base-devel
+    git base-devel \
+    webkit2gtk-4.1 libappindicator-gtk3 librsvg libsoup3
 ok "System packages installed"
+
+# Step 4c: Install Rust toolchain
+step "Installing Rust..."
+if ! command -v rustc &>/dev/null; then
+    if command -v rustup &>/dev/null; then
+        rustup install stable
+    else
+        pacman -S --noconfirm rustup 2>/dev/null || true
+        if ! command -v rustup &>/dev/null; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+            source "$HOME/.cargo/env" 2>/dev/null || true
+            # Ensure non-root user also has cargo
+            BUILD_USER="${SUDO_USER:-admin}"
+            if [ "$BUILD_USER" != "root" ]; then
+                cp -r "$HOME/.cargo" "$(getent passwd $BUILD_USER | cut -d: -f6)/.cargo" 2>/dev/null || true
+                chown -R "$BUILD_USER:$BUILD_USER" "$(getent passwd $BUILD_USER | cut -d: -f6)/.cargo" 2>/dev/null || true
+            fi
+        fi
+    fi
+fi
+command -v rustc > /dev/null || warn "rustc not found — Rust install might need manual intervention"
+ok "Rust: $(rustc --version 2>/dev/null || echo 'unknown')"
 
 # Step 4b: Ensure X server allows non-root users
 step "Configuring X server permissions..."
@@ -113,24 +136,33 @@ manifest_record "SYMLINK" "$XKOR_BIN"
 manifest_record "PLYMOUTH" "xkor"
 ok "Manifest: $XKOR_MANIFEST_FILE"
 
-# Step 7: npm install
+# Step 7: npm install (Tauri CLI)
 step "Installing Node.js dependencies..."
 cd "$XKOR_INSTALL_DIR"
 npm cache clean --force 2>/dev/null || true
-npm install --unsafe-perm
+npm install
 ok "npm install complete"
 
-# Step 8: Rebuild node-pty
-step "Rebuilding node-pty for Electron ABI..."
-# Pass explicit electronVersion to avoid "got undefined" error on Node 26
-if node -e "require('@electron/rebuild')" 2>/dev/null && node -e "require('electron/package.json')" 2>/dev/null; then
-    node -e "const ev=require('electron/package.json').version;const{rebuild}=require('@electron/rebuild');rebuild({buildPath:process.cwd(),electronVersion:ev,force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})" \
-        && touch node_modules/.node-pty-rebuilt \
-        && ok "node-pty rebuilt" \
-        || warn "node-pty rebuild failed -- terminals may not work"
+# Step 8: Build Tauri Rust backend
+step "Building xKOR_3RR0R Rust backend (Tauri)..."
+cd "$XKOR_INSTALL_DIR"
+# If running as root, build as the real user (Rust/cargo prefers non-root)
+BUILD_USER="${SUDO_USER:-admin}"
+BUILD_HOME=$(getent passwd "$BUILD_USER" | cut -d: -f6)
+if [ "$(id -u)" = "0" ] && [ "$BUILD_USER" != "root" ]; then
+    info "Building as $BUILD_USER (Rust prefers non-root)..."
+    chown -R "$BUILD_USER:$BUILD_USER" "$XKOR_INSTALL_DIR" 2>/dev/null || true
+    su -c "cd '$XKOR_INSTALL_DIR' && bash os/rebuild.sh" "$BUILD_USER" \
+        && ok "Rust build complete" \
+        || { warn "Rust build failed — check logs and rebuild manually: bash os/rebuild.sh"; ok "Skipping Rust build (will build on first run)"; }
 else
-    warn "@electron/rebuild not found, skipping"
+    bash os/rebuild.sh \
+        && ok "Rust build complete" \
+        || { warn "Rust build failed — check logs and rebuild manually: bash os/rebuild.sh"; ok "Skipping Rust build (will build on first run)"; }
 fi
+
+# Touch marker so xkor-session.sh knows it doesn't need to rebuild
+touch "$XKOR_INSTALL_DIR/node_modules/.tauri-built" 2>/dev/null || true
 
 # Step 9: Verify login app
 step "Verifying login app..."

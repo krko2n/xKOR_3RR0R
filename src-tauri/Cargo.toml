@@ -1,0 +1,23 @@
+[package]
+name = "xkor-3rr0r"
+version = "1.0.0"
+edition = "2021"
+description = "xKOR_3RR0R - Cyberpunk System Dashboard OS"
+
+[lib]
+name = "xkor_3rr0r_lib"
+crate-type = ["lib", "cdylib", "staticlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon"] }
+tauri-plugin-shell = "2"
+tauri-plugin-fs = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sysinfo = "0.33"
+nix = "0.29"
+reqwest = { version = "0.12", features = ["json"] }
+tokio = { version = "1", features = ["full"] }

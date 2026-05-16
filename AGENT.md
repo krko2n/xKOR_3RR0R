@@ -5,20 +5,30 @@
 
 ## Co to je
 
-Fullscreen cyberpunk system dashboard pro Linux. Dva mÄ‚Ĺ‚dy:
-- **App Mode** Ă˘â‚¬â€ť Electron okno na existujÄ‚Â­cÄ‚Â­m desktopu (`bash run.sh`)
-- **OS Mode** Ă˘â‚¬â€ť nahrazuje celÄ‚Ëť desktop (`sudo bash os/install.sh` + reboot)
+Fullscreen cyberpunk system dashboard pro Linux. Dva módy:
+- **App Mode** — Tauri okno na existujícím desktopu (`bash run.sh`)
+- **OS Mode** — nahrazuje celý desktop (`sudo bash os/install.sh` + reboot)
 
 Solo projekt, krko2n, MIT, Arch Linux only.
 Repo: https://github.com/krko2n/xKOR_3RR0R
+
+**Architecture**: Tauri v2 (Rust backend + HTML/CSS/JS frontend).  
+Nahrazuje původní Electron + Node.js backend (express, ws, node-pty).  
+Frontend: vanilla JS + xterm.js, komunikuje s Rust backendem přes Tauri IPC (invoke + events).
 
 ---
 
 ## Quickstart
 
 ```bash
-# App Mode
+# App Mode (builds Rust + starts)
 bash run.sh
+
+# Dev mode (hot reload frontend)
+npm run dev
+
+# Build release binary
+cd src-tauri && cargo build --release
 
 # OS Mode
 sudo bash os/install.sh && sudo reboot
@@ -32,32 +42,58 @@ sudo reboot
 
 ---
 
-## Architektura
+## Architektura (Tauri v2)
 
 ```
-Electron (src/main.js)
-  |-- spusti backend/server.js (port 3001)
-  |-- vytvori BrowserWindow -> src/renderer/index.html
-  |-- src/preload.js: window.xkor.send() + .onBackend() pres contextBridge
+src-tauri/ (Rust backend)
+  |-- src/main.rs  -> vstupni bod
+  |-- src/lib.rs   -> setup: plugins, commands, background stats emitter
+  |-- src/terminal/mod.rs -> PTY manager (fork + nix crate)
+  |-- src/commands/
+  |   |-- system.rs   -> authenticate, get_system_stats (CPU/RAM/NET/TEMP)
+  |   |-- fs.rs       -> fs_list, fs_read, fs_write, fs_delete, fs_rename
+  |   |-- ai.rs       -> ai_query (Ollama/OpenAI via reqwest)
+  |   |-- terminal_cmd.rs -> terminal_spawn, write, resize, kill
+  |-- Cargo.toml     -> tauri v2, sysinfo, nix, reqwest, serde
+  |-- tauri.conf.json -> fullscreen, kiosk, CSP
+  |-- capabilities/default.json -> IPC permissions
 
-backend/server.js (Express + WebSocket, port 3001)
-  POST /auth       -> overi config/user.json
-  POST /ai         -> backend/ai/proxy.js -> Ollama/OpenAI
-  GET  /fs/list    -> backend/fs/list.js
-  GET  /fs/read    -> backend/fs/read.js
-  POST /fs/write   -> backend/fs/write.js
-  POST /fs/delete  -> backend/fs/delete.js
-  POST /fs/rename  -> backend/fs/rename.js
-  WS   terminal    -> backend/terminal/pty.js (node-pty)
+src/ (HTML/CSS/JS frontend)
+  |-- index.html    -> main entry (login, boot, app screens)
+  |-- css/          -> 10 theme files (strict #000/#0f0 palette)
+  |-- js/
+      |-- app.js        -> Tauri IPC bridge, globals, initApp()
+      |-- login.js      -> login screen (USER/PASSWORD/AUTH)
+      |-- boot.js       -> boot sequence (kernel logs + glitch flash)
+      |-- terminal.js   -> xterm.js with Tauri PTY backend
+      |-- tabs.js       -> F1-F7 mode switching + dynamic terminal tabs
+      |-- ai.js         -> AI chat panel (F5 overlay) + web terminal
+      |-- globe.js      -> Canvas2D pseudosphere with heatmap dots
+      |-- graphs.js     -> CPU/RAM/TEMP sparkline graphs
+      |-- keyboard.js   -> On-screen QWERTY visualizer
+      |-- filemanager.js -> File explorer (invoke fs_list etc.)
+      |-- network.js    -> Network status display
+
+Komunikace: window.__TAURI__.core.invoke() + event.listen()  
+Neni Node.js backend, neni WebSocket, neni Electron. Vse pres Tauri IPC.
+
+> **DŮLEŽITÉ**: Následující sekce v tomto souboru dokumentují PŮVODNÍ Electron/Node.js architekturu.  
+> Codebase byl MIGROVÁN na Tauri v2 (Rust backend). Staré soubory (`src/main.js`, `src/preload.js`, `backend/`) jsou zachovány pro referenci ale NEJSOU používány.  
+> Nové Rust soubory: `src-tauri/src/lib.rs`, `src-tauri/src/terminal/mod.rs`, `src-tauri/src/commands/*.rs`.  
+> Nový frontend: `src/index.html`, `src/js/*.js`, `src/css/*.css`.  
+> Nový build: `os/rebuild.sh` (cargo build --release).
+
+  WS   terminal    -> backend/terminal/pty.js (node-pty) -- OBSOLETE (Rust PTY v src-tauri)
   WS   stats loop  -> kazde 200ms: {type:"stats", cpu, ram, net, temp}
 ```
 
 ---
 
 ## Kazdy soubor
+### src/main.js [OBSOLETE — zachováno pro referenci]
 
-### src/main.js
-Electron entry. Spusti backend (try/catch), pak createWindow().
+Původní Electron entry. Spoustel backend (try/catch), pak createWindow().  
+Nyní nahrazeno `src-tauri/src/main.rs` + `lib.rs`.
 BrowserWindow: 1920x1080, fullscreen, frameless, bg #000.
 nodeIntegration: false, contextIsolation: true, devTools: true (F12).
 
@@ -75,7 +111,7 @@ Stats loop 200ms -- broadcast {type:"stats", cpu, ram, net, temp}.
 POZOR: /auth IIFE pouziva raw req.on('data'), ne express.json() -- funguje,
 ale nesedi s ostatnim kodem. Bezpecne prepsat na req.body.
 
-### backend/terminal/pty.js
+### backend/terminal/pty.js [OBSOLETE — Rust PTY v src-tauri/src/terminal/mod.rs]
 Sessions v objektu klic=Date.now() string.
 Shell: bash (linux) / powershell (win32).
 PTY: cols 120, rows 30, cwd HOME.
@@ -386,6 +422,17 @@ devDependencies:
   (stejna sed pravidla: inline + block + empty block cleanup)
 - run.sh: --unsafe-perm u vsech npm install + Electron reinstal
   (reseni "Electron failed to install correctly" v App Mode)
+- [Tauri MIGRACE] Celý backend přepsán z Electron+Node.js do Tauri v2 (Rust):
+  - src-tauri/Cargo.toml: tauri v2, sysinfo, nix, reqwest
+  - src-tauri/src/terminal/mod.rs: PTY pres nix fork() + posix_openpt
+  - src-tauri/src/commands/system.rs: CPU/RAM/NET/TEMP pres sysinfo
+  - src-tauri/src/commands/fs.rs: filesystem pres std::fs
+  - src-tauri/src/commands/ai.rs: AI pres reqwest -> Ollama
+  - src-tauri/src/commands/terminal_cmd.rs: spawn/write/resize/kill
+  - Frontend: vanilla JS + xterm.js, komunikace pres Tauri IPC
+  - Žádný Electron, žádný node-pty, žádný Express/WS
+  - Build: os/rebuild.sh (cargo build --release)
+  - Hyprland: os/deploy-hyprland.sh (windowrulev2 pro Tauri okno)
 
 ### OPRAVENO (agent v8 — badge system)
 - badges/counts.json + files.json: opraveny na realne hodnoty (4135 lines, 72 files)
@@ -447,7 +494,7 @@ Font:           Share Tech Mono (Google Fonts)
 
 | Feature             | Stav                                          |
 |---------------------|-----------------------------------------------|
-| Electron okno       | Funguje                                       |
+| Tauri okno          | Funguje (migrováno z Electronu)               |
 | App Mode login      | Funguje (po agent v6 oprave)                  |
 | Boot animace        | Funguje                                       |
 | System grafy        | Funguje (CPU, RAM, NET, TEMP)                 |
@@ -460,7 +507,7 @@ Font:           Share Tech Mono (Google Fonts)
 | OS Mode boot        | Funguje (pamtester + spravne cesty)           |
 | OS Mode login       | Funguje (pamtester PAM)                       |
 | Plymouth tema       | Nainstalovano, zalezi na grub konfiguraci     |
-| node-pty rebuild    | Reseno v run.sh a install.sh                  |
+| PTY (Rust)          | Reseno v src-tauri/src/terminal/mod.rs (nix crate fork+PTY) |
 
 
 

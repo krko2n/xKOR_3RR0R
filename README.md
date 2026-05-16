@@ -6,8 +6,8 @@
 
 [![License](https://img.shields.io/badge/MIT-391362?style=for-the-badge&label=LICENSE&labelColor=000000)](LICENSE)
 [![Platform](https://img.shields.io/badge/ARCH%20LINUX-1793d1?style=for-the-badge&label=PLATFORM&labelColor=000000&logo=archlinux&logoColor=1793d1)](https://archlinux.org)
-[![Electron](https://img.shields.io/badge/ELECTRON%2034-47848f?style=for-the-badge&label=BUILT%20WITH&labelColor=000000&logo=electron&logoColor=47848f)](https://electronjs.org)
-[![Node](https://img.shields.io/badge/NODE%2018+-339933?style=for-the-badge&label=REQUIRES&labelColor=000000&logo=node.js&logoColor=339933)](https://nodejs.org)
+[![Tauri](https://img.shields.io/badge/TAURI%20v2-FFC131?style=for-the-badge&label=BUILT%20WITH&labelColor=000000&logo=tauri&logoColor=FFC131)](https://tauri.app)
+[![Rust](https://img.shields.io/badge/RUST-000000?style=for-the-badge&label=BACKEND&labelColor=000000&logo=rust&logoColor=fff)](https://rust-lang.org)
 [![Status](https://img.shields.io/badge/ACTIVE-28a745?style=for-the-badge&label=STATUS&labelColor=000000)](https://github.com/krko2n/xKOR_3RR0R)
 [![Lines of code](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/counts.json&style=for-the-badge&labelColor=000000&v=25965072006)](https://github.com/krko2n/xKOR_3RR0R)
 [![Files](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/files.json&style=for-the-badge&labelColor=000000&v=25965072006)](https://github.com/krko2n/xKOR_3RR0R)
@@ -57,6 +57,12 @@ xKOR_3RR0R turns your Linux machine into a sci-fi hacker workstation. Two operat
 
 ## INSTALLATION
 
+### Prerequisites
+
+- **Rust** (install: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`)
+- **Tauri system deps** (Arch: `sudo pacman -S webkit2gtk-4.1 libappindicator-gtk3 librsvg libsoup3`)
+- **Node.js** (for Tauri CLI, install: `sudo pacman -S nodejs npm`)
+
 ### App Mode
 
 ```bash
@@ -65,7 +71,7 @@ cd xKOR_3RR0R
 bash run.sh
 ```
 
-`run.sh` handles `npm install`, rebuilds `node-pty` for Electron ABI, then runs `npm start`.
+`run.sh` installs Rust if missing, checks Tauri system deps, installs npm modules, builds the Rust backend (`cargo build --release`), then starts the app via `npm run dev`.
 
 ### OS Mode
 
@@ -86,13 +92,15 @@ No reboot needed — the login screen starts automatically on TTY1.
 [  01  ]  pacman -Syu                        system update
 [  02  ]  pacman -S nodejs npm xorg mesa     install dependencies
           plymouth pam unclutter pamtester
-[  03  ]  cp repo -> /opt/xkor_3rr0r         copy project
-[  04  ]  npm install                         node modules
-[  05  ]  electron-rebuild -f -w node-pty    rebuild native module
-[  06  ]  npm install  (os/login/)           login app deps
-[  07  ]  systemctl enable xkor-login        register service
-[  08  ]  systemctl start xkor-login         start now (no reboot)
-[  09  ]  plymouth-set-default-theme xkor    boot animation
+          webkit2gtk libappindicator librsvg  Tauri deps
+[  03  ]  Install Rust toolchain             for Tauri build
+[  04  ]  cp repo -> /opt/xkor_3rr0r         copy project
+[  05  ]  npm install                         @tauri-apps/cli
+[  06  ]  cargo build --release              build Rust backend
+[  07  ]  npm install  (os/login/)           login app deps
+[  08  ]  systemctl enable xkor-login        register service
+[  09  ]  systemctl start xkor-login         start now (no reboot)
+[  10  ]  plymouth-set-default-theme xkor    boot animation
            log -> /var/log/xkor_3rr0r/
 ```
 
@@ -384,9 +392,9 @@ Then reload: `hyprctl reload`
 npm install
 npm start
 
-# terminals blank? node-pty needs rebuild (uses programmatic API
+# terminals blank? Tauri Rust PTY needs rebuild
 # to avoid ESM/yargs bug on Node 16):
-node -e "const{rebuild}=require('@electron/rebuild');rebuild({buildPath:process.cwd(),force:true,onlyModules:['node-pty']}).catch(e=>{console.error(e);process.exit(1)})"
+cd src-tauri && cargo build --release
 npm start
 ```
 

@@ -1,6 +1,6 @@
 # @summary: Verifies system requirements: root, Arch, dependencies.
 #!/bin/bash
-# xKOR_3RR0R - Verification library
+# xKOR_3RR0R - Verification library [Tauri]
 
 VERIFY_ERRORS=0; VERIFY_WARNINGS=0
 
@@ -39,19 +39,30 @@ run_verify() {
     echo; info "System binaries:"
     verify_check "node $(node --version 2>/dev/null)" "$(verify_binary node)"
     verify_check "npm" "$(verify_binary npm)"
+    verify_check "rustc $(rustc --version 2>/dev/null)" "$(verify_binary rustc)"
+    verify_check "cargo" "$(verify_binary cargo)"
     verify_check "pamtester" "$(verify_binary pamtester)"
     verify_check "startx" "$(verify_binary startx)"
     verify_check "unclutter" "$(verify_binary unclutter)"
 
     echo; info "Files:"
     verify_check "Install dir" "$(verify_dir "$XKOR_INSTALL_DIR")"
-    verify_check "src/main.js" "$(verify_file "$XKOR_INSTALL_DIR/src/main.js")"
+    verify_check "src/index.html" "$(verify_file "$XKOR_INSTALL_DIR/src/index.html")"
     verify_check "os/login/login.js" "$(verify_file "$XKOR_INSTALL_DIR/os/login/login.js")"
     verify_check "os/login/pam.js" "$(verify_file "$XKOR_INSTALL_DIR/os/login/pam.js")"
     verify_check "os/login/start-login.sh" "$(verify_file "$XKOR_INSTALL_DIR/os/login/start-login.sh")"
     verify_check "os/xorg/xkor-session.sh" "$(verify_file "$XKOR_INSTALL_DIR/os/xorg/xkor-session.sh")"
-    verify_check "node_modules" "$(verify_dir "$XKOR_INSTALL_DIR/node_modules")"
-    verify_check "node-pty rebuilt" "$(verify_file "$XKOR_INSTALL_DIR/node_modules/.node-pty-rebuilt")"
+    verify_check "src-tauri/Cargo.toml" "$(verify_file "$XKOR_INSTALL_DIR/src-tauri/Cargo.toml")"
+
+    echo; info "Build:"
+    TARGET_BIN="$XKOR_INSTALL_DIR/src-tauri/target/release/xkor-3rr0r"
+    if [ -f "$TARGET_BIN" ]; then
+        vok "Tauri binary: $($TARGET_BIN --version 2>/dev/null || echo 'built')"
+    elif [ -f "$XKOR_INSTALL_DIR/node_modules/.tauri-built" ]; then
+        vwarn "Tauri binary not found — rebuild needed: bash os/rebuild.sh"
+    else
+        vwarn "Tauri not yet built — will build on first run"
+    fi
 
     echo; info "Config:"
     verify_check "pam.js uses pamtester" "$(verify_pam)"

@@ -1,0 +1,15 @@
+#clock-area { padding:8px; border-bottom:1px solid #0a660a; text-align:center; }
+#clock-display { font-size:28px; color:#00ff00; font-weight:300; letter-spacing:2px; }
+#clock-uptime { font-size:11px; color:#0a660a; margin-top:4px; }
+
+#graphs-area { flex:1; display:flex; flex-direction:column; min-height:0; overflow-y:auto; }
+.graph-row { padding:4px; border-bottom:1px solid #0a3300; }
+.graph-row:last-child { border-bottom:none; }
+.graph-label { font-size:10px; color:#0a660a; display:block; margin-bottom:2px; text-transform:uppercase; letter-spacing:1px; }
+.graph-canvas { width:100%; height:60px; display:block; }
+
+#clipboard-area { padding:6px 8px; border-top:1px solid #0a660a; }
+.clipboard-title { font-size:10px; color:#0a660a; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+.clipboard-buttons { display:flex; gap:6px; }
+.clipboard-buttons button { font-size:11px; padding:2px 8px; color:#00ff00; border:1px solid #0a660a; background:transparent; }
+.clipboard-buttons button:hover { background:#0a3300; }
