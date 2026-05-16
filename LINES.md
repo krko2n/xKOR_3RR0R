@@ -1,14 +1,16 @@
-cloc|github.com/AlDanial/cloc v 1.98  T=0.03 s (2429.8 files/s, 225104.9 lines/s)
+cloc|github.com/AlDanial/cloc v 1.98  T=0.04 s (2451.0 files/s, 204431.4 lines/s)
 --- | ---
 
 Language|files|blank|comment|code
 :-------|-------:|-------:|-------:|-------:
-Bourne Shell|16|200|192|1203
-JavaScript|27|298|192|1165
-Markdown|4|215|2|869
-HTML|2|113|26|798
-CSS|10|35|6|272
+JavaScript|38|424|232|1992
+Bourne Shell|18|217|209|1314
+HTML|3|123|26|980
+Markdown|4|223|2|916
+Rust|9|73|1|669
+CSS|20|43|6|376
 Bourne Again Shell|2|7|4|75
 YAML|1|13|1|58
+TOML|1|3|0|20
 --------|--------|--------|--------|--------
-SUM:|62|881|423|4440
+SUM:|96|1126|481|6400
