@@ -113,7 +113,7 @@ impl TerminalManager {
                                 );
                             }
                             _ => {
-                                if nix::errno::errno() == nix::errno::Errno::EAGAIN as i32 {
+                                if nix::errno::errno() == nix::errno::Errno::EAGAIN {
                                     thread::sleep(Duration::from_millis(10));
                                 } else {
                                     break;
@@ -147,7 +147,7 @@ impl TerminalManager {
             match n {
                 n if n > 0 => offset += n as usize,
                 _ => {
-                    if nix::errno::errno() == nix::errno::Errno::EAGAIN as i32 {
+                    if nix::errno::errno() == nix::errno::Errno::EAGAIN {
                         thread::sleep(Duration::from_millis(10));
                     } else {
                         return Err("write error".to_string());

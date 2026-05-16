@@ -1,5 +1,5 @@
-# @summary: File manifest for integrity checks.
 #!/bin/bash
+# @summary: File manifest for integrity checks.
 # xKOR_3RR0R - Manifest library
 # Tracks everything the installer creates.
 # Manifest lives at /var/lib/xkor_3rr0r/manifest (survives repo deletion)

@@ -1,0 +1,26 @@
+#web-overlay {
+  display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: 999; background: #000;
+}
+#web-overlay.active { display: flex; flex-direction: column; }
+#web-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 12px; background: #0a0a0a; border-bottom: 1px solid #0f0;
+  font-size: 13px; flex-shrink: 0;
+}
+#web-back, #web-forward, #web-close {
+  background: none; border: 1px solid #0f0; color: #0f0;
+  padding: 2px 10px; cursor: pointer; font-family: 'JetBrains Mono', monospace;
+}
+#web-back:hover, #web-forward:hover, #web-close:hover { background: #0f0; color: #000; }
+#web-url {
+  flex: 1; background: #111; border: 1px solid #333; color: #0f0;
+  padding: 4px 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+}
+#web-frame {
+  flex: 1; border: none; background: #fff; width: 100%;
+}
+#web-status {
+  padding: 4px 12px; background: #0a0a0a; border-top: 1px solid #333;
+  color: #666; font-family: 'JetBrains Mono', monospace; font-size: 11px; flex-shrink: 0;
+}

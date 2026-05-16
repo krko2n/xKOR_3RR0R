@@ -1,5 +1,5 @@
-# @summary: Removes xKOR_3RR0R OS Mode: disables service, deletes /opt/xkor_3rr0r.
 #!/bin/bash
+# @summary: Removes xKOR_3RR0R OS Mode: disables service, deletes /opt/xkor_3rr0r.
 # xKOR_3RR0R - Uninstaller
 # Usage: sudo bash os/uninstall.sh [--remove-logs]
 # Or: sudo xkor uninstall

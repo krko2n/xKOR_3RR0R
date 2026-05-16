@@ -82,6 +82,7 @@ pub fn run() {
             commands::fs::fs_delete,
             commands::fs::fs_rename,
             commands::ai::ai_query,
+            commands::ai::web_fetch,
             commands::terminal_cmd::terminal_spawn,
             commands::terminal_cmd::terminal_write,
             commands::terminal_cmd::terminal_resize,

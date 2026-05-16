@@ -3,5 +3,4 @@
 .key.active { color:#00ff00; border-color:#00ff00; background:#0a3300; }
 .key.mod { width:48px; }
 .key.space { width:160px; }
-.key.func { color:#0a3300; font-size:9px; }
 .key:hover { border-color:#0a660a; }

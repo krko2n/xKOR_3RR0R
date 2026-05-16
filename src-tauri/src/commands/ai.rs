@@ -1,4 +1,5 @@
 use std::fs;
+use std::time::Duration;
 
 #[derive(serde::Serialize)]
 pub struct AiResponse {
@@ -81,4 +82,27 @@ pub async fn ai_query(prompt: String) -> AiResponse {
             error: Some(format!("AI endpoint unreachable: {}", e)),
         },
     }
+}
+
+#[tauri::command]
+pub async fn web_fetch(url: String) -> Result<String, String> {
+    let client = reqwest::Client::builder()
+        .timeout(Duration::from_secs(15))
+        .danger_accept_invalid_certs(true)
+        .build()
+        .map_err(|e| e.to_string())?;
+
+    let resp = client
+        .get(&url)
+        .header("User-Agent", "xKOR_3RR0R/1.0")
+        .send()
+        .await
+        .map_err(|e| format!("Fetch error: {}", e))?;
+
+    if !resp.status().is_success() {
+        return Err(format!("HTTP {}", resp.status()));
+    }
+
+    let text = resp.text().await.map_err(|e| format!("Read error: {}", e))?;
+    Ok(text)
 }

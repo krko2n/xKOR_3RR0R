@@ -1,5 +1,5 @@
-# @summary: Verifies system requirements: root, Arch, dependencies.
 #!/bin/bash
+# @summary: Verifies system requirements: root, Arch, dependencies.
 # xKOR_3RR0R - Verification library [Tauri]
 
 VERIFY_ERRORS=0; VERIFY_WARNINGS=0

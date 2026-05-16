@@ -1,5 +1,5 @@
-# @summary: Repair tool for OS Mode: rechecks deps, rebuilds Rust, reinstalls service.
 #!/bin/bash
+# @summary: Repair tool for OS Mode: rechecks deps, rebuilds Rust, reinstalls service.
 # xKOR_3RR0R - Repair mode [Tauri]
 # Fixes broken install without re-copying files
 # Usage: sudo bash os/repair.sh  OR  sudo xkor repair
