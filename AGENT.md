@@ -369,15 +369,22 @@ devDependencies:
   (reseni "XDG_RUNTIME_DIR is not set" pro Electron stabilitu v Xorg session)
 - login.js: `su -l` obaleno try/catch — pri selhani X serveru se vrati na login obrazovku
 - README: emergency recovery rozsireno o Hyprland navod (XDG_RUNTIME_DIR, fix hyprland.conf)
+- install.sh: step 7 — npm install s `--unsafe-perm` (Electron postinstall pod rootem)
 - install.sh: step 12b — kompletni oprava Hyprland/Wayland prostredi:
-  - odstraneni dwindl:pseudotile z hyprland.conf (vcetne hyprland.conf.d/)
+  - odstraneni `dwindle:pseudotile` INLINE syntax (sed '/dwindle:pseudotile/d')
+  - odstraneni `pseudotile = true` BLOCK syntax uvnitr `dwindle { }` (sed '/^\s*pseudotile\s*=/d')
+  - cleanup prazdneho `dwindle { }` bloku po odstraneni vsech radku
+  - kontrola `hyprland.conf` + `hyprlandd.conf` + cely `hyprland.conf.d/`
   - /etc/profile.d/xkor-hyprland.sh (vsechny login shelly, vsechny uzivatele)
   - ~/.bashrc (interaktivni non-login shelly)
   - /usr/local/bin/xkor-hyprland (wrapper, vzdy funguje)
   - explicitni mkdir /run/user/<uid>
   - loginctl enable-linger
+- verify.sh: hyprctl configerrors — kontrola chyb Hyprland configu (optional, jen pokud hyprctl existuje)
+  - pokud configerrors ma vystup, vypise varovani + kazdy radek chyby
 - start-login.sh: runtime fallback — oprava hyprland.conf pri kazdem startu login.js
-- run.sh: pridana kontrola Electron binary — automaticky reinstaluje pokud chybi
+  (stejna sed pravidla: inline + block + empty block cleanup)
+- run.sh: --unsafe-perm u vsech npm install + Electron reinstal
   (reseni "Electron failed to install correctly" v App Mode)
 
 ### OPRAVENO (agent v8 — badge system)

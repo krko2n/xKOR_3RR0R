@@ -18,13 +18,13 @@ fi
 
 if [ ! -d "node_modules" ]; then
     echo "[INFO] Running npm install..."
-    npm install
+    npm install --unsafe-perm
 fi
 
 # Ensure Electron binary is present (reinstall if missing)
 if ! node -e "require('electron')" 2>/dev/null; then
     echo "[INFO] Electron binary missing — reinstalling..."
-    npm install electron@^34.0.0 --save-dev
+    npm install electron@^34.0.0 --save-dev --unsafe-perm
 fi
 
 # Rebuild node-pty for Electron AFTER npm install (local binary exists then)

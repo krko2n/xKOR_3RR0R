@@ -56,6 +56,14 @@ run_verify() {
     echo; info "Config:"
     verify_check "pam.js uses pamtester" "$(verify_pam)"
     verify_check "login.js syntax" "$(verify_syntax "$XKOR_INSTALL_DIR/os/login/login.js")"
+    if command -v hyprctl &>/dev/null; then
+        if hyprctl configerrors 2>/dev/null | grep -q "."; then
+            vwarn "Hyprland configerrors detected"
+            hyprctl configerrors 2>/dev/null | while IFS= read -r line; do _vlog "  ${YELLOW}${line}${RESET}"; done
+        else
+            vok "Hyprland config has no errors"
+        fi
+    fi
 
     echo; info "Services:"
     verify_check "xkor-login.service enabled" "$(verify_service xkor-login.service)"

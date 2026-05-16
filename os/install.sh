@@ -117,7 +117,7 @@ ok "Manifest: $XKOR_MANIFEST_FILE"
 step "Installing Node.js dependencies..."
 cd "$XKOR_INSTALL_DIR"
 npm cache clean --force 2>/dev/null || true
-npm install
+npm install --unsafe-perm
 ok "npm install complete"
 
 # Step 8: Rebuild node-pty
@@ -172,23 +172,42 @@ REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
 if [[ -n "$REAL_USER" && -d "$REAL_HOME" ]]; then
     step "Fixing Hyprland/Wayland environment for $REAL_USER..."
 
-    # Fix hyprland.conf — remove outdated dwindl:pseudotile
-    # Check main config + all files in hyprland.conf.d/
+    # Fix hyprland.conf — remove outdated dwindl:pseudotile (v0.55+)
+    # Two syntax forms: inline "dwindle:pseudotile = true" and block "pseudotile = true" inside dwindl { }
     for HC in "$REAL_HOME/.config/hypr/hyprland.conf" "$REAL_HOME/.config/hypr/hyprlandd.conf"; do
-        if [[ -f "$HC" ]] && grep -q "dwindle:pseudotile" "$HC" 2>/dev/null; then
-            cp "$HC" "$HC.bak.$(date +%s)"
-            sed -i '/dwindle:pseudotile/d' "$HC"
-            ok "Removed dwindl:pseudotile from $HC"
+        if [[ -f "$HC" ]]; then
+            BAK="$HC.bak.$(date +%s)"
+            CHANGED=false
+            # Inline: dwindl:pseudotile
+            if grep -q "dwindle:pseudotile" "$HC" 2>/dev/null; then
+                cp "$HC" "$BAK"
+                sed -i '/dwindle:pseudotile/d' "$HC"
+                CHANGED=true
+            fi
+            # Block: pseudotile = ... inside dwindl { }
+            if grep -q "^\s*pseudotile\s*=" "$HC" 2>/dev/null; then
+                $CHANGED && cp "$HC" "$BAK"
+                sed -i '/^\s*pseudotile\s*=/d' "$HC"
+                # Clean up empty dwindl { } blocks orphans
+                sed -i '/^\s*dwindle\s*{\s*$/{N;/\n\s*}\s*$/d}' "$HC"
+                CHANGED=true
+            fi
+            $CHANGED && ok "Fixed hyprland.conf v0.55+ syntax in $HC"
         fi
     done
     # Also check hyprland.conf.d/ fragments
     HCD="$REAL_HOME/.config/hypr/hyprland.conf.d"
     if [[ -d "$HCD" ]]; then
         for f in "$HCD"/*.conf; do
-            if [[ -f "$f" ]] && grep -q "dwindle:pseudotile" "$f" 2>/dev/null; then
-                cp "$f" "$f.bak.$(date +%s)"
-                sed -i '/dwindle:pseudotile/d' "$f"
-                ok "Removed dwindl:pseudotile from $f"
+            if [[ -f "$f" ]]; then
+                CHANGED=false
+                if grep -q "dwindle:pseudotile\|^\s*pseudotile\s*=" "$f" 2>/dev/null; then
+                    cp "$f" "$f.bak.$(date +%s)"
+                    sed -i '/dwindle:pseudotile/d;/^\s*pseudotile\s*=/d' "$f"
+                    sed -i '/^\s*dwindle\s*{\s*$/{N;/\n\s*}\s*$/d}' "$f"
+                    CHANGED=true
+                fi
+                $CHANGED && ok "Fixed $f for Hyprland v0.55+"
             fi
         done
     fi
