@@ -2,7 +2,7 @@ use std::sync::Mutex;
 use std::time::Duration;
 
 use sysinfo::{CpuRefreshKind, MemoryRefreshKind, NetworksRefreshKind, RefreshKind, System};
-use tauri::{Emitter, Manager};
+use tauri::Emitter;
 
 mod commands;
 mod terminal;
@@ -43,7 +43,7 @@ fn collect_stats() -> StatsPayload {
     let (net_rx, net_tx) = {
         let mut rx = 0u64;
         let mut tx = 0u64;
-        for (_name, data) in system.networks() {
+        for data in system.get_networks().values() {
             rx += data.total_received();
             tx += data.total_transmitted();
         }
