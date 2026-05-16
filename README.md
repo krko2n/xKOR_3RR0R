@@ -9,8 +9,8 @@
 [![Electron](https://img.shields.io/badge/ELECTRON%2034-47848f?style=for-the-badge&label=BUILT%20WITH&labelColor=000000&logo=electron&logoColor=47848f)](https://electronjs.org)
 [![Node](https://img.shields.io/badge/NODE%2018+-339933?style=for-the-badge&label=REQUIRES&labelColor=000000&logo=node.js&logoColor=339933)](https://nodejs.org)
 [![Status](https://img.shields.io/badge/ACTIVE-28a745?style=for-the-badge&label=STATUS&labelColor=000000)](https://github.com/krko2n/xKOR_3RR0R)
-[![Lines of code](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/counts.json&style=for-the-badge&labelColor=000000&v=25961483458)](https://github.com/krko2n/xKOR_3RR0R)
-[![Files](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/files.json&style=for-the-badge&labelColor=000000&v=25961483458)](https://github.com/krko2n/xKOR_3RR0R)
+[![Lines of code](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/counts.json&style=for-the-badge&labelColor=000000&v=25961516183)](https://github.com/krko2n/xKOR_3RR0R)
+[![Files](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/files.json&style=for-the-badge&labelColor=000000&v=25961516183)](https://github.com/krko2n/xKOR_3RR0R)
 <br>
 
 **A fullscreen cyberpunk OS interface for Linux.**<br>
@@ -240,8 +240,8 @@ pm run docs:tree.
 │   └── terminal/
 │       └── pty.js  -- Manages node-pty sessions. create/write/onData/..
 ├── badges/
-│   ├── counts.json&style=for-the-badge&labelColor=000000&v=25961483458
-│   └── files.json&style=for-the-badge&labelColor=000000&v=25961483458
+│   ├── counts.json&style=for-the-badge&labelColor=000000&v=25961516183
+│   └── files.json&style=for-the-badge&labelColor=000000&v=25961516183
 ├── config/
 │   ├── ai-endpoint.json
 │   └── user.json
