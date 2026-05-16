@@ -29,15 +29,7 @@ pub struct FsWriteResult {
     pub error: Option<String>,
 }
 
-fn format_unix_time(secs: u64) -> String {
-    let days = secs / 86400;
-    let hours = (secs % 86400) / 3600;
-    let minutes = (secs % 3600) / 60;
-    format!("{days}d {hours:02}:{minutes:02}")
-}
-
 fn format_system_time(time: std::time::SystemTime) -> String {
-    let now = std::time::SystemTime::now();
     let duration = time.duration_since(std::time::UNIX_EPOCH).unwrap_or_default();
     let secs = duration.as_secs();
     let year = 1970 + secs / 31536000;

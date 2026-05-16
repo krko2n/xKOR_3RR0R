@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::ffi::CString;
 use std::fs::OpenOptions;
-use std::os::unix::io::{AsRawFd, FromRawFd, IntoRawFd, RawFd};
+use std::os::unix::io::{AsRawFd, IntoRawFd, RawFd};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Mutex;
 use std::thread;
@@ -10,10 +10,12 @@ use std::time::Duration;
 use nix::fcntl::OFlag;
 use nix::pty::{grantpt, posix_openpt, ptsname, unlockpt};
 use nix::sys::termios;
-use nix::unistd::{close, dup2, execvp, fork, ForkResult, setsid};
+use nix::unistd::{fork, ForkResult, setsid};
 use tauri::{AppHandle, Emitter};
 
 const READ_BUF_SIZE: usize = 65536;
+
+type Result<T> = std::result::Result<T, String>;
 
 pub struct Session {
     pub master_fd: RawFd,
@@ -33,7 +35,7 @@ impl TerminalManager {
         }
     }
 
-    pub fn spawn(&self, id: &str, cols: u16, rows: u16, handle: AppHandle) -> Result<(), String> {
+    pub fn spawn(&self, id: &str, cols: u16, rows: u16, handle: AppHandle) -> Result<()> {
         let master = posix_openpt(OFlag::O_RDWR | OFlag::O_NONBLOCK).map_err(|e| e.to_string())?;
         grantpt(&master).map_err(|e| e.to_string())?;
         unlockpt(&master).map_err(|e| e.to_string())?;
@@ -52,20 +54,22 @@ impl TerminalManager {
                     .map_err(|e| e.to_string())?;
                 let slave_fd = slave.as_raw_fd();
 
-                dup2(slave_fd, 0).map_err(|e| e.to_string())?;
-                dup2(slave_fd, 1).map_err(|e| e.to_string())?;
-                dup2(slave_fd, 2).map_err(|e| e.to_string())?;
-
-                if slave_fd > 2 {
-                    close(slave_fd).ok();
+                // dup2 in child — needs raw fds
+                unsafe {
+                    nix::libc::dup2(slave_fd, 0);
+                    nix::libc::dup2(slave_fd, 1);
+                    nix::libc::dup2(slave_fd, 2);
+                    if slave_fd > 2 {
+                        nix::libc::close(slave_fd);
+                    }
+                    nix::libc::close(master_fd);
                 }
-                close(master_fd).ok();
                 drop(slave);
 
-                let mut ios = termios::tcgetattr(0).map_err(|e| e.to_string())?;
-                ios.local_flags.remove(termios::LocalFlags::ECHO);
-                termios::tcsetattr(0, termios::SetAttribute::TCSANOW, &ios)
-                    .map_err(|e| e.to_string())?;
+                if let Ok(mut ios) = termios::tcgetattr(0) {
+                    ios.local_flags.remove(termios::LocalFlags::ECHO);
+                    let _ = termios::tcsetattr(0, termios::SetAttribute::TCSANOW, &ios);
+                }
 
                 let _ = Self::set_size_raw(0, cols, rows);
 
@@ -73,7 +77,7 @@ impl TerminalManager {
                     CString::new("bash").unwrap(),
                     CString::new("--login").unwrap(),
                 ];
-                let _ = execvp(&CString::new("bash").unwrap(), &args);
+                let _ = nix::unistd::execvp(&CString::new("bash").unwrap(), &args);
                 std::process::exit(1);
             }
             ForkResult::Parent { child: _child_pid } => {
@@ -90,28 +94,34 @@ impl TerminalManager {
                         if unsafe { &*running_ptr }.load(Ordering::SeqCst) == false {
                             break;
                         }
-                        match unsafe { nix::unistd::read(master_fd, &mut buf) } {
-                            Ok(0) => {
+                        let n = unsafe {
+                            nix::libc::read(master_fd, buf.as_mut_ptr() as *mut _, READ_BUF_SIZE)
+                        };
+                        match n {
+                            0 => {
                                 let _ = handle_clone.emit(
                                     "terminal-output",
                                     serde_json::json!({ "id": id_clone, "data": null, "eof": true }),
                                 );
                                 break;
                             }
-                            Ok(n) => {
-                                let data = String::from_utf8_lossy(&buf[..n]).to_string();
+                            n if n > 0 => {
+                                let data = String::from_utf8_lossy(&buf[..n as usize]).to_string();
                                 let _ = handle_clone.emit(
                                     "terminal-output",
                                     serde_json::json!({ "id": id_clone, "data": data, "eof": false }),
                                 );
                             }
-                            Err(nix::errno::Errno::EAGAIN) => {
-                                thread::sleep(Duration::from_millis(10));
+                            _ => {
+                                if nix::errno::errno() == nix::errno::Errno::EAGAIN as i32 {
+                                    thread::sleep(Duration::from_millis(10));
+                                } else {
+                                    break;
+                                }
                             }
-                            Err(_) => break,
                         }
                     }
-                    unsafe { close(master_fd).ok() };
+                    unsafe { nix::libc::close(master_fd); }
                 });
 
                 let mut sessions = self.sessions.lock().map_err(|e| e.to_string())?;
@@ -121,37 +131,49 @@ impl TerminalManager {
         }
     }
 
-    pub fn write(&self, id: &str, data: &str) -> Result<(), String> {
+    pub fn write(&self, id: &str, data: &str) -> Result<()> {
         let sessions = self.sessions.lock().map_err(|e| e.to_string())?;
         let session = sessions.get(id).ok_or_else(|| "Session not found".to_string())?;
         let bytes = data.as_bytes();
         let mut offset = 0;
         while offset < bytes.len() {
-            match unsafe { nix::unistd::write(session.master_fd, &bytes[offset..]) } {
-                Ok(n) => offset += n,
-                Err(nix::errno::Errno::EAGAIN) => thread::sleep(Duration::from_millis(10)),
-                Err(e) => return Err(e.to_string()),
+            let n = unsafe {
+                nix::libc::write(
+                    session.master_fd,
+                    bytes[offset..].as_ptr() as *const _,
+                    bytes.len() - offset,
+                )
+            };
+            match n {
+                n if n > 0 => offset += n as usize,
+                _ => {
+                    if nix::errno::errno() == nix::errno::Errno::EAGAIN as i32 {
+                        thread::sleep(Duration::from_millis(10));
+                    } else {
+                        return Err("write error".to_string());
+                    }
+                }
             }
         }
         Ok(())
     }
 
-    pub fn resize(&self, id: &str, cols: u16, rows: u16) -> Result<(), String> {
+    pub fn resize(&self, id: &str, cols: u16, rows: u16) -> Result<()> {
         let sessions = self.sessions.lock().map_err(|e| e.to_string())?;
         let session = sessions.get(id).ok_or_else(|| "Session not found".to_string())?;
         Self::set_size_raw(session.master_fd, cols, rows)
     }
 
-    pub fn kill(&self, id: &str) -> Result<(), String> {
+    pub fn kill(&self, id: &str) -> Result<()> {
         let mut sessions = self.sessions.lock().map_err(|e| e.to_string())?;
         if let Some(session) = sessions.remove(id) {
             session.running.store(false, Ordering::SeqCst);
-            unsafe { close(session.master_fd).ok() };
+            unsafe { nix::libc::close(session.master_fd); }
         }
         Ok(())
     }
 
-    fn set_size_raw(fd: RawFd, cols: u16, rows: u16) -> Result<(), String> {
+    fn set_size_raw(fd: RawFd, cols: u16, rows: u16) -> Result<()> {
         let ws = nix::libc::winsize {
             ws_row: rows,
             ws_col: cols,

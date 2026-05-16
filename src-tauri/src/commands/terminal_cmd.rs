@@ -1,5 +1,4 @@
-use std::sync::Mutex;
-use tauri::{AppHandle, Emitter, Manager, State};
+use tauri::{AppHandle, State};
 
 use crate::terminal::TerminalManager;
 

@@ -1,6 +1,5 @@
-use std::process::{Command, Stdio};
 use std::sync::Mutex;
-use sysinfo::{CpuRefreshKind, DiskRefreshKind, MemoryRefreshKind, NetworksRefreshKind, RefreshKind, System};
+use sysinfo::System;
 use tauri::State;
 
 pub struct SysState {
@@ -28,14 +27,11 @@ pub struct DiskInfo {
 
 #[tauri::command]
 pub async fn authenticate(username: String, password: String) -> bool {
-    use std::process::{Command, Stdio};
-    use std::io::Write;
-
-    let mut child = match Command::new("pamtester")
+    let mut child = match std::process::Command::new("pamtester")
         .args(["login", &username, "authenticate"])
-        .stdin(Stdio::piped())
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::null())
+        .stderr(std::process::Stdio::null())
         .spawn()
     {
         Ok(c) => c,
@@ -43,6 +39,7 @@ pub async fn authenticate(username: String, password: String) -> bool {
     };
 
     if let Some(mut stdin) = child.stdin.take() {
+        use std::io::Write;
         let _ = stdin.write_all(format!("{}\n", password).as_bytes());
     }
 
@@ -56,17 +53,7 @@ pub async fn authenticate(username: String, password: String) -> bool {
 pub fn get_system_stats(sys: State<SysState>) -> Result<SystemStats, String> {
     let mut system = sys.inner.lock().map_err(|e| e.to_string())?;
 
-    let cpu_kind = CpuRefreshKind::everything();
-    let mem_kind = MemoryRefreshKind::everything();
-    let disk_kind = DiskRefreshKind::everything();
-    let net_kind = NetworksRefreshKind::everything();
-    let kind = RefreshKind::new()
-        .with_cpu(cpu_kind)
-        .with_memory(mem_kind)
-        .with_disks(disk_kind)
-        .with_networks(net_kind);
-
-    system.refresh_specifics(kind);
+    system.refresh_all();
 
     let cpu_total = system.global_cpu_usage();
     let cpu_per_core: Vec<f32> = system.cpus().iter().map(|c| c.cpu_usage()).collect();
