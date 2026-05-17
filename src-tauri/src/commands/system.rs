@@ -53,7 +53,9 @@ pub async fn authenticate(username: String, password: String) -> bool {
 pub fn get_system_stats(sys: State<SysState>) -> Result<SystemStats, String> {
     let mut system = sys.inner.lock().map_err(|e| e.to_string())?;
 
-    system.refresh_all();
+    system.refresh_cpu_all();
+    system.refresh_memory();
+    system.refresh_disks();
 
     let cpu_total = system.global_cpu_usage();
     let cpu_per_core: Vec<f32> = system.cpus().iter().map(|c| c.cpu_usage()).collect();

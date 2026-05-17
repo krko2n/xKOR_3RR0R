@@ -64,7 +64,7 @@ pub fn run() {
             manager: terminal::TerminalManager::new(),
         })
         .manage(SysState {
-            inner: Mutex::new(System::new_all()),
+            inner: Mutex::new(System::new_with_specifics(RefreshKind::everything())),
         })
         .invoke_handler(tauri::generate_handler![
             commands::system::authenticate,
