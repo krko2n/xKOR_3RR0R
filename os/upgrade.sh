@@ -56,6 +56,15 @@ else
     ok "Updated: $CURRENT_COMMIT -> $NEW_COMMIT"
 fi
 
+step "Building Rust backend..."
+cd "$REPO_ROOT/src-tauri"
+info "Cleaning cargo build cache..."
+cargo clean 2>/dev/null || true
+info "Compiling release binary (this may take a few minutes)..."
+cargo build --release || fail "Cargo build failed — check logs above"
+ok "Rust backend built successfully"
+cd "$REPO_ROOT"
+
 step "Running installer..."
 if [[ $EUID -ne 0 ]]; then
     info "Needs root -- re-running with sudo..."
