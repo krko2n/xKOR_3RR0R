@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="css/web.css">
 <link rel="stylesheet" href="css/keyboard.css">
 <link rel="stylesheet" href="css/filemanager.css">
+<link rel="stylesheet" href="css/process-monitor.css">
 </head>
 <body>
 
@@ -126,6 +127,28 @@
           <div class="term-box" id="term-box-3"></div>
         </div>
       </div>
+
+      <div id="process-monitor" style="display:none;">
+        <div id="pm-header">
+          <span class="pm-col">PID</span>
+          <span class="pm-col pm-cmd">COMMAND</span>
+          <span class="pm-col">%CPU</span>
+          <span class="pm-col">TIME</span>
+          <span class="pm-col">#M</span>
+          <span class="pm-col">#WQ</span>
+          <span class="pm-col">#PORTS</span>
+          <span class="pm-col">MEM</span>
+          <span class="pm-col">PURG</span>
+          <span class="pm-col">CMPRS</span>
+          <span class="pm-col">PGRP</span>
+          <span class="pm-col">PPID</span>
+        </div>
+        <div id="pm-body"></div>
+        <div id="pm-footer">
+          <span id="pm-count">0 PROCESSES</span>
+          <span id="pm-sort">SORT: CPU</span>
+        </div>
+      </div>
     </div>
 
     <div id="right-panel">
@@ -190,5 +213,6 @@
 <script src="js/keyboard.js"></script>
 <script src="js/filemanager.js"></script>
 <script src="js/network.js"></script>
+<script src="js/process-monitor.js"></script>
 </body>
 </html>

@@ -1,0 +1,91 @@
+/* ============================================
+   XKOR_3RR0R PROCESS MONITOR
+   Hyper-detailed Unix-like process table
+   ============================================ */
+
+#process-monitor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg-panel);
+  font-size: 11px;
+  font-family: var(--font-stack);
+}
+
+#pm-header {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(0, 210, 255, 0.03);
+  color: var(--cyan);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+#pm-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.pm-row {
+  display: flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-bottom: 1px solid rgba(10, 58, 74, 0.3);
+  color: var(--text-dim);
+  font-size: 10px;
+  transition: none;
+  cursor: default;
+}
+
+.pm-row:hover {
+  background: rgba(0, 210, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.pm-row.selected {
+  background: rgba(0, 210, 255, 0.08);
+  color: var(--cyan-bright);
+  border-left: 2px solid var(--cyan);
+}
+
+.pm-row.high-cpu {
+  color: var(--red);
+}
+
+.pm-row.zombie {
+  color: var(--red-dim);
+  text-decoration: line-through;
+}
+
+.pm-col {
+  min-width: 52px;
+  text-align: right;
+  padding: 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pm-col.pm-cmd {
+  flex: 1;
+  text-align: left;
+  min-width: 120px;
+  color: var(--text-primary);
+}
+
+#pm-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 8px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-panel);
+  color: var(--text-muted);
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}

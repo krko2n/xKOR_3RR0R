@@ -73,6 +73,7 @@ function initApp() {
   initKeyboard();
   initFileManager();
   initNetwork();
+  initProcessMonitor();
 
   // Listen for system stats from Rust backend
   if (xkor.listen) {

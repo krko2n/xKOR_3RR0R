@@ -29,12 +29,11 @@ function switchMode(mode) {
   currentMode = mode;
   updateTopBar();
 
-  // Show/hide panels based on mode
-  const centerVisible = ['term1', 'term2', 'term3', 'web'].includes(mode);
   const monitorVisible = mode === 'monitor';
   const explorerVisible = mode === 'explorer';
 
-  $('#main-grid').style.display = 'grid'; // always visible
+  // Toggle process monitor vs terminal
+  updateProcessMonitorVisibility(monitorVisible);
 
   // Terminal tabs: highlight the right one
   if (mode.startsWith('term')) {
