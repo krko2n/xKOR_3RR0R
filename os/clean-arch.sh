@@ -1,5 +1,5 @@
-# @summary: Cleans Arch Linux package cache and orphaned deps.
 #!/bin/bash
+# @summary: Cleans Arch Linux package cache and orphaned deps.
 
 LOG_DIR="/var/log/xkor_3rr0r"
 LOG_FILE="$LOG_DIR/cleanup_$(date +%Y-%m-%d_%H-%M-%S).log"

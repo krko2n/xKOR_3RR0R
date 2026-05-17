@@ -1,5 +1,5 @@
-# @summary: Shared library of bash functions for OS scripts.
 #!/bin/bash
+# @summary: Shared library of bash functions for OS scripts.
 # xKOR_3RR0R - Shared library
 # Source this file from any script: source "$(dirname "$0")/lib/xkor-lib.sh"
 
