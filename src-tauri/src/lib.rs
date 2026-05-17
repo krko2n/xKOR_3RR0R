@@ -1,7 +1,7 @@
 use std::sync::Mutex;
 use std::time::Duration;
 
-use sysinfo::{CpuRefreshKind, MemoryRefreshKind, NetworksRefreshKind, RefreshKind, System};
+use sysinfo::{CpuRefreshKind, MemoryRefreshKind, RefreshKind, System};
 use tauri::Emitter;
 
 mod commands;
@@ -27,12 +27,10 @@ fn collect_stats() -> StatsPayload {
     let mut system = System::new_with_specifics(
         RefreshKind::new()
             .with_cpu(CpuRefreshKind::everything())
-            .with_memory(MemoryRefreshKind::everything())
-            .with_networks(NetworksRefreshKind::everything()),
+            .with_memory(MemoryRefreshKind::everything()),
     );
     system.refresh_cpu();
     system.refresh_memory();
-    system.refresh_networks();
 
     let cpu_total = system.global_cpu_usage();
     let cpu_per_core: Vec<f32> = system.cpus().iter().map(|c| c.cpu_usage()).collect();
@@ -40,15 +38,10 @@ fn collect_stats() -> StatsPayload {
     let ram_used = system.used_memory();
     let temp = 0.0f32;
 
-    let (net_rx, net_tx) = {
-        let mut rx = 0u64;
-        let mut tx = 0u64;
-        for data in system.get_networks().values() {
-            rx += data.total_received();
-            tx += data.total_transmitted();
-        }
-        (rx, tx)
-    };
+    // Network stats disabled in sysinfo 0.33 — API changed
+    // TODO: implement with alternative library (netlink, etc)
+    let net_rx = 0u64;
+    let net_tx = 0u64;
 
     StatsPayload {
         cpu: cpu_per_core,
