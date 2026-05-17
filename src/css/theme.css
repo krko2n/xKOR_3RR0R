@@ -1,10 +1,186 @@
-* { margin:0; padding:0; box-sizing:border-box; }
-html, body { width:100%; height:100%; overflow:hidden; background:#000; color:#00ff00; font-family:'JetBrains Mono','Courier New',monospace; font-size:14px; line-height:1.4; }
-input, button, textarea { font-family:'JetBrains Mono','Courier New',monospace; background:transparent; color:#00ff00; border:1px solid #0a660a; outline:none; padding:4px 8px; font-size:13px; }
-input:focus, button:focus { border-color:#00ff00; }
-button:hover { background:#0a3300; cursor:pointer; }
-::selection { background:#00ff00; color:#000; }
-::-webkit-scrollbar { width:4px; }
-::-webkit-scrollbar-track { background:#000; }
-::-webkit-scrollbar-thumb { background:#0a660a; }
-::-webkit-scrollbar-thumb:hover { background:#00ff00; }
+/* ============================================
+   XKOR_3RR0R GLOBAL THEME
+   Corrupted cyberpunk terminal aesthetic
+   ============================================ */
+
+:root {
+  --bg-primary: #02050a;
+  --bg-panel: #000000;
+  --cyan: #00d2ff;
+  --cyan-dim: #0a4a5a;
+  --cyan-bright: #33eeff;
+  --red: #ff1a1a;
+  --red-dim: #5a0a0a;
+  --text-primary: #00d2ff;
+  --text-dim: #0a4a5a;
+  --text-bright: #33eeff;
+  --text-muted: #1a3a4a;
+  --border: #0a3a4a;
+  --border-active: #00d2ff;
+  --glow-cyan: 0 0 4px rgba(0, 210, 255, 0.4);
+  --glow-red: 0 0 4px rgba(255, 26, 26, 0.4);
+  --font-stack: 'JetBrains Mono', 'Share Tech Mono', 'Courier New', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-stack);
+  font-size: 13px;
+  line-height: 1.35;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  text-rendering: geometricPrecision;
+}
+
+/* UPPERCASE MANDATE */
+h1, h2, h3, h4, h5, h6,
+.panel-title,
+.graph-label,
+.net-line,
+.clipboard-title,
+.login-label,
+.tab,
+.term-tab,
+#top-title,
+#top-mode,
+#top-clock,
+#top-uptime,
+#clock-display,
+#clock-uptime,
+#fm-path,
+button,
+label,
+input::placeholder {
+  text-transform: uppercase;
+}
+
+/* INPUTS & BUTTONS */
+input, button, textarea {
+  font-family: var(--font-stack);
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  outline: none;
+  padding: 4px 8px;
+  font-size: 12px;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+}
+
+input:focus, button:focus {
+  border-color: var(--cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+button:hover {
+  background: rgba(0, 210, 255, 0.05);
+  cursor: pointer;
+  border-color: var(--cyan);
+}
+
+::selection {
+  background: var(--cyan);
+  color: var(--bg-primary);
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border); }
+::-webkit-scrollbar-thumb:hover { background: var(--cyan-dim); }
+
+/* CRT SCANLINE OVERLAY */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* CHROMATIC ABERRATION GLITCH CLASS */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.glitch-text::before {
+  color: var(--red);
+  text-shadow: -1px 0 var(--red);
+  clip-path: inset(0 0 60% 0);
+  animation: glitch-r 2.5s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+  color: var(--cyan);
+  text-shadow: 1px 0 var(--cyan);
+  clip-path: inset(60% 0 0 0);
+  animation: glitch-c 3s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-r {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-1px, 1px); }
+  40% { transform: translate(1px, -1px); }
+  60% { transform: translate(-1px, 0); }
+  80% { transform: translate(1px, 1px); }
+}
+
+@keyframes glitch-c {
+  0%, 100% { transform: translate(0); }
+  15% { transform: translate(1px, -1px); }
+  35% { transform: translate(-1px, 1px); }
+  55% { transform: translate(0, 1px); }
+  75% { transform: translate(1px, 0); }
+  90% { transform: translate(-1px, -1px); }
+}
+
+/* FLICKER ANIMATION */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+.flicker {
+  animation: flicker 4s infinite;
+}
+
+/* COLOR UTILITIES */
+.cyan { color: var(--cyan); }
+.cyan-bright { color: var(--cyan-bright); text-shadow: var(--glow-cyan); }
+.cyan-dim { color: var(--text-dim); }
+.red { color: var(--red); text-shadow: var(--glow-red); }
+.red-dim { color: var(--red-dim); }
+.dim { color: var(--text-muted); }

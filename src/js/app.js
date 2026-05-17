@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Called by boot.js finishBoot()
 function initApp() {
+  initGlitch();
   initTerminal();
   initTabs();
   initAI();
