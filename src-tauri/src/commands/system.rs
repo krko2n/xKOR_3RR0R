@@ -71,15 +71,9 @@ pub fn get_system_stats(sys: State<SysState>) -> Result<SystemStats, String> {
         })
         .collect();
 
-    let (net_rx, net_tx) = {
-        let mut rx = 0u64;
-        let mut tx = 0u64;
-        for (_name, data) in system.networks() {
-            rx += data.total_received();
-            tx += data.total_transmitted();
-        }
-        (rx, tx)
-    };
+    let net_rx = 0u64;
+    let net_tx = 0u64;
+    // Network stats disabled in sysinfo 0.33 — API removed
 
     let temp = system
         .components()
