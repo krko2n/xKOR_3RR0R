@@ -446,9 +446,20 @@ devDependencies:
   3. sed updatuje README — vymeni cast [^)]* za URL s &v={run_id}
   4. commituje LINES.md + badgy + README
 
-### AKTIVNI
-- systeminformation v package.json ale nikde neni pouzito
-  Fix: ponechano pro budouc pouziti, neni kriticke
+### OPRAVENO (agent v10 — sysinfo 0.33 API, 15 audit errors, Tauri finalizace)
+- sysinfo 0.33: odstranen network stats (API se zmenilo) -- vraci 0 pro net_rx/net_tx
+- src/lib.rs: odstranen refresh_networks() call + network iteration
+- src-tauri/src/commands/system.rs: odstranena network iteration (stejny problem)
+- src-tauri/src/terminal/mod.rs: Errno::EAGAIN type fix (bylo `as i32`, musi byt `Errno` enum)
+- 7x shell scripts: shebang `#!/bin/bash` MUSI byt na radku 1 (ne 2), presunuty `# @summary` na radku 2
+  - os/install.sh, os/lib/verify.sh, os/lib/manifest.sh, os/lib/cleanup.sh, os/uninstall.sh, os/repair.sh, os/plymount/plymount-theme.sh
+- web_fetch command: novy Rust command v src-tauri/src/commands/ai.rs -- stahuje HTML stranky
+- web.css: novy soubor -- styly pro #web-overlay panel (F7 browser)
+- globe.js: worldmap data embed primo v JS (neni HTTP request, neni cesova zavislost)
+- Icons: vytvoreny placeholder PNG/ICO/ICNS soubory pro Tauri bundle
+- os/plymount/plymount-theme.sh: cesta z relativni na absolutni (`$(dirname "$0")/xkor`)
+- os/login/start-login.sh: $HOME fix -- pouziva `getent passwd $SUDO_USER` (systemd context)
+- src/css/keyboard.css: odstranen mrtvý `.key.func` selektor
 
 ## Pravidla
 
@@ -497,13 +508,14 @@ Font:           Share Tech Mono (Google Fonts)
 | Tauri okno          | Funguje (migrováno z Electronu)               |
 | App Mode login      | Funguje (po agent v6 oprave)                  |
 | Boot animace        | Funguje                                       |
-| System grafy        | Funguje (CPU, RAM, NET, TEMP)                 |
+| System grafy        | Funguje (CPU, RAM) -- NET vypnuta (sysinfo 0.33 removed API)|
 | Terminal (text)     | Funguje -- plain text, zadne ANSI barvy       |
 | Terminal (xterm.js) | INTEGROVANO                                    |
 | AI panel            | Funguje pokud bezi Ollama s llama3            |
 | File manager        | Funguje                                       |
 | Keyboard visualizer | Funguje (opraven I bug)                       |
-| Globe               | Funguje (opravena fetch cesta)                |
+| Globe               | Funguje (embedded data, bez HTTP)             |
+| Web panel (F7)      | NOVY -- Rust web_fetch command + web.css     |
 | OS Mode boot        | Funguje (pamtester + spravne cesty)           |
 | OS Mode login       | Funguje (pamtester PAM)                       |
 | Plymouth tema       | Nainstalovano, zalezi na grub konfiguraci     |
