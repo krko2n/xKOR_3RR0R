@@ -446,20 +446,25 @@ devDependencies:
   3. sed updatuje README — vymeni cast [^)]* za URL s &v={run_id}
   4. commituje LINES.md + badgy + README
 
-### OPRAVENO (agent v10 — sysinfo 0.33 API, 15 audit errors, Tauri finalizace)
+### OPRAVENO (agent v10 — sysinfo 0.33 API, 15 audit errors, Tauri finalizace, upgrade automation)
 - sysinfo 0.33: odstranen network stats (API se zmenilo) -- vraci 0 pro net_rx/net_tx
 - src/lib.rs: odstranen refresh_networks() call + network iteration
 - src-tauri/src/commands/system.rs: odstranena network iteration (stejny problem)
 - src-tauri/src/terminal/mod.rs: Errno::EAGAIN type fix (bylo `as i32`, musi byt `Errno` enum)
 - 7x shell scripts: shebang `#!/bin/bash` MUSI byt na radku 1 (ne 2), presunuty `# @summary` na radku 2
   - os/install.sh, os/lib/verify.sh, os/lib/manifest.sh, os/lib/cleanup.sh, os/uninstall.sh, os/repair.sh, os/plymount/plymount-theme.sh
+- 2x dodatecne shell scripts: shebang fix
+  - os/clean-arch.sh, os/lib/xkor-lib.sh
 - web_fetch command: novy Rust command v src-tauri/src/commands/ai.rs -- stahuje HTML stranky
-- web.css: novy soubor -- styly pro #web-overlay panel (F7 browser)
+- web.css: novy soubor -- styly pro #web-overlay panel (F7 browser, prikazy: open <url>, back, reload, clear)
 - globe.js: worldmap data embed primo v JS (neni HTTP request, neni cesova zavislost)
 - Icons: vytvoreny placeholder PNG/ICO/ICNS soubory pro Tauri bundle
 - os/plymount/plymount-theme.sh: cesta z relativni na absolutni (`$(dirname "$0")/xkor`)
 - os/login/start-login.sh: $HOME fix -- pouziva `getent passwd $SUDO_USER` (systemd context)
 - src/css/keyboard.css: odstranen mrtvý `.key.func` selektor
+- os/upgrade.sh: novy step -- automaticky cargo clean + cargo build --release po git pull
+  - neni jiz potreba rucni kompilace na Arch -- upgrade.sh dela vsechno
+- Duplicate web.js removed -- initWeb() uz existuje v ai.js
 
 ## Pravidla
 
