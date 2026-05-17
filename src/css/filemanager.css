@@ -1,9 +1,190 @@
-#fm-content { height:calc(100% - 24px); overflow-y:auto; padding:2px 0; }
-.fm-path { font-size:11px; color:#0a660a; }
-.fm-item { display:flex; align-items:center; padding:2px 8px; font-size:12px; cursor:pointer; gap:6px; }
-.fm-item:hover { background:#0a3300; }
-.fm-item .fm-icon { width:16px; text-align:center; color:#0a660a; }
-.fm-item .fm-name { flex:1; }
-.fm-item .fm-size { color:#0a660a; font-size:11px; min-width:50px; text-align:right; }
-.fm-item.type-dir .fm-name { color:#00ff00; }
-.fm-item.type-file .fm-name { color:#cccccc; }
+/* ============================================
+   XKOR_3RR0R FILE BROWSER
+   Flat wireframe grid, square icons, corrupted labels
+   ============================================ */
+
+#filemanager-area {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg-panel);
+}
+
+#fm-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+  min-height: 0;
+}
+
+/* Grid layout */
+.fm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 4px;
+  padding: 6px;
+}
+
+.fm-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  transition: none;
+  text-align: center;
+  min-height: 72px;
+}
+
+.fm-item:hover {
+  border-color: var(--border);
+  background: rgba(0, 210, 255, 0.03);
+}
+
+.fm-item.selected {
+  border-color: var(--cyan);
+  background: rgba(0, 210, 255, 0.08);
+}
+
+/* Square folder/file icons — no emojis, pure ASCII */
+.fm-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--cyan-dim);
+  font-family: var(--font-stack);
+  margin-bottom: 4px;
+  border: 1px solid var(--border);
+  background: transparent;
+}
+
+.fm-item.type-dir .fm-icon {
+  color: var(--cyan);
+  border-color: var(--cyan-dim);
+}
+
+.fm-item.type-file .fm-icon {
+  color: var(--text-dim);
+  border-color: var(--border);
+}
+
+.fm-item.type-exec .fm-icon {
+  color: var(--red);
+  border-color: var(--red-dim);
+}
+
+/* Name label — uppercase mandate */
+.fm-name {
+  font-size: 9px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  word-break: break-all;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.fm-item.type-dir .fm-name {
+  color: var(--text-primary);
+}
+
+.fm-item.type-exec .fm-name {
+  color: var(--red);
+}
+
+/* Size label */
+.fm-size {
+  font-size: 8px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* List view fallback */
+.fm-list .fm-item {
+  flex-direction: row;
+  min-height: 24px;
+  padding: 3px 8px;
+  gap: 8px;
+  border-bottom: 1px solid rgba(10, 58, 74, 0.2);
+}
+
+.fm-list .fm-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 8px;
+  margin-bottom: 0;
+}
+
+.fm-list .fm-name {
+  flex: 1;
+  text-align: left;
+}
+
+.fm-list .fm-size {
+  min-width: 48px;
+  text-align: right;
+}
+
+/* Mount bar */
+#fm-mount-bar {
+  display: flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-panel);
+  font-size: 9px;
+  color: var(--text-muted);
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+#fm-mount-label {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 60px;
+}
+
+#fm-mount-track {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  position: relative;
+}
+
+#fm-mount-fill {
+  height: 100%;
+  background: var(--cyan);
+  box-shadow: var(--glow-cyan);
+  transition: width 0.3s ease;
+}
+
+#fm-mount-fill.critical {
+  background: var(--red);
+  box-shadow: var(--glow-red);
+}
+
+#fm-mount-pct {
+  min-width: 32px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Error state */
+.fm-error {
+  color: var(--red);
+  padding: 12px 8px;
+  font-size: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
