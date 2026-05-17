@@ -1,64 +1,82 @@
-// On-screen visual QWERTY keyboard
-const keyLayout = [
+const kbLayout = [
   ['Esc','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12'],
   ['`','1','2','3','4','5','6','7','8','9','0','-','=','Backspace'],
   ['Tab','q','w','e','r','t','y','u','i','o','p','[',']','\\'],
   ['Caps','a','s','d','f','g','h','j','k','l',';',"'",'Enter'],
   ['Shift','z','x','c','v','b','n','m',',','.','/','Shift'],
-  ['Ctrl','Super','Alt','Space','Alt','Fn','Ctrl'],
+  ['Ctrl','Win','Alt','Space','Alt','Fn','Ctrl'],
 ];
 
-const modKeys = ['Esc','Backspace','Tab','Caps','Enter','Shift','Ctrl','Super','Alt','Fn'];
-const wideKeys = { 'Space': 'space', 'Backspace': 'mod', 'Caps': 'mod', 'Enter': 'mod', 'Shift': 'mod', 'Tab': 'mod', 'Ctrl': 'mod', 'Super': 'mod', 'Alt': 'mod', 'Fn': 'mod' };
+const kbWidths = {
+  'Esc': 'fn', 'F1': 'fn', 'F2': 'fn', 'F3': 'fn', 'F4': 'fn',
+  'F5': 'fn', 'F6': 'fn', 'F7': 'fn', 'F8': 'fn', 'F9': 'fn',
+  'F10': 'fn', 'F11': 'fn', 'F12': 'fn',
+  'Backspace': 'mod', 'Tab': 'tab', 'Caps': 'caps', 'Enter': 'enter',
+  'Shift': 'shift', 'Ctrl': 'ctrl', 'Win': 'ctrl', 'Alt': 'ctrl', 'Fn': 'ctrl',
+  'Space': 'space',
+};
 
-let keyElements = {};
+const kbKeyMap = {
+  'control': 'ctrl', 'alt': 'alt', 'shift': 'shift', 'meta': 'win',
+  'enter': 'enter', 'tab': 'tab', 'escape': 'esc', 'backspace': 'backspace',
+  ' ': 'space', 'capslock': 'caps',
+};
+
+let kbElements = {};
 
 function initKeyboard() {
-  const container = document.getElementById('keyboard');
-  keyLayout.forEach((row, ri) => {
+  const container = $('#keyboard');
+  container.innerHTML = '';
+
+  kbLayout.forEach(row => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'kb-row';
+
     row.forEach(k => {
       const el = document.createElement('div');
       el.className = 'key';
-      el.textContent = k;
-      if (wideKeys[k]) el.classList.add(wideKeys[k]);
-      if (modKeys.includes(k)) el.classList.add('mod');
-      if (k.length > 2 && k !== 'Backspace') el.classList.add('mod');
-      el.id = 'key-' + k.toLowerCase().replace(/[^a-z0-9]/g, '');
-      container.appendChild(el);
-      keyElements[k.toLowerCase()] = el;
+      el.textContent = k.toUpperCase();
+
+      if (kbWidths[k]) {
+        el.classList.add(kbWidths[k]);
+      }
+
+      const id = 'kb-' + k.toLowerCase().replace(/[^a-z0-9]/g, '');
+      el.id = id;
+      rowEl.appendChild(el);
+
+      kbElements[k.toLowerCase()] = el;
     });
+
+    container.appendChild(rowEl);
   });
 
   document.addEventListener('keydown', e => {
     const key = e.key.toLowerCase();
-    if (keyElements[key]) {
-      keyElements[key].classList.add('active');
-    }
-    // Also check common names
-    const map = {
-      'control': 'ctrl', 'alt': 'alt', 'shift': 'shift', 'meta': 'super',
-      'enter': 'enter', 'tab': 'tab', 'escape': 'esc', 'backspace': 'backspace',
-      ' ': 'space', 'capslock': 'caps',
-    };
-    const mapped = map[key] || key;
-    if (keyElements[mapped]) {
-      keyElements[mapped].classList.add('active');
-    }
+    activateKBKey(key);
+
+    const mapped = kbKeyMap[key] || key;
+    if (mapped !== key) activateKBKey(mapped);
   });
 
   document.addEventListener('keyup', e => {
     const key = e.key.toLowerCase();
-    if (keyElements[key]) {
-      keyElements[key].classList.remove('active');
-    }
-    const map = {
-      'control': 'ctrl', 'alt': 'alt', 'shift': 'shift', 'meta': 'super',
-      'enter': 'enter', 'tab': 'tab', 'escape': 'esc', 'backspace': 'backspace',
-      ' ': 'space', 'capslock': 'caps',
-    };
-    const mapped = map[key] || key;
-    if (keyElements[mapped]) {
-      keyElements[mapped].classList.remove('active');
-    }
+    deactivateKBKey(key);
+
+    const mapped = kbKeyMap[key] || key;
+    if (mapped !== key) deactivateKBKey(mapped);
   });
+}
+
+function activateKBKey(key) {
+  const el = kbElements[key];
+  if (el) {
+    el.classList.add('active');
+    setTimeout(() => el.classList.remove('active'), 150);
+  }
+}
+
+function deactivateKBKey(key) {
+  const el = kbElements[key];
+  if (el) el.classList.remove('active');
 }

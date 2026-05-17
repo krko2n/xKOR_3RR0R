@@ -1,6 +1,82 @@
-#keyboard { display:flex; flex-wrap:wrap; align-content:flex-start; padding:4px; gap:2px; user-select:none; }
-.key { display:flex; align-items:center; justify-content:center; width:36px; height:32px; font-size:10px; color:#0a660a; border:1px solid #0a3300; background:#000; cursor:default; }
-.key.active { color:#00ff00; border-color:#00ff00; background:#0a3300; }
-.key.mod { width:48px; }
-.key.space { width:160px; }
-.key:hover { border-color:#0a660a; }
+/* ============================================
+   XKOR_3RR0R VIRTUAL KEYBOARD
+   Flat border-only, sharp 90° corners, cyan glow flicker
+   ============================================ */
+
+#keyboard-area {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 6px;
+  background: var(--bg-panel);
+}
+
+#keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  user-select: none;
+}
+
+.kb-row {
+  display: flex;
+  gap: 2px;
+}
+
+.key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  min-width: 28px;
+  padding: 0 4px;
+  font-size: 9px;
+  font-family: var(--font-stack);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: default;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 0;
+  transition: none;
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+}
+
+.key:hover {
+  border-color: var(--cyan-dim);
+  color: var(--text-dim);
+}
+
+/* Active keystroke — cyan glow + flicker */
+.key.active {
+  color: var(--cyan-bright);
+  border-color: var(--cyan);
+  background: rgba(0, 210, 255, 0.08);
+  box-shadow: var(--glow-cyan);
+  animation: key-flicker 0.15s ease-out;
+}
+
+@keyframes key-flicker {
+  0% { opacity: 1; box-shadow: 0 0 8px rgba(0, 210, 255, 0.8); }
+  30% { opacity: 0.6; box-shadow: 0 0 2px rgba(0, 210, 255, 0.3); }
+  60% { opacity: 1; box-shadow: 0 0 6px rgba(0, 210, 255, 0.6); }
+  100% { opacity: 1; box-shadow: var(--glow-cyan); }
+}
+
+/* Key widths */
+.key.fn { min-width: 42px; }
+.key.mod { min-width: 52px; }
+.key.tab { min-width: 52px; }
+.key.caps { min-width: 62px; }
+.key.enter { min-width: 72px; }
+.key.shift { min-width: 82px; }
+.key.ctrl { min-width: 48px; }
+.key.space { min-width: 220px; }
+
+/* Modifier keys dimmer by default */
+.key.mod, .key.fn {
+  color: var(--text-muted);
+  font-size: 8px;
+}
