@@ -74,6 +74,13 @@ function initWeb() {
       processWebCommand(cmd);
     }
   });
+
+  // Escape to close web overlay
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && $('#web-overlay').classList.contains('open')) {
+      switchMode('term1');
+    }
+  });
 }
 
 async function processWebCommand(cmd) {
