@@ -120,6 +120,7 @@ impl TerminalManager {
                             }
                         }
                     }
+                    }
                     unsafe { nix::libc::close(master_fd); }
                 });
 
