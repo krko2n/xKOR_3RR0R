@@ -29,7 +29,7 @@ fn collect_stats() -> StatsPayload {
             .with_cpu(CpuRefreshKind::everything())
             .with_memory(MemoryRefreshKind::everything()),
     );
-    system.refresh_cpu();
+    system.refresh_cpu_all();
     system.refresh_memory();
 
     let cpu_total = system.global_cpu_usage();
