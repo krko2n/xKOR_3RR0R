@@ -66,9 +66,9 @@ impl TerminalManager {
                 }
                 drop(slave);
 
-                if let Ok(mut ios) = termios::tcgetattr(0) {
+                if let Ok(mut ios) = termios::tcgetattr(std::os::unix::io::BorrowedFd::borrow_raw(0)) {
                     ios.local_flags.remove(termios::LocalFlags::ECHO);
-                    let _ = termios::tcsetattr(0, termios::SetAttribute::TCSANOW, &ios);
+                    let _ = termios::tcsetattr(std::os::unix::io::BorrowedFd::borrow_raw(0), termios::SetArg::TCSANOW, &ios);
                 }
 
                 let _ = Self::set_size_raw(0, cols, rows);
