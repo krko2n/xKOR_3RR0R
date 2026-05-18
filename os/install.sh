@@ -143,6 +143,22 @@ npm cache clean --force 2>/dev/null || true
 npm install
 ok "npm install complete"
 
+# Step 7b: Ensure icons are RGBA format (Tauri requirement)
+step "Converting icons to RGBA format..."
+if command -v convert &>/dev/null; then
+    for icon in "$REPO_ROOT/src-tauri/icons"/*.png; do
+        [ -f "$icon" ] && convert "$icon" -alpha on "$icon.tmp" && mv "$icon.tmp" "$icon"
+    done
+    ok "Icons converted to RGBA"
+else
+    warn "ImageMagick not found — installing..."
+    pacman -S --noconfirm --needed imagemagick
+    for icon in "$REPO_ROOT/src-tauri/icons"/*.png; do
+        [ -f "$icon" ] && convert "$icon" -alpha on "$icon.tmp" && mv "$icon.tmp" "$icon"
+    done
+    ok "Icons converted to RGBA"
+fi
+
 # Step 8: Build Tauri Rust backend
 step "Building xKOR_3RR0R Rust backend (Tauri)..."
 cd "$XKOR_INSTALL_DIR"

@@ -58,6 +58,18 @@ fi
 
 step "Building Rust backend..."
 cd "$REPO_ROOT/src-tauri"
+
+# Ensure icons are in RGBA format (Tauri requirement)
+if command -v convert &>/dev/null; then
+    info "Converting icons to RGBA format..."
+    for icon in "$REPO_ROOT/src-tauri/icons"/*.png; do
+        [ -f "$icon" ] && convert "$icon" -alpha on "$icon.tmp" && mv "$icon.tmp" "$icon"
+    done
+    ok "Icons converted to RGBA"
+else
+    warn "ImageMagick not found — icons may fail if not RGBA"
+fi
+
 info "Cleaning cargo build cache..."
 cargo clean 2>/dev/null || true
 info "Compiling release binary (this may take a few minutes)..."

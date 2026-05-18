@@ -33,6 +33,17 @@ if [ ! -d "node_modules" ]; then
     npm install
 fi
 
+# Ensure icons are RGBA format (Tauri requirement)
+echo "[INFO] Converting icons to RGBA..."
+if command -v convert &>/dev/null; then
+    for icon in "$REPO_ROOT/src-tauri/icons"/*.png; do
+        [ -f "$icon" ] && convert "$icon" -alpha on "$icon.tmp" && mv "$icon.tmp" "$icon"
+    done
+    echo "[OK]   Icons converted to RGBA"
+else
+    echo "[WARN] ImageMagick not found — icons may fail if not RGBA"
+fi
+
 # Build in release mode
 echo "[INFO] Building xKOR_3RR0R (release)..."
 cd src-tauri
