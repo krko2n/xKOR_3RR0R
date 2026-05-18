@@ -3,7 +3,7 @@ use std::ffi::CString;
 use std::fs::OpenOptions;
 use std::os::unix::io::{AsRawFd, IntoRawFd, RawFd};
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 
@@ -19,10 +19,8 @@ type Result<T> = std::result::Result<T, String>;
 
 pub struct Session {
     pub master_fd: RawFd,
-    pub running: AtomicBool,
+    pub running: Arc<AtomicBool>,
 }
-
-unsafe impl Send for Session {}
 
 pub struct TerminalManager {
     sessions: Mutex<HashMap<String, Session>>,
@@ -82,16 +80,16 @@ impl TerminalManager {
             }
             ForkResult::Parent { child: _child_pid } => {
                 let master_fd = master.into_raw_fd();
-                let running = AtomicBool::new(true);
-                let running_ptr = &running as *const AtomicBool;
+                let running = Arc::new(AtomicBool::new(true));
 
                 let handle_clone = handle.clone();
                 let id_clone = id.to_string();
+                let running_clone = running.clone();
 
                 thread::spawn(move || {
                     let mut buf = vec![0u8; READ_BUF_SIZE];
                     loop {
-                        if unsafe { &*running_ptr }.load(Ordering::SeqCst) == false {
+                        if running_clone.load(Ordering::SeqCst) == false {
                             break;
                         }
                         let n = unsafe {
