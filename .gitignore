@@ -8,6 +8,3 @@ build/
 config/ai-endpoint.json
 .xkor_initialized
 src-tauri/target/
-src-tauri/icons/*.png
-src-tauri/icons/*.ico
-src-tauri/icons/*.icns
