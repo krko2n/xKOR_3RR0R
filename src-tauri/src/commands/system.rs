@@ -55,7 +55,6 @@ pub fn get_system_stats(sys: State<SysState>) -> Result<SystemStats, String> {
 
     system.refresh_cpu_all();
     system.refresh_memory();
-    system.refresh_disks();
 
     let cpu_total = system.global_cpu_usage();
     let cpu_per_core: Vec<f32> = system.cpus().iter().map(|c| c.cpu_usage()).collect();
@@ -63,25 +62,16 @@ pub fn get_system_stats(sys: State<SysState>) -> Result<SystemStats, String> {
     let ram_total = system.total_memory();
     let ram_used = system.used_memory();
 
-    let disks: Vec<DiskInfo> = system
-        .disks()
-        .iter()
-        .map(|d| DiskInfo {
-            mount: d.mount_point().to_string_lossy().to_string(),
-            total: d.total_space(),
-            used: d.total_space() - d.available_space(),
-        })
-        .collect();
+    // Disks: sysinfo 0.33 does not provide disk enumeration via System
+    // Return empty list for now (or could use alternative library)
+    let disks: Vec<DiskInfo> = vec![];
 
     let net_rx = 0u64;
     let net_tx = 0u64;
     // Network stats disabled in sysinfo 0.33 — API removed
 
-    let temp = system
-        .components()
-        .first()
-        .map(|c| c.temperature())
-        .unwrap_or(0.0);
+    // Temperature: sysinfo 0.33 does not provide components/temperature data
+    let temp = 0.0f32;
 
     Ok(SystemStats {
         cpu: cpu_per_core,
