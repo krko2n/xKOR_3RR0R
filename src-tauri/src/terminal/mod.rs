@@ -37,7 +37,7 @@ impl TerminalManager {
         let master = posix_openpt(OFlag::O_RDWR | OFlag::O_NONBLOCK).map_err(|e| e.to_string())?;
         grantpt(&master).map_err(|e| e.to_string())?;
         unlockpt(&master).map_err(|e| e.to_string())?;
-        let slave_name = ptsname(&master).map_err(|e| e.to_string())?;
+        let slave_name = unsafe { ptsname(&master) }.map_err(|e| e.to_string())?;
 
         let master_fd = master.as_raw_fd();
 
@@ -64,9 +64,9 @@ impl TerminalManager {
                 }
                 drop(slave);
 
-                if let Ok(mut ios) = termios::tcgetattr(std::os::unix::io::BorrowedFd::borrow_raw(0)) {
+                if let Ok(mut ios) = termios::tcgetattr(unsafe { std::os::unix::io::BorrowedFd::borrow_raw(0) }) {
                     ios.local_flags.remove(termios::LocalFlags::ECHO);
-                    let _ = termios::tcsetattr(std::os::unix::io::BorrowedFd::borrow_raw(0), termios::SetArg::TCSANOW, &ios);
+                    let _ = termios::tcsetattr(unsafe { std::os::unix::io::BorrowedFd::borrow_raw(0) }, termios::SetArg::TCSANOW, &ios);
                 }
 
                 let _ = Self::set_size_raw(0, cols, rows);
