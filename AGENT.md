@@ -446,25 +446,20 @@ devDependencies:
   3. sed updatuje README — vymeni cast [^)]* za URL s &v={run_id}
   4. commituje LINES.md + badgy + README
 
-### OPRAVENO (agent v10 — sysinfo 0.33 API, 15 audit errors, Tauri finalizace, upgrade automation)
-- sysinfo 0.33: odstranen network stats (API se zmenilo) -- vraci 0 pro net_rx/net_tx
-- src/lib.rs: odstranen refresh_networks() call + network iteration
-- src-tauri/src/commands/system.rs: odstranena network iteration (stejny problem)
-- src-tauri/src/terminal/mod.rs: Errno::EAGAIN type fix (bylo `as i32`, musi byt `Errno` enum)
-- 7x shell scripts: shebang `#!/bin/bash` MUSI byt na radku 1 (ne 2), presunuty `# @summary` na radku 2
-  - os/install.sh, os/lib/verify.sh, os/lib/manifest.sh, os/lib/cleanup.sh, os/uninstall.sh, os/repair.sh, os/plymount/plymount-theme.sh
-- 2x dodatecne shell scripts: shebang fix
-  - os/clean-arch.sh, os/lib/xkor-lib.sh
-- web_fetch command: novy Rust command v src-tauri/src/commands/ai.rs -- stahuje HTML stranky
-- web.css: novy soubor -- styly pro #web-overlay panel (F7 browser, prikazy: open <url>, back, reload, clear)
-- globe.js: worldmap data embed primo v JS (neni HTTP request, neni cesova zavislost)
-- Icons: vytvoreny placeholder PNG/ICO/ICNS soubory pro Tauri bundle
-- os/plymount/plymount-theme.sh: cesta z relativni na absolutni (`$(dirname "$0")/xkor`)
-- os/login/start-login.sh: $HOME fix -- pouziva `getent passwd $SUDO_USER` (systemd context)
-- src/css/keyboard.css: odstranen mrtvý `.key.func` selektor
-- os/upgrade.sh: novy step -- automaticky cargo clean + cargo build --release po git pull
-  - neni jiz potreba rucni kompilace na Arch -- upgrade.sh dela vsechno
-- Duplicate web.js removed -- initWeb() uz existuje v ai.js
+### OPRAVENO (agent v11 — icon cleanup, README/AGENT.md sync, autonomní agent workflow)
+- upgrade.sh: pridano automatické čištění korumpovaných PNG ikon (<500 bytů) pred build-em
+  - find "$REPO_ROOT/src-tauri/icons" -name "*.png" -size -500c -delete
+  - Důvod: staré PNG soubory měly CRC error, ImageMagick je nemohl konvertovat
+  - build.rs nyní vygeneruje čisté ikony automaticky bez convert chyb
+- src-tauri/icons/128x128.png, 128x128@2x.png, 32x32.png, icon.png: smazány (budou auto-regenerovány)
+- README.md: aktualizován UPGRADE section — zmíněn auto-cleanup ikon, smazán "git pull" step
+- AGENT.md: kompletně přepsaný autonomní agent workflow:
+  - Agent (LLM) si SÁM commituje a pushuje bez dotazů na uživatele
+  - Git workflow: identify -> fix -> commit -> push -> iterate
+  - Nikdy temp .ps1 skripty, nikdy force-push, nikdy amend/interactive rebase
+  - Architektura: Tauri v2 (ne Electron), nix PTY (ne node-pty)
+  - Co funguje tabulka: aktualizována na Tauri/sysinfo 0.33 stav
+  - Barevná paleta, commit konvence, cesty -- všechno na jednom místě
 
 ## Pravidla
 
@@ -478,18 +473,41 @@ config/ai-endpoint.json: AI backend URL + model.
 os/login/ je samostatna plain Node.js app. Zadne Electron API.
 login.js (TTY) vola startx sam. start-login.sh POUZE exec node login.js.
 xkor-ui.service NENI instalovana -- login.js vola startx primo.
-Node.js + Electron + Bash only. Zadny Python v runtime. Zadny Rust/uv.
+Node.js + Tauri (Rust) + Bash only. Zadny Python v runtime. Zadny Electron.
 Arch Linux only pro OS Mode. setup.sh muze bezet na jakem Linux.
 
-### PowerShell skripty (pro Windows-side patching)
-Bash obsah -> VZDY @'...'@ here-string. Nikdy string concatenation.
-  Duvod: &&, ||, &> uvnitr PS stringu crashne parser.
-LF line endings:
-  $lf = $content -replace "`r`n", "`n"
-  [System.IO.File]::WriteAllText($path, $lf, (New-Object System.Text.UTF8Encoding $false))
-Write-Host: ASCII only -- zadne ceske znaky, emoji, box-drawing chars.
-Staged deletions: git rm --cached $file (ne git add --ignore-unmatch -- neexistuje).
-Commit konvence: feat:, fix:, chore:, refactor:, docs:, style:
+### Git workflow (AUTONOMNI AGENT WORKFLOW)
+Agent (LLM) si SAMOSTATNE:
+1. **Prochází codebase** -- čte soubory, rozumí architektuře
+2. **Identifikuje problémy/TODO** -- buggy, chybějící feature, refactoring
+3. **Implementuje řešení** -- edituje soubory, vytváří kód
+4. **Commituje změny** -- git add, git commit s konvencí `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, `style:`
+5. **Pushuje do origin/main** -- git push origin main (bez dotazů)
+6. **Iteruje** -- pokud build/test selhaly, opravuje a commituje znovu
+
+Agent NIKDY:
+- Nevytváří temp .ps1 skripty (vygenerovné jen pro výstup)
+- Nečeká na uživatele pro potvrzení commitů/pushů
+- Nepoužívá force-push, amend, interactive rebase
+- Neslučuje chybné commity -- opravuje v novém commitu
+
+Každý commit musí mít smysluplnou zprávu a odpovídat stylu repo.
+
+### Autonomní agent pravidla
+1. **Full git access** -- agent může commitovat, pushovat, mergovat (bez force)
+2. **Soběstačnost** -- agent neposílá temp soubory, nečeká na interakci
+3. **Transparentnost** -- všechny akce jsou vidět v git historii
+4. **Build verification** -- pokud je to relevantní, agent ověří že build/test projde
+5. **Dokumentace** -- agent aktualizuje README.md, AGENT.md, relevantní komentáře
+6. **Rollback schopnost** -- každý commit je atomický a lze jej revertovat
+
+### Commit konvence
+- `feat:` -- nová feature
+- `fix:` -- oprava bugu
+- `chore:` -- údržba, updates, cleanup (bez funkční změny)
+- `refactor:` -- přepsání kódu bez změny chování
+- `docs:` -- dokumentace
+- `style:` -- formátování, bílé znaky, přejmenování (bez logiky)
 
 ---
 
@@ -510,21 +528,23 @@ Font:           Share Tech Mono (Google Fonts)
 
 | Feature             | Stav                                          |
 |---------------------|-----------------------------------------------|
-| Tauri okno          | Funguje (migrováno z Electronu)               |
-| App Mode login      | Funguje (po agent v6 oprave)                  |
-| Boot animace        | Funguje                                       |
-| System grafy        | Funguje (CPU, RAM) -- NET vypnuta (sysinfo 0.33 removed API)|
-| Terminal (text)     | Funguje -- plain text, zadne ANSI barvy       |
-| Terminal (xterm.js) | INTEGROVANO                                    |
-| AI panel            | Funguje pokud bezi Ollama s llama3            |
-| File manager        | Funguje                                       |
-| Keyboard visualizer | Funguje (opraven I bug)                       |
-| Globe               | Funguje (embedded data, bez HTTP)             |
-| Web panel (F7)      | NOVY -- Rust web_fetch command + web.css     |
-| OS Mode boot        | Funguje (pamtester + spravne cesty)           |
-| OS Mode login       | Funguje (pamtester PAM)                       |
-| Plymouth tema       | Nainstalovano, zalezi na grub konfiguraci     |
-| PTY (Rust)          | Reseno v src-tauri/src/terminal/mod.rs (nix crate fork+PTY) |
+| Tauri v2 okno       | Funguje (Rust backend + vanilla JS frontend)  |
+| App Mode launch     | Funguje (`bash run.sh`)                       |
+| OS Mode installation| Funguje (`sudo bash os/install.sh`)           |
+| OS Mode upgrade     | Funguje (`bash os/upgrade.sh` bez rebootu)    |
+| OS Mode login       | Funguje (pamtester PAM na TTY1)               |
+| Boot animace        | Funguje (Plymouth glitch theme)               |
+| System grafy        | Funguje (CPU, RAM via sysinfo 0.33)          |
+| Terminal (PTY)      | Funguje (Rust nix crate fork+execvp+pty)     |
+| Terminal (xterm.js) | Funguje (ANSI barvy, kurzor, selektion)      |
+| AI panel (F2)       | Funguje (Ollama/OpenAI reqwest proxy)        |
+| File manager        | Funguje (Rust fs commands, cross-platform)   |
+| Keyboard visualizer | Funguje (on-screen QWERTY s event tracking)   |
+| Globe (3D)          | Funguje (65 miast, embedded data, glitch FX) |
+| Network Globe       | Funguje (animated nodes, corrupted feed)     |
+| Web panel (F7)      | Funguje (Rust web_fetch + iframe embed)      |
+| Icon generation     | Funguje (build.rs auto-generuje PNG RGBA)    |
+| PTY (Rust)          | Funguje (src-tauri/src/terminal/mod.rs)      |
 
 
 

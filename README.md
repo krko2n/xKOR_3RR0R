@@ -121,19 +121,17 @@ sudo bash unistall.sh
 
 ```bash
 cd xKOR_3RR0R
-git pull
-npm install
 bash run.sh
 ```
 
 ### OS Mode
 
 ```bash
-cd xKOR_3RR0R/os
-sudo bash upgrade.sh
+cd xKOR_3RR0R
+bash os/upgrade.sh
 ```
 
-`upgrade.sh` pulls the latest version from GitHub, discards local changes, then runs `install.sh` which re-copies everything to `/opt/xkor_3rr0r`, reinstalls dependencies, and starts the login screen on TTY1 automatically.
+`upgrade.sh` pulls the latest version from GitHub, auto-cleans corrupted PNG icon files, compiles the Rust backend via `cargo build --release`, and runs the installer which re-copies everything to `/opt/xkor_3rr0r`, reinstalls dependencies, and starts the login screen on TTY1 automatically. **No reboot needed.**
 
 ---
 
