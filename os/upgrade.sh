@@ -59,6 +59,11 @@ fi
 step "Building Rust backend..."
 cd "$REPO_ROOT/src-tauri"
 
+# Clean corrupted PNG icons to force rebuild via build.rs
+info "Cleaning corrupted PNG icons..."
+find "$REPO_ROOT/src-tauri/icons" -name "*.png" -size -500c -delete 2>/dev/null || true
+ok "Cleaned old icons"
+
 # Ensure icons are in RGBA format (Tauri requirement)
 if command -v convert &>/dev/null; then
     info "Converting icons to RGBA format..."
@@ -67,7 +72,7 @@ if command -v convert &>/dev/null; then
     done
     ok "Icons converted to RGBA"
 else
-    warn "ImageMagick not found — icons may fail if not RGBA"
+    info "ImageMagick not found — build.rs will auto-generate icons"
 fi
 
 info "Cleaning cargo build cache..."
