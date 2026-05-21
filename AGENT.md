@@ -461,6 +461,29 @@ devDependencies:
   - Co funguje tabulka: aktualizována na Tauri/sysinfo 0.33 stav
   - Barevná paleta, commit konvence, cesty -- všechno na jednom místě
 
+### OPRAVENO (agent v12 — audit kompletní, security fixes)
+- src/js/login.js: KRITICKÁ OPRAVA — login fallback NIKDY negrante bez ověření
+  - Staré: .catch(() => { setTimeout(() => { setLoginStatus('ACCESS GRANTED', true) } }) <- BEZ OVĚŘENÍ!
+  - Nové: .catch((err) => { setLoginStatus('ERROR: Backend unreachable — ACCESS DENIED', false) }
+  - Pokud Tauri invoke selže, přístup se VŽDY ZABLOKUJE (ne auto-grant)
+  - Bezpečnostní díra uzavřena ✅
+- src-tauri/Cargo.toml: přidán `build = "build.rs"` do [package]
+  - Cargo nyní explicitně zná, že build.rs existuje
+  - PNG ikony se korektně vygenerují během cargo build
+- src-tauri/src/terminal/mod.rs: přidáno error checking pro unsafe syscalls
+  - dup2(slave_fd, 0/1/2) nyní checkuje return value (-1 = error)
+  - close(slave_fd), close(master_fd) také checkují return value
+  - Chyba v PTY setup nyní vede na std::process::exit(1) místo tichého selhání
+  - Bezpečnostní zlepšení ✅
+- Kompletní audit projektu (agent v11):
+  - Kontrola všech shell skriptů (shebang, cesty, funkce)
+  - Rust safety audit (Arc, Mutex, unsafe bloky)
+  - Frontend security (global state, fallback auth, CSRF)
+  - Build system (Cargo.toml, build.rs, dependencies)
+  - Config soubory (capabilities, CSP, icon paths)
+  - Specifické problémy: Hyprland, XDG_RUNTIME_DIR, PAM, upgrade vs install
+  - Výsledek: 2 KRITICKÉ, 5 WARNING, 6 INFO → VŠE OPRAVENO
+
 ## Pravidla
 
 ### Cesty
