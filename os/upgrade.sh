@@ -56,13 +56,13 @@ else
     ok "Updated: $CURRENT_COMMIT -> $NEW_COMMIT"
 fi
 
-step "Building Rust backend..."
-cd "$REPO_ROOT/src-tauri"
-
-# Clean corrupted PNG icons to force rebuild via build.rs
+# Clean corrupted PNG icons AFTER pull (git pull might restore them from older commits)
 info "Cleaning corrupted PNG icons..."
 find "$REPO_ROOT/src-tauri/icons" -name "*.png" -size -500c -delete 2>/dev/null || true
 ok "Cleaned old icons"
+
+step "Building Rust backend..."
+cd "$REPO_ROOT/src-tauri"
 
 # Ensure icons are in RGBA format (Tauri requirement)
 if command -v convert &>/dev/null; then
