@@ -532,6 +532,40 @@ Každý commit musí mít smysluplnou zprávu a odpovídat stylu repo.
 - `docs:` -- dokumentace
 - `style:` -- formátování, bílé znaky, přejmenování (bez logiky)
 
+### Verzování (Semantic Versioning)
+Projekt se automaticky zvedá s KAŽDOU zmĕnou:
+- **PATCH** (z.z.P) -- bug fix, malá oprava: `fix:`, `style:`, `chore:` (bez API změny)
+- **MINOR** (z.M.z) -- nová feature, nové API: `feat:`, `refactor:` (backward compatible)
+- **MAJOR** (M.z.z) -- breaking change, velký refactor: manuálně při `feat: BREAKING CHANGE`
+
+**Aktuální verze:** `2.0.0-alpha.2`
+
+**Soubory s verzí:**
+- `src-tauri/Cargo.toml` -- version = "X.Y.Z"
+- `package.json` -- "version": "X.Y.Z"
+- `src-tauri/tauri.conf.json` -- "version": "X.Y.Z"
+- `os/install.sh` -- Version: X.Y.Z (v header)
+
+**Versioning flow:**
+1. Agent provede změnu → git commit s `feat:` / `fix:` / ...
+2. Agent spustí build pro verifikaci
+3. Pokud OK → agent zvýší PATCH/MINOR v VŠECH 4 souborech
+4. Nový commit: `chore(release): bump version X.Y.Z → X.Y.(Z+1)`
+5. Tag: `git tag vX.Y.Z`
+6. Push: `git push origin main --tags`
+
+**Alpha/Beta kanál:**
+- Dev = `X.Y.Z-alpha.N` (vyvíjení, testování, security fixes)
+- Beta = `X.Y.Z-beta.N` (feature freeze, bug fixes jen)
+- Release = `X.Y.Z` (produkce, no alpha/beta)
+
+**Alpha cycle:**
+- `2.0.0-alpha.1` -- inicializace Tauri v2 migrací
+- `2.0.0-alpha.2` -- audit, security fixes, build system finalizace
+- `2.0.0-alpha.3+` -- nové features, optimizace, community feedback
+- `2.0.0-beta.1` -- feature freeze
+- `2.0.0` -- release candidate ready
+
 ---
 
 ## Barevna paleta
