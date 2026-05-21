@@ -34,26 +34,22 @@ function submitLogin() {
           $('#login-password').focus();
         }
       })
-      .catch(() => {
-        // Fallback: check via backend CLI (pamtester equivalent)
-        setLoginStatus('CHECKING CREDENTIALS...', true);
-        setTimeout(() => {
-          setLoginStatus('ACCESS GRANTED', true);
-          setTimeout(() => {
-            $('#login-screen').style.display = 'none';
-            startBoot();
-          }, 800);
-        }, 1200);
+      .catch((err) => {
+        // Fallback: Tauri invoke failed - deny access and show error
+        setLoginStatus('ERROR: Backend unreachable — ACCESS DENIED', false);
+        console.error('Tauri invoke failed:', err);
+        $('#login-password').value = '';
+        $('#login-password').disabled = false;
+        $('#login-password').focus();
+        // Log error but do NOT grant access
       });
   } else {
-    // Dev fallback
-    setTimeout(() => {
-      setLoginStatus('ACCESS GRANTED', true);
-      setTimeout(() => {
-        $('#login-screen').style.display = 'none';
-        startBoot();
-      }, 800);
-    }, 1500);
+    // Dev fallback - same as production
+    setLoginStatus('ERROR: No Tauri environment — ACCESS DENIED', false);
+    console.warn('Tauri __TAURI__ not available');
+    $('#login-password').value = '';
+    $('#login-password').disabled = false;
+    $('#login-password').focus();
   }
 }
 

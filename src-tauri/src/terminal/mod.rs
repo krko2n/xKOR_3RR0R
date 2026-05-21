@@ -52,15 +52,28 @@ impl TerminalManager {
                     .map_err(|e| e.to_string())?;
                 let slave_fd = slave.as_raw_fd();
 
-                // dup2 in child — needs raw fds
+                // dup2 in child — needs raw fds with error checking
                 unsafe {
-                    nix::libc::dup2(slave_fd, 0);
-                    nix::libc::dup2(slave_fd, 1);
-                    nix::libc::dup2(slave_fd, 2);
-                    if slave_fd > 2 {
-                        nix::libc::close(slave_fd);
+                    if nix::libc::dup2(slave_fd, 0) == -1 {
+                        eprintln!("dup2 failed for stdin");
+                        std::process::exit(1);
                     }
-                    nix::libc::close(master_fd);
+                    if nix::libc::dup2(slave_fd, 1) == -1 {
+                        eprintln!("dup2 failed for stdout");
+                        std::process::exit(1);
+                    }
+                    if nix::libc::dup2(slave_fd, 2) == -1 {
+                        eprintln!("dup2 failed for stderr");
+                        std::process::exit(1);
+                    }
+                    if slave_fd > 2 {
+                        if nix::libc::close(slave_fd) == -1 {
+                            eprintln!("close failed for slave_fd");
+                        }
+                    }
+                    if nix::libc::close(master_fd) == -1 {
+                        eprintln!("close failed for master_fd");
+                    }
                 }
                 drop(slave);
 
