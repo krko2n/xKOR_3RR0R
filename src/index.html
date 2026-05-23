@@ -32,17 +32,28 @@
  ██╔██╗ ██╔═██╗ ██║   ██║██╔══██╗
 ██╔╝ ██╗██║  ██╗╚██████╔╝██║  ██║
 ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
+
+█████╗ ██████╗ ██████╗  ██████╗ ██████╗
+╚════██╗██╔══██╗██╔══██╗██╔═████╗██╔══██╗
+ █████╔╝██████╔╝██████╔╝██║██╔██║██████╔╝
+ ╚═══██╗██╔══██╗██╔══██╗████╔╝██║██╔══██╗
+██████╔╝██║  ██║██║  ██║╚██████╔╝██║  ██║
+╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝
     </pre>
     <div id="login-form">
       <div class="login-field">
-        <span class="login-label">USER:</span>
-        <input type="text" id="login-username" autocomplete="off" spellcheck="false">
+        <span class="login-label">Username</span>
+        <input type="text" id="login-username" autocomplete="off" spellcheck="false" placeholder="enter username...">
       </div>
       <div class="login-field">
-        <span class="login-label">PASSWORD:</span>
-        <input type="password" id="login-password" autocomplete="off" spellcheck="false">
+        <span class="login-label">Password</span>
+        <input type="password" id="login-password" autocomplete="off" spellcheck="false" placeholder="enter password...">
       </div>
       <div id="login-status"></div>
+      <div id="login-hint">
+        Press <kbd>TAB</kbd> to switch fields · Press <kbd>ENTER</kbd> to login<br>
+        Default: admin / admin
+      </div>
     </div>
   </div>
 </div>

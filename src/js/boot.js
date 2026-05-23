@@ -88,5 +88,14 @@ function finishBoot() {
   console.log('[xKOR] Boot complete, switching to app screen');
   switchScreen('app');
   console.log('[xKOR] Calling initApp()');
-  initApp();
+  if (typeof window.initApp === 'function') {
+    window.initApp();
+  } else {
+    console.error('[xKOR] FATAL: initApp() is not defined!');
+    alert('App initialization function not loaded. Check console.');
+  }
 }
+
+// Expose functions globally
+window.startBoot = startBoot;
+window.finishBoot = finishBoot;

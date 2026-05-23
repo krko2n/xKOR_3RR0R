@@ -17,15 +17,26 @@ function submitLogin() {
   setLoginStatus('AUTHENTICATING...', true);
   $('#login-password').disabled = true;
 
+  console.log('[xKOR] Login attempt:', user);
+
   // Tauri invoke: call Rust authenticate (we'll simulate via invoke or direct check)
   if (xkor.invoke) {
     xkor.invoke('authenticate', { username: user, password: pass })
       .then(ok => {
+        console.log('[xKOR] Authentication result:', ok);
         if (ok) {
           setLoginStatus('ACCESS GRANTED', true);
           setTimeout(() => {
+            console.log('[xKOR] Hiding login screen');
             $('#login-screen').style.display = 'none';
-            startBoot();
+            console.log('[xKOR] Checking if startBoot exists:', typeof window.startBoot);
+            if (typeof window.startBoot === 'function') {
+              console.log('[xKOR] Calling startBoot()');
+              window.startBoot();
+            } else {
+              console.error('[xKOR] FATAL: startBoot() is not defined!');
+              alert('Boot function not loaded. Check console.');
+            }
           }, 800);
         } else {
           setLoginStatus('ACCESS DENIED', false);
