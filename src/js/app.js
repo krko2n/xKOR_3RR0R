@@ -63,32 +63,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Called by boot.js finishBoot()
 function initApp() {
-  initGlitch();
-  initTerminal();
-  initTabs();
-  initAI();
-  initWeb();
-  initGlobe();
-  initGraphs();
-  initKeyboard();
-  initFileManager();
-  initNetwork();
-  initProcessMonitor();
+  console.log('[xKOR] Initializing app...');
 
-  // Listen for system stats from Rust backend
-  if (xkor.listen) {
-    xkor.listen('system-stats', event => {
-      const stats = event.payload;
-      xkor.stats = stats;
-      updateGraphs(stats);
-      updateNetwork(stats);
-      updateClock();
-    });
+  try {
+    console.log('[xKOR] Init glitch');
+    initGlitch();
+    console.log('[xKOR] Init terminal');
+    initTerminal();
+    console.log('[xKOR] Init tabs');
+    initTabs();
+    console.log('[xKOR] Init AI');
+    initAI();
+    console.log('[xKOR] Init web');
+    initWeb();
+    console.log('[xKOR] Init globe');
+    initGlobe();
+    console.log('[xKOR] Init graphs');
+    initGraphs();
+    console.log('[xKOR] Init keyboard');
+    initKeyboard();
+    console.log('[xKOR] Init file manager');
+    initFileManager();
+    console.log('[xKOR] Init network');
+    initNetwork();
+    console.log('[xKOR] Init process monitor');
+    initProcessMonitor();
+
+    // Listen for system stats from Rust backend
+    if (xkor.listen) {
+      xkor.listen('system-stats', event => {
+        const stats = event.payload;
+        xkor.stats = stats;
+        updateGraphs(stats);
+        updateNetwork(stats);
+        updateClock();
+      });
+    }
+
+    // Local clock update
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    console.log('[xKOR] App initialized successfully');
+  } catch (err) {
+    console.error('[xKOR] FATAL: App initialization failed:', err);
+    alert('xKOR initialization failed. Check console for details.\n\n' + err.message);
   }
-
-  // Local clock update
-  setInterval(updateClock, 1000);
-  updateClock();
 }
 
 function updateClock() {

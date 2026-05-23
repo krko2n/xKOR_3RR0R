@@ -65,6 +65,8 @@ function glitchScreen() {
 }
 
 function finishBoot() {
+  console.log('[xKOR] Boot complete, switching to app screen');
   switchScreen('app');
+  console.log('[xKOR] Calling initApp()');
   initApp();
 }
