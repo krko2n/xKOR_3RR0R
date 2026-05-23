@@ -9,8 +9,8 @@
 [![Tauri](https://img.shields.io/badge/TAURI%20v2-FFC131?style=for-the-badge&label=BUILT%20WITH&labelColor=000000&logo=tauri&logoColor=FFC131)](https://tauri.app)
 [![Rust](https://img.shields.io/badge/RUST-000000?style=for-the-badge&label=BACKEND&labelColor=000000&logo=rust&logoColor=fff)](https://rust-lang.org)
 [![Status](https://img.shields.io/badge/ACTIVE-28a745?style=for-the-badge&label=STATUS&labelColor=000000)](https://github.com/krko2n/xKOR_3RR0R)
-[![Lines of code](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/counts.json&style=for-the-badge&labelColor=000000&v=26343127989)](https://github.com/krko2n/xKOR_3RR0R)
-[![Files](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/files.json&style=for-the-badge&labelColor=000000&v=26343127989)](https://github.com/krko2n/xKOR_3RR0R)
+[![Lines of code](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/counts.json&style=for-the-badge&labelColor=000000&v=26343240123)](https://github.com/krko2n/xKOR_3RR0R)
+[![Files](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/files.json&style=for-the-badge&labelColor=000000&v=26343240123)](https://github.com/krko2n/xKOR_3RR0R)
 <br>
 
 **A fullscreen cyberpunk OS interface for Linux.**<br>
@@ -246,8 +246,8 @@ pm run docs:tree.
 │   └── terminal/
 │       └── pty.js  -- Manages node-pty sessions. create/write/onData/..
 ├── badges/
-│   ├── counts.json&style=for-the-badge&labelColor=000000&v=26343127989
-│   └── files.json&style=for-the-badge&labelColor=000000&v=26343127989
+│   ├── counts.json&style=for-the-badge&labelColor=000000&v=26343240123
+│   └── files.json&style=for-the-badge&labelColor=000000&v=26343240123
 ├── config/
 │   ├── ai-endpoint.json
 │   └── user.json
