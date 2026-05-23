@@ -5,10 +5,7 @@
 
 export { default as TerminalPanel } from './TerminalPanel.js';
 export { default as CPUInfoPanel } from './CPUInfoPanel.js';
-
-// TODO: Add remaining modules as they're converted:
-// export { default as GlobePanel } from './GlobePanel.js';
-// export { default as FileExplorerPanel } from './FileExplorerPanel.js';
-// export { default as KeyboardPanel } from './KeyboardPanel.js';
-// export { default as AIPanel } from './AIPanel.js';
-// export { default as ClockPanel } from './ClockPanel.js';
+export { default as GlobePanel } from './GlobePanel.js';
+export { default as FileExplorerPanel } from './FileExplorerPanel.js';
+export { default as KeyboardPanel } from './KeyboardPanel.js';
+export { default as AIPanel } from './AIPanel.js';
