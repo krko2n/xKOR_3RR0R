@@ -1,20 +1,40 @@
 [Unit]
-Description=xKOR_3RR0R Login Screen
-After=systemd-user-sessions.service plymouth-quit-wait.service
+Description=xKOR_3RR0R OS Mode Login Service
+Documentation=https://github.com/krko2n/xKOR_3RR0R
+After=systemd-user-sessions.service systemd-logind.service plymouth-quit-wait.service
 Conflicts=getty@tty1.service
 
 [Service]
 Type=simple
-ExecStart=/bin/bash /opt/xkor_3rr0r/os/login/start-login.sh
-Restart=on-failure
-RestartSec=3
-StandardInput=tty
-StandardOutput=tty
+User=xkor
+WorkingDirectory=/opt/xkor_3rr0r
+
+# CRITICAL: Enable PAM session to create /run/user/UID
+# Without this, systemd-logind will NOT create XDG_RUNTIME_DIR
+# and Hyprland will fail with socket initialization errors
+PAMName=login
+
+# Launch Hyprland via wrapper script (replaces old TTY login)
+ExecStart=/opt/xkor_3rr0r/os/bin/start-hyprland
+
+# Logging (captured by journalctl -u xkor-login)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=xkor-os
+
+# TTY allocation
 TTYPath=/dev/tty1
 TTYReset=yes
 TTYVHangup=yes
-Environment=HOME=/root
-Environment=TERM=linux
+TTYVTDisallocate=yes
+
+# Restart policy
+Restart=on-failure
+RestartSec=3s
+
+# Environment (inherited by compositor)
+Environment="XDG_SESSION_TYPE=wayland"
+Environment="XDG_CURRENT_DESKTOP=Hyprland"
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical.target

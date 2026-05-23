@@ -1,6 +1,6 @@
 [package]
 name = "xkor-3rr0r"
-version = "2.0.2-beta.1"
+version = "2.1.0-beta.1"
 edition = "2021"
 description = "xKOR_3RR0R - Cyberpunk System Dashboard OS"
 build = "build.rs"

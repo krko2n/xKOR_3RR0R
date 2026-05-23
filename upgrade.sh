@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # xKOR_3RR0R - Professional Upgrade Script
-# Version: 2.0.2-beta.1
+# Version: 2.1.0-beta.1
 #
 # One-command upgrade with rollback support
 # Usage: ./upgrade.sh [--force] [--no-backup] [--dev]

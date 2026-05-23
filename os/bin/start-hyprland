@@ -1,0 +1,194 @@
+#!/usr/bin/env bash
+#
+# xKOR_3RR0R - Hyprland Startup Wrapper
+# Fixes: socket init, runtime directory, PAM session issues
+#
+
+set -euo pipefail
+
+# ==============================================================================
+# CONFIGURATION
+# ==============================================================================
+
+PROJECT_ROOT="/opt/xkor_3rr0r"
+LOG_DIR="$PROJECT_ROOT/diagnostics/logs/compositor"
+LOG_FILE="$LOG_DIR/hyprland_$(date +%Y%m%d_%H%M%S).log"
+
+# Crash logger
+CRASH_LOGGER="$PROJECT_ROOT/diagnostics/crash-logger.sh"
+
+# ==============================================================================
+# LOGGING
+# ==============================================================================
+
+mkdir -p "$LOG_DIR"
+
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"
+}
+
+log_error() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: $*" | tee -a "$LOG_FILE" >&2
+}
+
+# ==============================================================================
+# ENVIRONMENT SETUP
+# ==============================================================================
+
+setup_environment() {
+    log "Setting up Wayland environment..."
+
+    # Critical: Use systemd-managed runtime directory
+    if [[ -z "${XDG_RUNTIME_DIR:-}" ]]; then
+        export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+        log "Set XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR"
+    fi
+
+    # Verify runtime directory exists
+    if [[ ! -d "$XDG_RUNTIME_DIR" ]]; then
+        log_error "Runtime directory missing: $XDG_RUNTIME_DIR"
+        log_error "This means PAM session was not initialized"
+        log_error "Check xkor-login.service PAMName= configuration"
+
+        # Attempt recovery: create directory (will fail without proper permissions)
+        log "Attempting to create runtime directory..."
+        if mkdir -p "$XDG_RUNTIME_DIR" 2>>"$LOG_FILE"; then
+            chmod 700 "$XDG_RUNTIME_DIR"
+            log "Created $XDG_RUNTIME_DIR (manual recovery)"
+        else
+            log_error "Failed to create runtime directory - PAM session required"
+            "$CRASH_LOGGER" crash "runtime_dir_missing" "XDG_RUNTIME_DIR does not exist, PAM session not initialized"
+            exit 1
+        fi
+    fi
+
+    log "Runtime directory OK: $XDG_RUNTIME_DIR"
+
+    # Set Wayland session type
+    export XDG_SESSION_TYPE=wayland
+    export XDG_CURRENT_DESKTOP=Hyprland
+    export XDG_SESSION_DESKTOP=Hyprland
+
+    # Add compositor to path
+    export PATH="$PATH:/usr/local/bin:/usr/bin"
+
+    log "Environment configured:"
+    log "  XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR"
+    log "  XDG_SESSION_TYPE=$XDG_SESSION_TYPE"
+    log "  USER=$(whoami) UID=$(id -u)"
+}
+
+# ==============================================================================
+# CLEANUP STALE SOCKETS
+# ==============================================================================
+
+cleanup_stale_sockets() {
+    log "Cleaning up stale Hyprland sockets..."
+
+    local hypr_dir="$XDG_RUNTIME_DIR/hypr"
+
+    if [[ -d "$hypr_dir" ]]; then
+        log "Found existing Hyprland runtime directory: $hypr_dir"
+
+        # Check for running Hyprland instances
+        if pgrep -u "$(id -u)" Hyprland >/dev/null 2>&1; then
+            log_error "Hyprland is already running!"
+            log_error "Cannot start multiple instances"
+            "$CRASH_LOGGER" crash "hyprland_already_running" "Hyprland process already exists"
+            exit 1
+        fi
+
+        # Remove stale sockets
+        log "Removing stale socket files..."
+        rm -rf "${hypr_dir:?}"/* 2>>"$LOG_FILE" || true
+        log "Stale sockets cleaned"
+    else
+        log "No existing Hyprland runtime directory (first boot)"
+        mkdir -p "$hypr_dir"
+        chmod 700 "$hypr_dir"
+    fi
+}
+
+# ==============================================================================
+# PRE-FLIGHT CHECKS
+# ==============================================================================
+
+preflight_checks() {
+    log "Running pre-flight checks..."
+
+    # Check Hyprland binary
+    if ! command -v Hyprland >/dev/null 2>&1; then
+        log_error "Hyprland binary not found in PATH"
+        "$CRASH_LOGGER" crash "hyprland_not_found" "Hyprland executable missing"
+        exit 1
+    fi
+
+    local hypr_version
+    hypr_version=$(Hyprland --version 2>&1 | head -1)
+    log "Hyprland version: $hypr_version"
+
+    # Check permissions
+    if [[ ! -w "$XDG_RUNTIME_DIR" ]]; then
+        log_error "No write permission to $XDG_RUNTIME_DIR"
+        log_error "Owner: $(stat -c '%U:%G' "$XDG_RUNTIME_DIR")"
+        log_error "Permissions: $(stat -c '%a' "$XDG_RUNTIME_DIR")"
+        "$CRASH_LOGGER" crash "runtime_dir_permission" "Cannot write to XDG_RUNTIME_DIR"
+        exit 1
+    fi
+
+    # Check Hyprland config
+    local hypr_config="$HOME/.config/hypr/hyprland.conf"
+    if [[ -f "$hypr_config" ]]; then
+        log "Hyprland config: $hypr_config"
+    else
+        log "WARNING: No Hyprland config found at $hypr_config"
+        log "Using default configuration"
+    fi
+
+    log "Pre-flight checks passed"
+}
+
+# ==============================================================================
+# LAUNCH HYPRLAND
+# ==============================================================================
+
+launch_hyprland() {
+    log "Launching Hyprland compositor..."
+
+    # Redirect stdout/stderr to log
+    exec >>"$LOG_FILE" 2>&1
+
+    # Launch with error handling
+    if Hyprland; then
+        log "Hyprland exited cleanly"
+        exit 0
+    else
+        local exit_code=$?
+        log_error "Hyprland crashed with exit code $exit_code"
+
+        # Capture crash
+        "$CRASH_LOGGER" crash "hyprland_crash" "Hyprland exited with code $exit_code, check $LOG_FILE"
+
+        exit "$exit_code"
+    fi
+}
+
+# ==============================================================================
+# MAIN
+# ==============================================================================
+
+main() {
+    log "=================================================="
+    log "xKOR_3RR0R Hyprland Startup"
+    log "=================================================="
+
+    setup_environment
+    cleanup_stale_sockets
+    preflight_checks
+    launch_hyprland
+}
+
+# Trap errors
+trap 'log_error "Script failed at line $LINENO"; "$CRASH_LOGGER" crash "start_hyprland_error" "Script failed at line $LINENO"' ERR
+
+main "$@"
