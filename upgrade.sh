@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # xKOR_3RR0R - Professional Upgrade Script
-# Version: 2.0.0-beta.2
+# Version: 2.0.1-beta.1
 #
 # One-command upgrade with rollback support
 # Usage: ./upgrade.sh [--force] [--no-backup] [--dev]
@@ -88,6 +88,23 @@ log_verbose() {
     [[ "$OPT_VERBOSE" == "true" ]] && log_raw "${DIM}[DEBUG]${RESET} $*"
 }
 
+# Progress spinner
+spinner() {
+    local pid=$1
+    local delay=0.1
+    local spinstr='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
+    local temp
+
+    while ps -p "$pid" > /dev/null 2>&1; do
+        temp=${spinstr#?}
+        printf " ${CYAN}%c${RESET} " "$spinstr"
+        spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\b\b\b"
+    done
+    printf "   \b\b\b"
+}
+
 # ==============================================================================
 # UTILITY FUNCTIONS
 # ==============================================================================
@@ -169,13 +186,26 @@ check_local_changes() {
     fi
 }
 
+get_version_from_file() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        grep '"version"' "$file" 2>/dev/null | head -1 | sed 's/.*"\([0-9][^"]*\)".*/\1/' || echo "unknown"
+    else
+        echo "unknown"
+    fi
+}
+
 fetch_updates() {
     log_step "Fetching updates..."
 
     cd "$PROJECT_ROOT"
 
+    # Get current version
+    OLD_VERSION=$(get_version_from_file "$PROJECT_ROOT/package.json")
+    log_substep "Current version: ${BOLD}$OLD_VERSION${RESET}"
+
     # Fetch from remote
-    log_substep "Fetching from origin..."
+    log_substep "Connecting to GitHub..."
     git fetch origin "$CURRENT_BRANCH" || log_fatal "Git fetch failed"
 
     # Check if updates available
@@ -189,9 +219,22 @@ fetch_updates() {
             exit 0
         fi
         SKIP_PULL=true
+        NEW_VERSION="$OLD_VERSION"
     else
         NEW_COMMITS=$(git rev-list --count "$LOCAL..$REMOTE")
-        log_success "$NEW_COMMITS new commit(s) available"
+
+        # Preview new version from remote
+        NEW_VERSION=$(git show "origin/$CURRENT_BRANCH:package.json" 2>/dev/null | grep '"version"' | head -1 | sed 's/.*"\([0-9][^"]*\)".*/\1/' || echo "$OLD_VERSION")
+
+        echo
+        log_raw "${BOLD}${GREEN}╔════════════════════════════════════════════╗${RESET}"
+        log_raw "${BOLD}${GREEN}║  UPDATE AVAILABLE                          ║${RESET}"
+        log_raw "${BOLD}${GREEN}╠════════════════════════════════════════════╣${RESET}"
+        log_raw "${BOLD}${GREEN}║${RESET}  Version: ${CYAN}$OLD_VERSION${RESET} ${DIM}→${RESET} ${BOLD}${GREEN}$NEW_VERSION${RESET}           "
+        log_raw "${BOLD}${GREEN}║${RESET}  Commits: ${CYAN}$NEW_COMMITS new${RESET}                      "
+        log_raw "${BOLD}${GREEN}╚════════════════════════════════════════════╝${RESET}"
+        echo
+
         SKIP_PULL=false
     fi
 }
@@ -336,15 +379,27 @@ rebuild_project() {
 
     # Clean build artifacts
     log_substep "Cleaning build cache..."
-    cargo clean || log_warn "Cargo clean failed"
+    cargo clean 2>&1 | tee -a "$LOG_FILE" > /dev/null || log_warn "Cargo clean failed"
 
-    # Rebuild
-    log_substep "Compiling (this may take several minutes)..."
+    # Rebuild with progress indicator
+    echo -ne "  ${CYAN}⚙${RESET}  Compiling Rust backend (this may take 3-5 minutes)..."
 
     if [[ "$OPT_DEV_MODE" == "true" ]]; then
-        cargo build || log_fatal "Build failed"
+        cargo build >> "$LOG_FILE" 2>&1 &
     else
-        cargo build --release || log_fatal "Build failed"
+        cargo build --release >> "$LOG_FILE" 2>&1 &
+    fi
+
+    local build_pid=$!
+    spinner $build_pid
+    wait $build_pid
+
+    local build_status=$?
+    if [[ $build_status -ne 0 ]]; then
+        echo -e " ${RED}✗${RESET}"
+        log_fatal "Build failed (see log: $LOG_FILE)"
+    else
+        echo -e " ${GREEN}✓${RESET}"
     fi
 
     log_success "Build complete"
@@ -433,7 +488,21 @@ print_banner() {
     cat <<'EOF'
     ╔═══════════════════════════════════════════════════════════╗
     ║                                                           ║
-    ║           xKOR_3RR0R UPGRADE UTILITY                      ║
+    ║              ██╗  ██╗██╗  ██╗ ██████╗ ██████╗            ║
+    ║              ╚██╗██╔╝██║ ██╔╝██╔═══██╗██╔══██╗           ║
+    ║               ╚███╔╝ █████╔╝ ██║   ██║██████╔╝           ║
+    ║               ██╔██╗ ██╔═██╗ ██║   ██║██╔══██╗           ║
+    ║              ██╔╝ ██╗██║  ██╗╚██████╔╝██║  ██║           ║
+    ║              ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝           ║
+    ║                                                           ║
+    ║           █████╗ ██████╗ ██████╗  ██████╗ ██████╗        ║
+    ║          ╚════██╗██╔══██╗██╔══██╗██╔═████╗██╔══██╗       ║
+    ║           █████╔╝██████╔╝██████╔╝██║██╔██║██████╔╝       ║
+    ║           ╚═══██╗██╔══██╗██╔══██╗████╔╝██║██╔══██╗       ║
+    ║          ██████╔╝██║  ██║██║  ██║╚██████╔╝██║  ██║       ║
+    ║          ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝       ║
+    ║                                                           ║
+    ║                   SYSTEM UPGRADE                          ║
     ║                                                           ║
     ╚═══════════════════════════════════════════════════════════╝
 
@@ -473,15 +542,21 @@ main() {
     # Validate
     validate_build
 
-    # Success
+    # Success banner
     echo
-    log_success "${BOLD}Upgrade complete!${RESET}"
+    log_raw "${BOLD}${GREEN}╔════════════════════════════════════════════════════════╗${RESET}"
+    log_raw "${BOLD}${GREEN}║                                                        ║${RESET}"
+    log_raw "${BOLD}${GREEN}║            ✓ UPGRADE SUCCESSFUL                        ║${RESET}"
+    log_raw "${BOLD}${GREEN}║                                                        ║${RESET}"
+    log_raw "${BOLD}${GREEN}╠════════════════════════════════════════════════════════╣${RESET}"
+    log_raw "${BOLD}${GREEN}║${RESET}  Version:  ${CYAN}$OLD_VERSION${RESET} ${DIM}→${RESET} ${BOLD}${GREEN}$NEW_VERSION${RESET}"
+    log_raw "${BOLD}${GREEN}║${RESET}  Backup:   ${DIM}$BACKUP_PATH${RESET}"
+    log_raw "${BOLD}${GREEN}║${RESET}  Log:      ${DIM}$LOG_FILE${RESET}"
+    log_raw "${BOLD}${GREEN}║                                                        ║${RESET}"
+    log_raw "${BOLD}${GREEN}╚════════════════════════════════════════════════════════╝${RESET}"
     echo
-    log_info "Backup saved to: $BACKUP_PATH"
-    echo
-    echo -e "${CYAN}Run:${RESET} xkor"
-    echo
-    echo -e "${DIM}Logs saved to: $LOG_FILE${RESET}"
+    echo -e "${CYAN}${BOLD}Launch xKOR:${RESET} ${BOLD}xkor${RESET}"
+    echo -e "${DIM}Or reboot to start in OS Mode${RESET}"
     echo
 }
 
