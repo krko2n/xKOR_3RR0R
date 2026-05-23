@@ -10,8 +10,8 @@
 [![Rust](https://img.shields.io/badge/RUST-333333?style=for-the-badge&label=BACKEND&labelColor=000000&logo=rust&logoColor=fff)](https://rust-lang.org)
 [![Version](https://img.shields.io/badge/v2.1.0--beta.1-310505?style=for-the-badge&label=VERSION&labelColor=000000)](https://github.com/krko2n/xKOR_3RR0R/releases)
 [![Status](https://img.shields.io/badge/ACTIVE-28a745?style=for-the-badge&label=STATUS&labelColor=000000)](https://github.com/krko2n/xKOR_3RR0R)
-[![Lines of code](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/counts.json&style=for-the-badge&labelColor=000000&v=26346118708)](https://github.com/krko2n/xKOR_3RR0R)
-[![Files](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/files.json&style=for-the-badge&labelColor=000000&v=26346118708)](https://github.com/krko2n/xKOR_3RR0R)
+[![Lines of code](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/counts.json&style=for-the-badge&labelColor=000000&v=26346285590)](https://github.com/krko2n/xKOR_3RR0R)
+[![Files](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/files.json&style=for-the-badge&labelColor=000000&v=26346285590)](https://github.com/krko2n/xKOR_3RR0R)
 <br>
 
 **A fullscreen cyberpunk OS interface for Linux.**<br>
@@ -349,8 +349,8 @@ pm run docs:tree.
 │   └── terminal/
 │       └── pty.js  -- Manages node-pty sessions. create/write/onData/..
 ├── badges/
-│   ├── counts.json&style=for-the-badge&labelColor=000000&v=26346118708
-│   └── files.json&style=for-the-badge&labelColor=000000&v=26346118708
+│   ├── counts.json&style=for-the-badge&labelColor=000000&v=26346285590
+│   └── files.json&style=for-the-badge&labelColor=000000&v=26346285590
 ├── config/
 │   ├── ai-endpoint.json
 │   └── user.json
@@ -472,8 +472,8 @@ pm run docs:tree.
 │   └── terminal/
 │       └── pty.js  -- Manages node-pty sessions. create/write/onData/..
 ├── badges/
-│   ├── counts.json&style=for-the-badge&labelColor=000000&v=26346118708
-│   └── files.json&style=for-the-badge&labelColor=000000&v=26346118708
+│   ├── counts.json&style=for-the-badge&labelColor=000000&v=26346285590
+│   └── files.json&style=for-the-badge&labelColor=000000&v=26346285590
 ├── config/
 │   ├── ai-endpoint.json
 │   └── user.json
