@@ -1,0 +1,74 @@
+{
+  "name": "horizon",
+  "displayName": "Horizon",
+  "description": "Amber gold space-age control systems - eDEX-UI horizon theme",
+  "author": "krko2n",
+  "colors": {
+    "primary": "#ffa000",
+    "secondary": "#9d00ff",
+    "accent": "#ff7000",
+    "background": "#0c0a0e",
+    "panel": "#14101a",
+    "border": "#ffa000",
+    "text": {
+      "primary": "#ffa000",
+      "secondary": "#ffffff",
+      "dim": "#665544"
+    },
+    "metrics": {
+      "cpu": "#ffa000",
+      "ram": "#9d00ff",
+      "net": "#ff7000",
+      "temp": "#ff3300"
+    },
+    "status": {
+      "success": "#ffa000",
+      "warning": "#ff7000",
+      "error": "#ff3300"
+    }
+  },
+  "fonts": {
+    "main": "'Share Tech Mono', 'JetBrains Mono', 'Courier New', monospace",
+    "header": "'Michroma', 'Share Tech Mono', sans-serif",
+    "terminal": "'Share Tech Mono', 'JetBrains Mono', monospace",
+    "size": {
+      "base": "13px",
+      "small": "11px",
+      "large": "16px"
+    }
+  },
+  "terminal": {
+    "background": "#0c0a0e",
+    "foreground": "#ffa000",
+    "cursor": "#ffa000",
+    "cursorAccent": "#0c0a0e",
+    "selectionBackground": "rgba(255, 160, 0, 0.3)",
+    "black": "#000000",
+    "red": "#ff3300",
+    "green": "#ffa000",
+    "yellow": "#ffcc00",
+    "blue": "#9d00ff",
+    "magenta": "#ff00ff",
+    "cyan": "#00aaff",
+    "white": "#cccccc",
+    "brightBlack": "#333333",
+    "brightRed": "#ff6633",
+    "brightGreen": "#ffcc66",
+    "brightYellow": "#ffee88",
+    "brightBlue": "#bb66ff",
+    "brightMagenta": "#ff66ff",
+    "brightCyan": "#66ccff",
+    "brightWhite": "#ffffff"
+  },
+  "audio": {
+    "keyboard": "keyboard.wav",
+    "stdin": "stdin.wav",
+    "stdout": "stdout.wav",
+    "folder": "folder.wav",
+    "expand": "expand.wav",
+    "denied": "denied.wav",
+    "granted": "granted.wav",
+    "theme": "theme.wav"
+  },
+  "injectCSS": ""
+}

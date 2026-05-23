@@ -1,0 +1,74 @@
+{
+  "name": "tron-disrupted",
+  "displayName": "TRON: Disrupted",
+  "description": "Glitched terminal aesthetic with acid green - eDEX-UI tron-disrupted",
+  "author": "krko2n",
+  "colors": {
+    "primary": "#20ff50",
+    "secondary": "#ffaa00",
+    "accent": "#ff7000",
+    "background": "#020502",
+    "panel": "#040a04",
+    "border": "#20ff50",
+    "text": {
+      "primary": "#20ff50",
+      "secondary": "#ffffff",
+      "dim": "#446644"
+    },
+    "metrics": {
+      "cpu": "#20ff50",
+      "ram": "#ffaa00",
+      "net": "#ff7000",
+      "temp": "#ff3300"
+    },
+    "status": {
+      "success": "#20ff50",
+      "warning": "#ffaa00",
+      "error": "#ff3300"
+    }
+  },
+  "fonts": {
+    "main": "'Share Tech Mono', 'JetBrains Mono', 'Courier New', monospace",
+    "header": "'Michroma', 'Share Tech Mono', sans-serif",
+    "terminal": "'Share Tech Mono', 'JetBrains Mono', monospace",
+    "size": {
+      "base": "13px",
+      "small": "11px",
+      "large": "16px"
+    }
+  },
+  "terminal": {
+    "background": "#020502",
+    "foreground": "#20ff50",
+    "cursor": "#20ff50",
+    "cursorAccent": "#020502",
+    "selectionBackground": "rgba(32, 255, 80, 0.3)",
+    "black": "#000000",
+    "red": "#ff3300",
+    "green": "#20ff50",
+    "yellow": "#ffaa00",
+    "blue": "#00aaff",
+    "magenta": "#ff00ff",
+    "cyan": "#00ffaa",
+    "white": "#cccccc",
+    "brightBlack": "#333333",
+    "brightRed": "#ff6633",
+    "brightGreen": "#55ff77",
+    "brightYellow": "#ffcc66",
+    "brightBlue": "#66ccff",
+    "brightMagenta": "#ff66ff",
+    "brightCyan": "#66ffcc",
+    "brightWhite": "#ffffff"
+  },
+  "audio": {
+    "keyboard": "keyboard.wav",
+    "stdin": "stdin.wav",
+    "stdout": "stdout.wav",
+    "folder": "folder.wav",
+    "expand": "expand.wav",
+    "denied": "denied.wav",
+    "granted": "granted.wav",
+    "theme": "theme.wav"
+  },
+  "injectCSS": ""
+}

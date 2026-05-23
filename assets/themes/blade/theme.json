@@ -1,0 +1,74 @@
+{
+  "name": "blade",
+  "displayName": "Blade",
+  "description": "Deep crimson cyberpunk - inspired by eDEX-UI blade theme",
+  "author": "krko2n",
+  "colors": {
+    "primary": "#ff1f1f",
+    "secondary": "#ff6600",
+    "accent": "#ffcc00",
+    "background": "#080202",
+    "panel": "#0f0404",
+    "border": "#ff1f1f",
+    "text": {
+      "primary": "#ff1f1f",
+      "secondary": "#ffffff",
+      "dim": "#664444"
+    },
+    "metrics": {
+      "cpu": "#ff1f1f",
+      "ram": "#ff6600",
+      "net": "#ffcc00",
+      "temp": "#ff0000"
+    },
+    "status": {
+      "success": "#ff6600",
+      "warning": "#ffcc00",
+      "error": "#ff0000"
+    }
+  },
+  "fonts": {
+    "main": "'Share Tech Mono', 'JetBrains Mono', 'Courier New', monospace",
+    "header": "'Michroma', 'Share Tech Mono', sans-serif",
+    "terminal": "'Share Tech Mono', 'JetBrains Mono', monospace",
+    "size": {
+      "base": "13px",
+      "small": "11px",
+      "large": "16px"
+    }
+  },
+  "terminal": {
+    "background": "#080202",
+    "foreground": "#ff1f1f",
+    "cursor": "#ff1f1f",
+    "cursorAccent": "#080202",
+    "selectionBackground": "rgba(255, 31, 31, 0.3)",
+    "black": "#000000",
+    "red": "#ff1f1f",
+    "green": "#ff6600",
+    "yellow": "#ffcc00",
+    "blue": "#ff00ff",
+    "magenta": "#ff0088",
+    "cyan": "#ff6666",
+    "white": "#cccccc",
+    "brightBlack": "#333333",
+    "brightRed": "#ff4444",
+    "brightGreen": "#ff8833",
+    "brightYellow": "#ffdd66",
+    "brightBlue": "#ff66ff",
+    "brightMagenta": "#ff33aa",
+    "brightCyan": "#ff9999",
+    "brightWhite": "#ffffff"
+  },
+  "audio": {
+    "keyboard": "keyboard.wav",
+    "stdin": "stdin.wav",
+    "stdout": "stdout.wav",
+    "folder": "folder.wav",
+    "expand": "expand.wav",
+    "denied": "denied.wav",
+    "granted": "granted.wav",
+    "theme": "theme.wav"
+  },
+  "injectCSS": ""
+}
