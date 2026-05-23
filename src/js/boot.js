@@ -14,11 +14,23 @@ let bootIndex = 0;
 let bootProgress = 0;
 
 function startBoot() {
+  console.log('[xKOR] Starting boot sequence');
   switchScreen('boot');
   bootIndex = 0;
   bootProgress = 0;
   $('#boot-log').innerHTML = '';
   $('#boot-progress-fill').style.width = '0%';
+
+  // Emergency bypass: press ESC during boot to skip to app
+  const escListener = (e) => {
+    if (e.key === 'Escape') {
+      console.log('[xKOR] Boot bypassed by user (ESC key)');
+      document.removeEventListener('keydown', escListener);
+      finishBoot();
+    }
+  };
+  document.addEventListener('keydown', escListener);
+
   bootNext();
 }
 
@@ -45,6 +57,7 @@ function appendBootLog(text, idx) {
 }
 
 function glitchScreen() {
+  console.log('[xKOR] Playing glitch animation');
   const flash = document.createElement('div');
   flash.style.cssText = 'position:fixed;inset:0;z-index:99999;background:#ff0000;opacity:0;transition:opacity 0.05s;';
   document.body.appendChild(flash);
@@ -62,6 +75,13 @@ function glitchScreen() {
       finishBoot();
     }, 200);
   }, 400);
+
+  // Failsafe: force finish boot after 2 seconds if something goes wrong
+  setTimeout(() => {
+    console.warn('[xKOR] Boot failsafe triggered - forcing finish');
+    flash.remove();
+    finishBoot();
+  }, 2000);
 }
 
 function finishBoot() {
