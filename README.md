@@ -8,6 +8,7 @@
 [![Platform](https://img.shields.io/badge/ARCH%20LINUX-1793d1?style=for-the-badge&label=PLATFORM&labelColor=000000&logo=archlinux&logoColor=1793d1)](https://archlinux.org)
 [![Tauri](https://img.shields.io/badge/TAURI%20v2-FFC131?style=for-the-badge&label=BUILT%20WITH&labelColor=000000&logo=tauri&logoColor=FFC131)](https://tauri.app)
 [![Rust](https://img.shields.io/badge/RUST-000000?style=for-the-badge&label=BACKEND&labelColor=000000&logo=rust&logoColor=fff)](https://rust-lang.org)
+[![Version](https://img.shields.io/badge/v2.1.0--beta.1-00ff9f?style=for-the-badge&label=VERSION&labelColor=000000)](https://github.com/krko2n/xKOR_3RR0R/releases)
 [![Status](https://img.shields.io/badge/ACTIVE-28a745?style=for-the-badge&label=STATUS&labelColor=000000)](https://github.com/krko2n/xKOR_3RR0R)
 [![Lines of code](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/counts.json&style=for-the-badge&labelColor=000000&v=26346004503)](https://github.com/krko2n/xKOR_3RR0R)
 [![Files](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/krko2n/xKOR_3RR0R/main/badges/files.json&style=for-the-badge&labelColor=000000&v=26346004503)](https://github.com/krko2n/xKOR_3RR0R)
@@ -53,17 +54,87 @@ xKOR_3RR0R turns your Linux machine into a sci-fi hacker workstation. Two operat
 
 **KEYBOARD VISUALIZER** — Full on-screen keyboard. Lights up physical keys as you type. Click to input.
 
+**AUTOMATIC DIAGNOSTICS** — Crash logger captures full system state on failure. Auto-commits to git. Comprehensive logging system with 7-day rotation.
+
+---
+
+## DIAGNOSTICS & DEBUGGING (v2.1.0+)
+
+xKOR_3RR0R includes a comprehensive diagnostic system for troubleshooting:
+
+### Automatic Crash Capture
+
+When a crash occurs:
+1. Full system state captured automatically
+2. Saved to `diagnostics/crashes/YYYY-MM-DD_HH-MM-SS.log`
+3. Auto-committed to git with structured message
+4. Includes: kernel info, processes, sessions, environment, journal logs
+
+### Manual Crash Capture
+
+```bash
+./diagnostics/crash-logger.sh crash "compositor" "Manual test"
+```
+
+### Log Locations
+
+```
+diagnostics/
+├── logs/              # Runtime logs (gitignored)
+│   ├── compositor/    # Hyprland/X11 startup logs
+│   ├── runtime/       # Application runtime
+│   ├── install/       # Installation logs
+│   └── upgrade/       # Upgrade logs
+├── crashes/           # Full crash reports (tracked in git)
+└── errors/            # Error logs (tracked in git)
+```
+
+### View Logs
+
+```bash
+# Live compositor logs
+tail -f diagnostics/logs/compositor/*.log
+
+# System journal
+journalctl -u xkor-login -f
+
+# Recent crashes
+ls -lt diagnostics/crashes/
+```
+
+### Cleanup Old Logs
+
+```bash
+./diagnostics/crash-logger.sh cleanup  # Removes logs older than 7 days
+```
+
 ---
 
 ## INSTALLATION
 
-### Prerequisites
+### Quick Start (Recommended)
+
+```bash
+git clone https://github.com/krko2n/xKOR_3RR0R
+cd xKOR_3RR0R
+./install.sh
+```
+
+The installer automatically:
+- Detects your Linux distribution (Debian, Ubuntu, Arch, Fedora, openSUSE)
+- Installs all dependencies (Rust, Node.js, Tauri deps)
+- Builds the Rust backend
+- Sets up launcher and desktop entry
+
+### Manual Prerequisites
+
+If you prefer manual installation:
 
 - **Rust** (install: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`)
 - **Tauri system deps** (Arch: `sudo pacman -S webkit2gtk-4.1 libappindicator-gtk3 librsvg libsoup3`)
-- **Node.js** (for Tauri CLI, install: `sudo pacman -S nodejs npm`)
+- **Node.js 18+** (install: `sudo pacman -S nodejs npm`)
 
-### App Mode
+### App Mode (Quick Dev)
 
 ```bash
 git clone https://github.com/krko2n/xKOR_3RR0R
@@ -71,19 +142,31 @@ cd xKOR_3RR0R
 bash run.sh
 ```
 
-`run.sh` installs Rust if missing, checks Tauri system deps, installs npm modules, builds the Rust backend (`cargo build --release`), then starts the app via `npm run dev`.
+`run.sh` checks dependencies and starts dev server with hot reload.
 
-### OS Mode
+### OS Mode (Full Desktop Replacement)
 
 > Arch Linux / Manjaro / EndeavourOS only
 
 ```bash
 git clone https://github.com/krko2n/xKOR_3RR0R
-cd xKOR_3RR0R/os
-sudo bash install.sh
+cd xKOR_3RR0R
+sudo ./install.sh --mode=os
 ```
 
-No reboot needed — the login screen starts automatically on TTY1.
+**What happens:**
+- Installs to `/opt/xkor_3rr0r`
+- Creates systemd service with PAM session support
+- Configures Hyprland compositor (Wayland)
+- Sets up automatic crash diagnostics
+- Enables on TTY1 (replaces getty)
+
+**After install:**
+```bash
+sudo reboot
+```
+
+System boots directly to xKOR login screen.
 
 <details>
 <summary>what the installer does</summary>
@@ -117,21 +200,33 @@ sudo bash unistall.sh
 
 ## UPGRADE
 
-### App Mode
+### Professional Upgrade System (v2.1.0+)
 
 ```bash
-cd xKOR_3RR0R
-bash run.sh
+cd xKOR_3RR0R  # or /opt/xkor_3rr0r for OS Mode
+./upgrade.sh
 ```
 
-### OS Mode
+**Features:**
+- ✨ Premium ASCII art UI with progress indicators
+- 📦 Shows version comparison (e.g., 2.0.2 → 2.1.0)
+- 🔄 Automatic backup before upgrade
+- 🔙 Rollback on failure
+- ⚙️ Animated spinner for compilation
+- 📊 Detailed upgrade summary
 
+**The upgrade script:**
+1. Pulls latest changes from GitHub
+2. Creates automatic backup (kept for 7 days)
+3. Updates dependencies (npm + cargo)
+4. Rebuilds Rust backend
+5. Validates binary
+6. Shows success banner with version info
+
+**For OS Mode, reboot after upgrade:**
 ```bash
-cd xKOR_3RR0R
-bash os/upgrade.sh
+sudo reboot
 ```
-
-`upgrade.sh` pulls the latest version from GitHub, auto-cleans corrupted PNG icon files, compiles the Rust backend via `cargo build --release`, and runs the installer which re-copies everything to `/opt/xkor_3rr0r`, reinstalls dependencies, and starts the login screen on TTY1 automatically. **No reboot needed.**
 
 ---
 
@@ -145,18 +240,25 @@ POWER ON
   |-- kernel
   |-- Plymouth ──────────── xKOR boot animation
   |-- systemd ────────────  xkor-login.service on TTY1
-  |                         (replaces getty@tty1)
-  |-- login.js ───────────  ASCII banner + PAM auth
+  |                         (replaces getty@tty1, PAM enabled)
+  |-- start-hyprland ─────  Enhanced launcher with diagnostics
   |     |
-  |     |-- [FAIL] ──────── service restarts, prompt again
-  |     |-- [OK] ─────────  loading.sh glitch animation ~4s
-  |                              |
-  |                         startx xkor-session.sh
-  |                              |
-                         |                         Tauri fullscreen
+  |     |-- Pre-flight checks (runtime dir, sockets, permissions)
+  |     |-- Clean stale sockets from previous crashes
+  |     |-- Launch Hyprland compositor (Wayland)
+  |           |
+  |           |-- [FAIL] ──── Automatic crash capture + git commit
+  |           |-- [OK] ─────  Tauri fullscreen app
   |
   `-- ACCESS GRANTED
 ```
+
+**Key improvements in v2.1.0:**
+- ✅ PAM session properly initialized by systemd
+- ✅ `/run/user/UID` created by systemd-logind
+- ✅ Hyprland socket initialization succeeds
+- ✅ Automatic crash capture with full diagnostics
+- ✅ Comprehensive logging to `diagnostics/logs/`
 
 ---
 
@@ -208,6 +310,7 @@ Default is [Ollama](https://ollama.ai) running locally. Change `endpoint` and `m
 Generated from @summary comments via 
 pm run docs:tree.
 
+<<<<<<< HEAD
 <!-- TREE_START -->
 
 <details open>
@@ -330,6 +433,130 @@ pm run docs:tree.
 
 
 
+=======
+<!-- TREE_START -->
+
+<details open>
+<summary><strong style="color:#00ff9f">xKOR_3RR0R/</strong></summary>
+
+```
+├── .gitattributes
+├── .github/
+│   └── workflows/
+│       └── count-lines.yml
+├── .gitignore
+├── AGENT.md
+├── assets/
+│   ├── branding/
+│   ├── fonts/
+│   ├── globe/
+│   │   └── worldmap.json
+│   ├── icons/
+│   ├── images/
+│   └── sounds/
+├── backend/
+│   ├── ai/
+│   │   └── proxy.js  -- Forwards prompts to Ollama or any OpenAI-compat..
+│   ├── fs/
+│   │   ├── delete.js
+│   │   ├── list.js
+│   │   ├── read.js
+│   │   ├── rename.js
+│   │   └── write.js
+│   ├── server.js  -- Express + WebSocket server
+│   ├── system/
+│   │   ├── cpu.js
+│   │   ├── net.js
+│   │   ├── ram.js
+│   │   └── temp.js
+│   └── terminal/
+│       └── pty.js  -- Manages node-pty sessions. create/write/onData/..
+├── badges/
+│   ├── counts.json&style=for-the-badge&labelColor=000000&v=26345985848
+│   └── files.json&style=for-the-badge&labelColor=000000&v=26345985848
+├── config/
+│   ├── ai-endpoint.json
+│   └── user.json
+├── docs/
+│   └── index.html
+├── fixGuide.pdf
+├── INSTALL.md
+├── LINES.md
+├── logo.png
+├── logo_with_text.png
+├── os/
+│   ├── clean-arch.sh
+│   ├── install.sh  -- Full OS Mode installer for Arch Linux. Installs..
+│   ├── lib/
+│   │   ├── cleanup.sh
+│   │   ├── manifest.sh
+│   │   ├── verify.sh
+│   │   └── xkor-lib.sh
+│   ├── loading/
+│   │   └── loading.sh
+│   ├── login/
+│   │   ├── login.js  -- TTY login app: ASCII banner, readline prompts, ..
+│   │   ├── package.json
+│   │   ├── pam.js
+│   │   └── start-login.sh
+│   ├── plymount/
+│   │   ├── plymount-theme.sh
+│   │   └── xkor/
+│   │       ├── xkor.plymouth
+│   │       └── xkor.script
+│   ├── repair.sh
+│   ├── systemd/
+│   │   ├── xkor-login.service
+│   │   └── xkor-ui.service
+│   ├── uninstall.sh
+│   ├── unistall.sh
+│   ├── xkor
+│   └── xorg/
+│       ├── .xinitrc
+│       └── xkor-session.sh
+├── package.json
+├── README.md
+├── run.sh  -- Quick launcher: Rust build + Tauri dev
+├── scripts/
+│   └── generate-tree.mjs
+├── setup.sh  -- One-time setup for App Mode on any Linux distro.
+└── src/
+    ├── index.html -- Tauri frontend entry point
+    ├── preload.js  -- WebSocket bridge. Exposes window.xkor.send() / ..
+    └── renderer/
+        ├── css/
+        │   ├── ai.css
+        │   ├── boot.css
+        │   ├── filemanager.css
+        │   ├── globe.css
+        │   ├── graphs.css
+        │   ├── keyboard.css
+        │   ├── layout.css
+        │   ├── login.css
+        │   ├── terminal.css
+        │   └── theme.css
+        ├── index.html  -- Main HTML shell: login, boot, app UI with 3 ter..
+        └── js/
+            ├── ai.js
+            ├── boot.js
+            ├── filemanager.js
+            ├── globe.js
+            ├── graphs.js
+            ├── keyboard.js
+            ├── login.js  -- Login screen UI. POSTs to /auth, dispatches xko..
+            ├── tabs.js
+            ├── terminal.js  -- xterm.js terminal instances (3 sessions). WebSo..
+            └── ui.js
+```
+
+</details>
+
+<!-- TREE_END -->
+
+
+
+
+>>>>>>> a876ff8 (docs: update all documentation for v2.1.0 diagnostic system)
 
 ---
 

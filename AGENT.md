@@ -21,8 +21,16 @@ Frontend: vanilla JS + xterm.js, komunikuje s Rust backendem přes Tauri IPC (in
 ## Quickstart
 
 ```bash
-# App Mode (builds Rust + starts)
-bash run.sh
+# Professional Installation System (v2.1.0+)
+./install.sh                    # Auto-detect distro, install deps, build
+./install.sh --mode=app         # App Mode (window)
+sudo ./install.sh --mode=os     # OS Mode (full desktop replacement)
+
+# Upgrade (with premium UI)
+./upgrade.sh                    # Auto-backup, pull, rebuild, validate
+
+# App Mode (quick dev)
+bash run.sh                     # Legacy launcher
 
 # Dev mode (hot reload frontend)
 npm run dev
@@ -30,14 +38,90 @@ npm run dev
 # Build release binary
 cd src-tauri && cargo build --release
 
-# OS Mode
-sudo bash os/install.sh && sudo reboot
+# Diagnostic System (v2.1.0+)
+./diagnostics/install-diagnostics.sh         # Install crash logger
+./diagnostics/crash-logger.sh crash "type"   # Manual crash capture
+tail -f diagnostics/logs/compositor/*.log    # Live logs
 
 # Emergency recovery (black screen)
 Ctrl+Alt+F2 -> prihlaseni ->
 sudo systemctl disable xkor-login.service
 sudo systemctl enable --now sddm
 sudo reboot
+```
+
+---
+
+## Diagnostic System (v2.1.0+) ⚠️ CRITICAL
+
+### Automatic Crash Capture
+
+When crash occurs:
+1. `diagnostics/crash-logger.sh` auto-runs
+2. Captures full system state:
+   - Kernel version, memory, disk
+   - User sessions (loginctl)
+   - Runtime directory (`/run/user/UID`)
+   - Compositor state (Hyprland/X11)
+   - systemd journal (last 50 lines)
+   - Environment variables
+   - Process list
+   - File permissions
+3. Saves to `diagnostics/crashes/YYYY-MM-DD_HH-MM-SS.log`
+4. **Auto-commits to git** with structured message
+5. You: `git pull` to get crash reports
+
+### Directory Structure
+
+```
+diagnostics/
+├── crash-logger.sh          # Main crash capture script
+├── install-diagnostics.sh   # One-command installer
+├── crashes/                 # Full crash reports (tracked in git)
+├── errors/                  # Error logs (tracked in git)
+└── logs/                    # Runtime logs (gitignored, too large)
+    ├── compositor/          # Hyprland/X11 startup logs
+    ├── runtime/             # App runtime logs
+    ├── install/             # Installation logs
+    ├── upgrade/             # Upgrade logs
+    ├── frontend/            # Browser/Tauri logs
+    ├── backend/             # Rust backend logs
+    ├── terminal/            # PTY/terminal logs
+    └── system/              # System service logs
+```
+
+### Critical Fix (v2.1.0)
+
+**Problem**: Hyprland crashed with "Couldn't uniqfd for .sock2"  
+**Root Cause**: `xkor-login.service` had NO PAM session → systemd-logind never created `/run/user/UID`  
+**Fix**: Added `PAMName=login` to `os/systemd/xkor-login.service`
+
+**Files Changed**:
+- `os/systemd/xkor-login.service` — Added PAMName=login
+- `os/bin/start-hyprland` — Enhanced launcher with pre-flight checks, socket cleanup, logging
+- `diagnostics/crash-logger.sh` — Auto-capture crashes + git commit
+- `.gitignore` — Track crashes/errors, ignore bulk logs
+
+### Debugging Workflow
+
+```bash
+# Before any work:
+git pull  # Get auto-committed crash reports
+
+# Check for crashes:
+ls -lt diagnostics/crashes/
+
+# View latest crash:
+cat diagnostics/crashes/*.log | less
+
+# Live compositor logs:
+tail -f diagnostics/logs/compositor/*.log
+
+# System journal:
+journalctl -u xkor-login -f
+
+# Manual crash test:
+./diagnostics/crash-logger.sh crash "test" "Testing crash capture"
 ```
 
 ---

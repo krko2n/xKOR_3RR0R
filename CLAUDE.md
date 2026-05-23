@@ -7,10 +7,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 **xKOR_3RR0R** is a fullscreen cyberpunk system dashboard for Linux with two operating modes:
-- **App Mode**: Tauri window on existing desktop (`bash run.sh`)
-- **OS Mode**: Replaces entire desktop environment (`sudo bash os/install.sh`)
+- **App Mode**: Tauri window on existing desktop (`./install.sh --app`)
+- **OS Mode**: Replaces entire desktop environment (`sudo ./install.sh --mode=os`)
 
 **Tech Stack**: Tauri v2 (Rust backend) + vanilla JavaScript frontend, targeting Arch Linux.
+
+**Version**: 2.1.0-beta.1 (May 2026)
+
+**Key Features (v2.1.0)**:
+- Professional installation system (multi-distro)
+- Automatic crash diagnostics with git auto-commit
+- Enhanced Hyprland launcher with PAM session support
+- Comprehensive logging infrastructure
+- Premium upgrade UI with version tracking
 
 ---
 
@@ -18,7 +27,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Development
 ```bash
-# App Mode - dev server with hot reload
+# Professional installer (recommended)
+./install.sh                    # Auto-detect distro, deps, build
+./install.sh --dev              # Debug build
+
+# Quick dev mode (legacy)
 bash run.sh
 # or
 npm run dev
@@ -29,14 +42,40 @@ cd src-tauri && cargo build --release
 
 ### Production
 ```bash
-# Build release binary
-bash run.sh release
+# App Mode installation
+./install.sh
 
-# OS Mode install (Arch Linux only)
-sudo bash os/install.sh
+# OS Mode installation (Arch Linux, Hyprland/Wayland)
+sudo ./install.sh --mode=os
 
-# OS Mode upgrade (no reboot needed)
-bash os/upgrade.sh
+# Diagnostic system setup
+./diagnostics/install-diagnostics.sh
+
+# Upgrade (with premium UI + auto-backup)
+./upgrade.sh
+
+# System health check
+./xkor-doctor.sh
+./xkor-doctor.sh --fix          # Auto-fix issues
+```
+
+### Diagnostics (v2.1.0+)
+```bash
+# View live logs
+tail -f diagnostics/logs/compositor/*.log
+journalctl -u xkor-login -f
+
+# Check for crashes
+ls -lt diagnostics/crashes/
+
+# Manual crash capture
+./diagnostics/crash-logger.sh crash "type" "message"
+
+# Cleanup old logs (7+ days)
+./diagnostics/crash-logger.sh cleanup
+
+# ALWAYS before debugging:
+git pull  # Get auto-committed crash reports
 ```
 
 ### Testing & Verification
@@ -248,6 +287,12 @@ hyprctl reload
 
 ## Known Issues & Workarounds
 
+### ✅ FIXED in v2.1.0: Hyprland Socket Initialization Crash
+**Symptom**: "Couldn't uniqfd for .sock2", compositor crash on startup  
+**Root Cause**: xkor-login.service had no PAM session → systemd-logind never created `/run/user/UID`  
+**Fix**: Added `PAMName=login` to `os/systemd/xkor-login.service`  
+**Status**: RESOLVED. If still occurs, check `diagnostics/crashes/` for auto-captured report.
+
 ### Network & Temperature Stats Disabled
 - sysinfo 0.33 removed network API
 - TODO: Implement via netlink or `/proc/net/dev` direct read
@@ -266,6 +311,13 @@ hyprctl reload
 - Old Hyprland syntax, removed in newer versions
 - Installer auto-fixes via sed: `/dwindle:pseudotile/d`
 - Also removes `pseudotile = true` inside `dwindle { }` blocks
+
+### Debugging Tips (v2.1.0+)
+- Check crash reports: `cat diagnostics/crashes/*.log`
+- Live logs: `tail -f diagnostics/logs/compositor/*.log`
+- System journal: `journalctl -u xkor-login -e`
+- Manual capture: `./diagnostics/crash-logger.sh crash "type" "msg"`
+- **Always `git pull` before debugging** - crash reports auto-commit
 
 ---
 
