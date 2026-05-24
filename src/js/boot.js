@@ -92,7 +92,11 @@ function finishBoot() {
     window.initApp();
   } else {
     console.error('[xKOR] FATAL: initApp() is not defined!');
-    alert('App initialization function not loaded. Check console.');
+    if (window.reportFatal) {
+      window.reportFatal('initApp() function not loaded - app.js may have failed to load', new Error('initApp undefined'));
+    } else {
+      alert('App initialization function not loaded. Check console.');
+    }
   }
 }
 

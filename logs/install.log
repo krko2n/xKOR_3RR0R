@@ -1,0 +1,265 @@
+=== SKILLS INSTALLATION LOG ===
+Timestamp: Sun May 24 12:39:54 CEDT 2026
+
+(node:19128) ExperimentalWarning: CommonJS module C:\msys64\mingw64\lib\node_modules\npm\node_modules\debug\src\node.js is loading ES Module C:\msys64\mingw64\lib\node_modules\npm\node_modules\supports-color\index.js using require().
+Support for loading ES Module in require() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[90m│[39m
+[34m●[39m  [46m[30m[1m claude-code_2-1-150_agent [22m[39m[49m Agent detected — installing non-interactively
+[?25l[90m│[39m
+[32m◇[39m  Source: https://github.com/vercel-labs/skills.git
+[?25h[?25l[90m│[39m
+[35m◒[39m  Fetching skills[999D[J[35m◐[39m  Fetching skills[999D[J[35m◓[39m  Fetching skills[999D[J[35m◑[39m  Fetching skills[999D[J[35m◒[39m  Fetching skills[999D[J[32m◇[39m  Found [32m1[39m skill
+[?25h[90m│[39m
+[34m●[39m  Selected 1 skill: [36mfind-skills[39m
+[?25l[90m│[39m
+[999D[J[32m◇[39m  55 agents
+[?25h[90m│[39m
+[34m●[39m  Installing to: [36mClaude Code[39m, [36mContinue[39m, [36mCursor[39m, [36mGitHub Copilot[39m
+
+[90m│[39m
+[32m◇[39m  [0mInstallation Summary[0m [90m─────────────────────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[36m~\.agents\skills\find-skills[39m[22m                                          [90m│[39m
+[90m│[39m  [2m  [32muniversal:[39m Cursor, GitHub Copilot, Amp, Antigravity, Cline +8 more[22m  [90m│[39m
+[90m│[39m  [2m  [2msymlink →[22m[2m Claude Code, Continue[22m                                     [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m├────────────────────────────────────────────────────────────────────────╯[39m
+[90m│[39m
+[32m◇[39m  [0mSecurity Risk Assessments[0m [90m─────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                           [90m│[39m
+[90m│[39m  [2m             [2mGen[22m[2m               [2mSocket[22m[2m            [2mSnyk[22m[2m[22m      [90m│[39m
+[90m│[39m  [2m[36mfind-skills[39m  [32mSafe[39m              [32m0 alerts[39m          [33mMed Risk[39m[22m  [90m│[39m
+[90m│[39m  [2m[22m                                                           [90m│[39m
+[90m│[39m  [2m[2mDetails:[22m[2m [2mhttps://skills.sh/vercel-labs/skills[22m[2m[22m              [90m│[39m
+[90m│[39m  [2m[22m                                                           [90m│[39m
+[90m├─────────────────────────────────────────────────────────────╯[39m
+[?25l[90m│[39m
+[999D[J[32m◇[39m  Installation complete
+[?25h
+[90m│[39m
+[32m◇[39m  [0m[32mInstalled 1 skill[39m[0m [90m────────────────────────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[32m✓[39m ~\.agents\skills\find-skills[22m                                        [90m│[39m
+[90m│[39m  [2m  [32muniversal:[39m Cursor, GitHub Copilot, Amp, Antigravity, Cline +8 more[22m  [90m│[39m
+[90m│[39m  [2m  [2msymlinked:[22m[2m Claude Code, Continue[22m                                    [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m├────────────────────────────────────────────────────────────────────────╯[39m
+
+[90m│[39m
+[90m└[39m  [32mDone![39m[2m  Review skills before use; they run with full agent permissions.[22m
+
+(node:10288) ExperimentalWarning: CommonJS module C:\msys64\mingw64\lib\node_modules\npm\node_modules\debug\src\node.js is loading ES Module C:\msys64\mingw64\lib\node_modules\npm\node_modules\supports-color\index.js using require().
+Support for loading ES Module in require() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[90m│[39m
+[34m●[39m  [46m[30m[1m claude-code_2-1-150_agent [22m[39m[49m Agent detected — installing non-interactively
+[?25l[90m│[39m
+[32m◇[39m  Source: https://github.com/anthropics/skills.git
+[?25h[?25l[90m│[39m
+[35m◒[39m  Cloning repository[999D[J[35m◐[39m  Cloning repository[999D[J[35m◓[39m  Cloning repository[999D[J[35m◑[39m  Cloning repository[999D[J[35m◒[39m  Cloning repository[999D[J[35m◐[39m  Cloning repository[999D[J[35m◓[39m  Cloning repository[999D[J[35m◑[39m  Cloning repository[999D[J[35m◒[39m  Cloning repository.[999D[J[35m◐[39m  Cloning repository.[999D[J[35m◓[39m  Cloning repository.[999D[J[35m◑[39m  Cloning repository.[999D[J[35m◒[39m  Cloning repository.[999D[J[35m◐[39m  Cloning repository.[999D[J[35m◓[39m  Cloning repository.[999D[J[35m◑[39m  Cloning repository.[999D[J[35m◒[39m  Cloning repository..[999D[J[35m◐[39m  Cloning repository..[999D[J[35m◓[39m  Cloning repository..[999D[J[35m◑[39m  Cloning repository..[999D[J[32m◇[39m  Repository cloned
+[?25h[?25l[90m│[39m
+[999D[J[35m◒[39m  Discovering skills[999D[J[35m◐[39m  Discovering skills[999D[J[35m◓[39m  Discovering skills[999D[J[32m◇[39m  Found [32m18[39m skills
+[?25h[90m│[39m
+[31m■[39m  No matching skills found for: mcp-builder,frontend-design
+[90m│[39m
+[34m●[39m  Available skills:
+[90m│[39m
+[90m│[39m    - template-skill
+[90m│[39m
+[90m│[39m    - algorithmic-art
+[90m│[39m
+[90m│[39m    - brand-guidelines
+[90m│[39m
+[90m│[39m    - canvas-design
+[90m│[39m
+[90m│[39m    - claude-api
+[90m│[39m
+[90m│[39m    - doc-coauthoring
+[90m│[39m
+[90m│[39m    - docx
+[90m│[39m
+[90m│[39m    - frontend-design
+[90m│[39m
+[90m│[39m    - internal-comms
+[90m│[39m
+[90m│[39m    - mcp-builder
+[90m│[39m
+[90m│[39m    - pdf
+[90m│[39m
+[90m│[39m    - pptx
+[90m│[39m
+[90m│[39m    - skill-creator
+[90m│[39m
+[90m│[39m    - slack-gif-creator
+[90m│[39m
+[90m│[39m    - theme-factory
+[90m│[39m
+[90m│[39m    - web-artifacts-builder
+[90m│[39m
+[90m│[39m    - webapp-testing
+[90m│[39m
+[90m│[39m    - xlsx
+(node:16104) ExperimentalWarning: CommonJS module C:\msys64\mingw64\lib\node_modules\npm\node_modules\debug\src\node.js is loading ES Module C:\msys64\mingw64\lib\node_modules\npm\node_modules\supports-color\index.js using require().
+Support for loading ES Module in require() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[90m│[39m
+[34m●[39m  [46m[30m[1m claude-code_2-1-150_agent [22m[39m[49m Agent detected — installing non-interactively
+[?25l[90m│[39m
+[32m◇[39m  Source: https://github.com/anthropics/skills.git
+[?25h[?25l[90m│[39m
+[35m◒[39m  Cloning repository[999D[J[35m◐[39m  Cloning repository[999D[J[35m◓[39m  Cloning repository[999D[J[35m◑[39m  Cloning repository[999D[J[35m◒[39m  Cloning repository[999D[J[35m◐[39m  Cloning repository[999D[J[35m◓[39m  Cloning repository[999D[J[35m◑[39m  Cloning repository[999D[J[35m◒[39m  Cloning repository.[999D[J[35m◐[39m  Cloning repository.[999D[J[35m◓[39m  Cloning repository.[999D[J[35m◑[39m  Cloning repository.[999D[J[35m◒[39m  Cloning repository.[999D[J[35m◐[39m  Cloning repository.[999D[J[35m◓[39m  Cloning repository.[999D[J[35m◑[39m  Cloning repository.[999D[J[35m◒[39m  Cloning repository..[999D[J[35m◐[39m  Cloning repository..[999D[J[35m◓[39m  Cloning repository..[999D[J[32m◇[39m  Repository cloned
+[?25h[?25l[90m│[39m
+[999D[J[35m◒[39m  Discovering skills[999D[J[35m◐[39m  Discovering skills[999D[J[32m◇[39m  Found [32m18[39m skills
+[?25h[90m│[39m
+[34m●[39m  Selected 1 skill: [36mmcp-builder[39m
+[?25l[90m│[39m
+[999D[J[32m◇[39m  55 agents
+[?25h[90m│[39m
+[34m●[39m  Installing to: [36mClaude Code[39m, [36mContinue[39m, [36mCursor[39m, [36mGitHub Copilot[39m
+
+[90m│[39m
+[32m◇[39m  [0mInstallation Summary[0m [90m─────────────────────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[1mExample Skills[22m[2m[22m                                                        [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[36m~\.agents\skills\mcp-builder[39m[22m                                          [90m│[39m
+[90m│[39m  [2m  [32muniversal:[39m Cursor, GitHub Copilot, Amp, Antigravity, Cline +8 more[22m  [90m│[39m
+[90m│[39m  [2m  [2msymlink →[22m[2m Claude Code, Continue[22m                                     [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m├────────────────────────────────────────────────────────────────────────╯[39m
+[90m│[39m
+[32m◇[39m  [0mSecurity Risk Assessments[0m [90m─────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                           [90m│[39m
+[90m│[39m  [2m             [2mGen[22m[2m               [2mSocket[22m[2m            [2mSnyk[22m[2m[22m      [90m│[39m
+[90m│[39m  [2m[36mmcp-builder[39m  [32mSafe[39m              [32m0 alerts[39m          [33mMed Risk[39m[22m  [90m│[39m
+[90m│[39m  [2m[22m                                                           [90m│[39m
+[90m│[39m  [2m[2mDetails:[22m[2m [2mhttps://skills.sh/anthropics/skills[22m[2m[22m               [90m│[39m
+[90m│[39m  [2m[22m                                                           [90m│[39m
+[90m├─────────────────────────────────────────────────────────────╯[39m
+[?25l[90m│[39m
+[999D[J[35m◒[39m  Installing skills[999D[J[32m◇[39m  Installation complete
+[?25h
+[90m│[39m
+[32m◇[39m  [0m[32mInstalled 1 skill[39m[0m [90m────────────────────────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[1mExample Skills[22m[2m[22m                                                        [90m│[39m
+[90m│[39m  [2m[32m✓[39m ~\.agents\skills\mcp-builder[22m                                        [90m│[39m
+[90m│[39m  [2m  [32muniversal:[39m Cursor, GitHub Copilot, Amp, Antigravity, Cline +8 more[22m  [90m│[39m
+[90m│[39m  [2m  [2msymlinked:[22m[2m Claude Code, Continue[22m                                    [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m├────────────────────────────────────────────────────────────────────────╯[39m
+
+[90m│[39m
+[90m└[39m  [32mDone![39m[2m  Review skills before use; they run with full agent permissions.[22m
+
+(node:24152) ExperimentalWarning: CommonJS module C:\msys64\mingw64\lib\node_modules\npm\node_modules\debug\src\node.js is loading ES Module C:\msys64\mingw64\lib\node_modules\npm\node_modules\supports-color\index.js using require().
+Support for loading ES Module in require() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[90m│[39m
+[34m●[39m  [46m[30m[1m claude-code_2-1-150_agent [22m[39m[49m Agent detected — installing non-interactively
+[?25l[90m│[39m
+[32m◇[39m  Source: https://github.com/anthropics/skills.git
+[?25h[?25l[90m│[39m
+[35m◒[39m  Cloning repository[999D[J[35m◐[39m  Cloning repository[999D[J[35m◓[39m  Cloning repository[999D[J[35m◑[39m  Cloning repository[999D[J[35m◒[39m  Cloning repository[999D[J[35m◐[39m  Cloning repository[999D[J[35m◓[39m  Cloning repository[999D[J[35m◑[39m  Cloning repository[999D[J[35m◒[39m  Cloning repository.[999D[J[35m◐[39m  Cloning repository.[999D[J[35m◓[39m  Cloning repository.[999D[J[35m◑[39m  Cloning repository.[999D[J[35m◒[39m  Cloning repository.[999D[J[35m◐[39m  Cloning repository.[999D[J[35m◓[39m  Cloning repository.[999D[J[35m◑[39m  Cloning repository.[999D[J[35m◒[39m  Cloning repository..[999D[J[35m◐[39m  Cloning repository..[999D[J[35m◓[39m  Cloning repository..[999D[J[35m◑[39m  Cloning repository..[999D[J[32m◇[39m  Repository cloned
+[?25h[?25l[90m│[39m
+[999D[J[35m◒[39m  Discovering skills[999D[J[35m◐[39m  Discovering skills[999D[J[32m◇[39m  Found [32m18[39m skills
+[?25h[90m│[39m
+[34m●[39m  Selected 1 skill: [36mfrontend-design[39m
+[?25l[90m│[39m
+[999D[J[32m◇[39m  55 agents
+[?25h[90m│[39m
+[34m●[39m  Installing to: [36mClaude Code[39m, [36mContinue[39m, [36mCursor[39m, [36mGitHub Copilot[39m
+
+[90m│[39m
+[32m◇[39m  [0mInstallation Summary[0m [90m─────────────────────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[1mExample Skills[22m[2m[22m                                                        [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[36m~\.agents\skills\frontend-design[39m[22m                                      [90m│[39m
+[90m│[39m  [2m  [32muniversal:[39m Cursor, GitHub Copilot, Amp, Antigravity, Cline +8 more[22m  [90m│[39m
+[90m│[39m  [2m  [2msymlink →[22m[2m Claude Code, Continue[22m                                     [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m├────────────────────────────────────────────────────────────────────────╯[39m
+[90m│[39m
+[32m◇[39m  [0mSecurity Risk Assessments[0m [90m─────────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                               [90m│[39m
+[90m│[39m  [2m                 [2mGen[22m[2m               [2mSocket[22m[2m            [2mSnyk[22m[2m[22m      [90m│[39m
+[90m│[39m  [2m[36mfrontend-design[39m  [32mSafe[39m              [32m0 alerts[39m          [32mLow Risk[39m[22m  [90m│[39m
+[90m│[39m  [2m[22m                                                               [90m│[39m
+[90m│[39m  [2m[2mDetails:[22m[2m [2mhttps://skills.sh/anthropics/skills[22m[2m[22m                   [90m│[39m
+[90m│[39m  [2m[22m                                                               [90m│[39m
+[90m├─────────────────────────────────────────────────────────────────╯[39m
+[?25l[90m│[39m
+[999D[J[32m◇[39m  Installation complete
+[?25h
+[90m│[39m
+[32m◇[39m  [0m[32mInstalled 1 skill[39m[0m [90m────────────────────────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[1mExample Skills[22m[2m[22m                                                        [90m│[39m
+[90m│[39m  [2m[32m✓[39m ~\.agents\skills\frontend-design[22m                                    [90m│[39m
+[90m│[39m  [2m  [32muniversal:[39m Cursor, GitHub Copilot, Amp, Antigravity, Cline +8 more[22m  [90m│[39m
+[90m│[39m  [2m  [2msymlinked:[22m[2m Claude Code, Continue[22m                                    [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m├────────────────────────────────────────────────────────────────────────╯[39m
+
+[90m│[39m
+[90m└[39m  [32mDone![39m[2m  Review skills before use; they run with full agent permissions.[22m
+
+(node:15000) ExperimentalWarning: CommonJS module C:\msys64\mingw64\lib\node_modules\npm\node_modules\debug\src\node.js is loading ES Module C:\msys64\mingw64\lib\node_modules\npm\node_modules\supports-color\index.js using require().
+Support for loading ES Module in require() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[90m│[39m
+[34m●[39m  [46m[30m[1m claude-code_2-1-150_agent [22m[39m[49m Agent detected — installing non-interactively
+[?25l[90m│[39m
+[32m◇[39m  Source: https://github.com/vercel-labs/agent-skills.git
+[?25h[?25l[90m│[39m
+[35m◒[39m  Fetching skills[999D[J[35m◐[39m  Fetching skills[999D[J[35m◓[39m  Fetching skills[999D[J[35m◑[39m  Fetching skills[999D[J[35m◒[39m  Fetching skills[999D[J[35m◐[39m  Fetching skills[999D[J[35m◓[39m  Fetching skills[999D[J[35m◑[39m  Fetching skills[999D[J[32m◇[39m  Found [32m8[39m skills
+[?25h[90m│[39m
+[34m●[39m  Selected 1 skill: [36mweb-design-guidelines[39m
+[?25l[90m│[39m
+[999D[J[32m◇[39m  55 agents
+[?25h[90m│[39m
+[34m●[39m  Installing to: [36mClaude Code[39m, [36mContinue[39m, [36mCursor[39m, [36mGitHub Copilot[39m
+
+[90m│[39m
+[32m◇[39m  [0mInstallation Summary[0m [90m─────────────────────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[36m~\.agents\skills\web-design-guidelines[39m[22m                                [90m│[39m
+[90m│[39m  [2m  [32muniversal:[39m Cursor, GitHub Copilot, Amp, Antigravity, Cline +8 more[22m  [90m│[39m
+[90m│[39m  [2m  [2msymlink →[22m[2m Claude Code, Continue[22m                                     [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m├────────────────────────────────────────────────────────────────────────╯[39m
+[90m│[39m
+[32m◇[39m  [0mSecurity Risk Assessments[0m [90m───────────────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                                     [90m│[39m
+[90m│[39m  [2m                       [2mGen[22m[2m               [2mSocket[22m[2m            [2mSnyk[22m[2m[22m      [90m│[39m
+[90m│[39m  [2m[36mweb-design-guidelines[39m  [32mSafe[39m              [32m0 alerts[39m          [33mMed Risk[39m[22m  [90m│[39m
+[90m│[39m  [2m[22m                                                                     [90m│[39m
+[90m│[39m  [2m[2mDetails:[22m[2m [2mhttps://skills.sh/vercel-labs/agent-skills[22m[2m[22m                  [90m│[39m
+[90m│[39m  [2m[22m                                                                     [90m│[39m
+[90m├───────────────────────────────────────────────────────────────────────╯[39m
+[?25l[90m│[39m
+[999D[J[32m◇[39m  Installation complete
+[?25h
+[90m│[39m
+[32m◇[39m  [0m[32mInstalled 1 skill[39m[0m [90m────────────────────────────────────────────────────╮[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m│[39m  [2m[32m✓[39m ~\.agents\skills\web-design-guidelines[22m                              [90m│[39m
+[90m│[39m  [2m  [32muniversal:[39m Cursor, GitHub Copilot, Amp, Antigravity, Cline +8 more[22m  [90m│[39m
+[90m│[39m  [2m  [2msymlinked:[22m[2m Claude Code, Continue[22m                                    [90m│[39m
+[90m│[39m  [2m[22m                                                                      [90m│[39m
+[90m├────────────────────────────────────────────────────────────────────────╯[39m
+
+[90m│[39m
+[90m└[39m  [32mDone![39m[2m  Review skills before use; they run with full agent permissions.[22m
+

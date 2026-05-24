@@ -88,8 +88,14 @@ impl TerminalManager {
                     CString::new("bash").unwrap(),
                     CString::new("--login").unwrap(),
                 ];
-                let _ = nix::unistd::execvp(&CString::new("bash").unwrap(), &args);
-                std::process::exit(1);
+                // If execvp returns, it failed
+                match nix::unistd::execvp(&CString::new("bash").unwrap(), &args) {
+                    Err(e) => {
+                        eprintln!("[xKOR] FATAL: Failed to exec bash: {}", e);
+                        std::process::exit(127);
+                    }
+                    Ok(_) => unreachable!(), // execvp never returns on success
+                }
             }
             ForkResult::Parent { child: _child_pid } => {
                 let master_fd = master.into_raw_fd();

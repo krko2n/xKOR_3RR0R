@@ -35,7 +35,11 @@ function submitLogin() {
               window.startBoot();
             } else {
               console.error('[xKOR] FATAL: startBoot() is not defined!');
-              alert('Boot function not loaded. Check console.');
+              if (window.reportFatal) {
+                window.reportFatal('startBoot() function not loaded - boot.js may have failed to load', new Error('startBoot undefined'));
+              } else {
+                alert('Boot function not loaded. Check console.');
+              }
             }
           }, 800);
         } else {

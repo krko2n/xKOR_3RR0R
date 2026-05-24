@@ -1,0 +1,38 @@
+[0;34m[2026-05-24 12:42:23][0m Starting Skills Verification
+[0;34m[2026-05-24 12:42:23][0m Log file: ./logs/verify_20260524_124223.log
+
+[0;34m[2026-05-24 12:42:23][0m Checking for expected skills...
+
+[0;31m[2026-05-24 12:42:25] ✗[0m Missing: find-skills
+
+[0;31m[2026-05-24 12:42:25] ✗[0m Missing: mcp-builder
+
+[0;31m[2026-05-24 12:42:25] ✗[0m Missing: frontend-design
+
+[0;31m[2026-05-24 12:42:25] ✗[0m Missing: web-design-guidelines
+
+=== VERIFICATION SUMMARY ===
+[0;34m[2026-05-24 12:42:25][0m Total expected: 4
+[0;32m[2026-05-24 12:42:25] ✓[0m Found: 0
+[0;31m[2026-05-24 12:42:25] ✗[0m Missing: 4
+
+[0;34m[2026-05-24 12:42:25][0m All installed global skills:
+(node:8436) ExperimentalWarning: CommonJS module C:\msys64\mingw64\lib\node_modules\npm\node_modules\debug\src\node.js is loading ES Module C:\msys64\mingw64\lib\node_modules\npm\node_modules\supports-color\index.js using require().
+Support for loading ES Module in require() is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[1mGlobal Skills[0m
+
+[1mExample Skills[0m
+  [36mfrontend-design[0m [38;5;102m~\.agents\skills\frontend-design[0m
+    [38;5;102mAgents:[0m Claude Code, Continue
+  [36mmcp-builder[0m [38;5;102m~\.agents\skills\mcp-builder[0m
+    [38;5;102mAgents:[0m Claude Code, Continue
+
+[1mGeneral[0m
+  [36mfind-skills[0m [38;5;102m~\.agents\skills\find-skills[0m
+    [38;5;102mAgents:[0m Claude Code, Continue
+  [36mweb-design-guidelines[0m [38;5;102m~\.agents\skills\web-design-guidelines[0m
+    [38;5;102mAgents:[0m Claude Code, Continue
+
+
+[0;34m[2026-05-24 12:42:26][0m Verification complete! Check ./logs/verify_20260524_124223.log for details.

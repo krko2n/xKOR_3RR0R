@@ -1,693 +1,613 @@
-# AGENT.md Ă˘â‚¬â€ť xKOR_3RR0R
-> Full source audit May 2026. Read before touching anything.
+# AGENT.md - AI Agent Operating Instructions
+
+This file contains critical instructions for AI agents (Claude Code, Cursor, etc.) working with the xKOR_3RR0R project.
+
+READ THIS FILE BEFORE TAKING ANY ACTION.
 
 ---
 
-## Co to je
+## CRITICAL RULE: NO EMOJIS
 
-Fullscreen cyberpunk system dashboard pro Linux. Dva módy:
-- **App Mode** — Tauri okno na existujícím desktopu (`bash run.sh`)
-- **OS Mode** — nahrazuje celý desktop (`sudo bash os/install.sh` + reboot)
+NEVER use emojis in:
+- Code files
+- Documentation
+- Commit messages
+- Issue reports
+- Log messages
+- Terminal output
+- Markdown files
+- Comments
+- Any text output
 
-Solo projekt, krko2n, MIT, Arch Linux only.
-Repo: https://github.com/krko2n/xKOR_3RR0R
-
-**Architecture**: Tauri v2 (Rust backend + HTML/CSS/JS frontend).  
-Nahrazuje původní Electron + Node.js backend (express, ws, node-pty).  
-Frontend: vanilla JS + xterm.js, komunikuje s Rust backendem přes Tauri IPC (invoke + events).
+Use plain text alternatives instead:
+- Instead of checkmark emoji: [OK], [PASS], [SUCCESS]
+- Instead of cross emoji: [FAIL], [ERROR]
+- Instead of warning emoji: [WARN], [WARNING]
+- Instead of info emoji: [INFO], [NOTE]
+- Instead of rocket emoji: "Ready", "Launched", "Started"
+- Instead of bug emoji: "bug", "issue", "error"
 
 ---
 
-## Quickstart
+## PROJECT IDENTITY
+
+**Name**: xKOR_3RR0R  
+**Type**: Cyberpunk system dashboard for Linux  
+**Tech Stack**: Tauri v2 (Rust backend) + Vanilla JavaScript frontend  
+**Target Platform**: Arch Linux (primary), Ubuntu/Debian (supported)  
+**Version**: 2.1.0-beta.1  
+**Installation Path**: /opt/xkor_3rr0r (ALWAYS lowercase with underscore)
+
+**Operating Modes**:
+1. App Mode - Tauri window on existing desktop
+2. OS Mode - Full desktop environment replacement with Hyprland/Wayland
+
+---
+
+## CORE PRINCIPLES
+
+### 1. ANALYZE BEFORE ACTING
+
+ALWAYS:
+- Read CLAUDE.md and AGENT.md first
+- Check existing systems before creating new ones
+- Use `git status`, `git log` to understand current state
+- Search for similar functionality before implementing
+- Verify paths and file existence before operations
+- Test changes before reporting completion
+
+NEVER:
+- Blindly retry failed commands without diagnosis
+- Create duplicate functionality
+- Skip verification steps
+- Assume file paths without checking
+- Use destructive git operations without confirmation
+- Commit changes without explicit request
+
+### 2. CODE QUALITY STANDARDS
+
+- Production-grade: Robust error handling, defensive programming
+- Idempotent: Safe to run scripts multiple times
+- Reversible: Backups before destructive operations
+- Logged: Comprehensive logging to files with timestamps
+- Tested: Include test suites for new systems
+- Documented: Inline comments for non-obvious WHY, not WHAT
+
+### 3. FORBIDDEN PRACTICES
+
+- DO NOT use emojis (see CRITICAL RULE above)
+- DO NOT spam GitHub with duplicate issues
+- DO NOT commit secrets/tokens/passwords
+- DO NOT use `--no-verify` flag unless explicitly requested
+- DO NOT use `git commit --amend` unless explicitly requested
+- DO NOT skip hooks or bypass signing
+- DO NOT create premature abstractions
+- DO NOT add unnecessary error handling for impossible scenarios
+
+---
+
+## PROJECT STRUCTURE
+
+### Critical Paths
+
+**Installation Directory**: `/opt/xkor_3rr0r` (lowercase, underscore)
+Never use `/opt/xKOR_3RR0R` - this breaks OS Mode systemd services.
+
+**Configuration Files**:
+- `config/user.json` - App Mode credentials (plaintext)
+- `config/ai-endpoint.json` - AI backend configuration
+
+**Version Files** (update ALL 4 when bumping version):
+1. `src-tauri/Cargo.toml` - `version = "X.Y.Z"`
+2. `package.json` - `"version": "X.Y.Z"`
+3. `src-tauri/tauri.conf.json` - `"version": "X.Y.Z"`
+4. `os/install.sh` - `Version: X.Y.Z` (header comment)
+
+### Key Directories
+
+```
+src-tauri/src/          Rust backend (Tauri commands, PTY, system stats)
+src/                    Frontend (HTML, JS, CSS)
+os/                     OS Mode files (systemd, login, Hyprland launcher)
+diagnostics/            Logging and crash reporting infrastructure
+scripts/                Automation scripts (error reporting, monitoring)
+config/                 Configuration files
+```
+
+---
+
+## CURRENT SYSTEMS IN PLACE
+
+### 1. Logging Infrastructure (v2.1.0+)
+
+**Location**: `diagnostics/`
+
+**Components**:
+- `crash-logger.sh` - Comprehensive crash capture with git auto-commit
+- `install-diagnostics.sh` - Directory structure setup
+- Log directories: `logs/compositor/`, `logs/tauri/`, `logs/frontend/`
+- Crash directory: `crashes/` (tracked by git)
+- Gitignore configured: logs ignored, crashes tracked
+
+**Status**: ACTIVE and WORKING
+
+### 2. Error Reporting System (v3.0.0)
+
+**Automated Pipeline**:
+1. Error detection (patterns: ERROR, FATAL, PANIC, EXCEPTION, SEGFAULT)
+2. Data collection (logs, stack traces, system info)
+3. Secret sanitization (removes tokens, passwords, API keys)
+4. Report generation (structured markdown, SHA256 signatures)
+5. Issue deduplication (SQLite database, rate limiting)
+6. GitHub issue creation (via gh CLI)
+7. Background monitoring (systemd service or daemon)
+
+**Components**:
+- `upgrade.sh` v3.0.0 - Main automation script
+- `scripts/error-reporting/` - Generated by setup scripts
+- `scripts/create-error-reporting.sh` - Setup generator
+- `scripts/create-github-integration.sh` - GitHub integration setup
+- `scripts/create-monitoring-service.sh` - Monitoring daemon setup
+- `scripts/create-deduplication.sh` - Deduplication database setup
+- `scripts/test-error-reporting.sh` - Test suite
+- `.github/monitoring/` - Background monitoring scripts
+- `.github/issue_cache.db` - Deduplication database (runtime)
+
+**Deduplication**:
+- SHA256 signatures from error_type + stack_trace
+- SQLite database tracking all issues
+- 5-minute cooldown between duplicate reports
+- Maximum 10 occurrences per signature
+- Comments added to existing issues instead of creating new ones
+
+**Security**:
+- Sanitizes tokens, passwords, API keys from logs
+- Limits log output to last 50 lines per file
+- Filters environment variables
+- No binary uploads
+
+**Status**: IMPLEMENTED and TESTED
+
+### 3. Frontend Error Handling
+
+**File**: `src/js/error-logger.js`
+
+**Features**:
+- Global window.onerror handler
+- window.addEventListener('unhandledrejection') for promises
+- Invokes Tauri command `log_frontend_error`
+- Creates structured error reports
+
+**Integration**: Loaded in `src/index.html`
+
+**Status**: IMPLEMENTED
+
+### 4. Backend Error Handling
+
+**Files**:
+- `src-tauri/src/commands/logging.rs` - Tauri logging command
+- `src-tauri/src/lib.rs` - Panic hook registration
+
+**Features**:
+- Custom panic hook captures Rust panics
+- Invokes `diagnostics/crash-logger.sh crash` with details
+- Auto-commits crash reports to git
+- `log_frontend_error` command for JavaScript errors
+
+**Status**: IMPLEMENTED
+
+### 5. Hyprland Integration
+
+**File**: `os/bin/start-hyprland`
+
+**Features**:
+- Crash detection on compositor exit
+- Automatic crash report generation
+- Captures Hyprland logs, systemd journal, system state
+- Git auto-commit of crash data
+
+**Status**: WORKING (fixed PAMName=login issue in v2.1.0)
+
+### 6. Background Monitoring
+
+**Service**: `xkor-monitor.service` (systemd)
+
+**Configuration**:
+- 60-second check interval
+- CPU limit: 10%
+- Memory limit: 100MB
+- Restart policy: on-failure
+- Manual mode available: `start-monitor.sh` / `stop-monitor.sh`
+
+**Monitored Sources**:
+- `diagnostics/logs/**/*.log`
+- `diagnostics/crashes/*.log`
+- `journalctl -u xkor-login`
+
+**Status**: CONFIGURED (requires systemctl enable)
+
+---
+
+## ARCHITECTURAL DECISIONS
+
+### Why Tauri v2?
+
+- Native performance (Rust backend)
+- Smaller binary than Electron
+- Better security model (no Node.js runtime in frontend)
+- WebView instead of bundled Chromium
+
+### Why PTY in Rust?
+
+- Direct control over pseudoterminal lifecycle
+- Avoids Node.js pty.js dependencies
+- Uses nix crate for fork + posix_openpt + execvp
+- Nonblocking I/O with EAGAIN retry
+
+### Why Bash + Python for Error Reporting?
+
+- Bash: System integration, log collection, command execution
+- Python: Complex logic (JSON parsing, SHA256 hashing, GitHub API)
+- SQLite: Lightweight, embedded deduplication database
+- No external services required
+
+### Why systemd for Monitoring?
+
+- Native Linux service management
+- Resource limits enforcement
+- Automatic restart on failure
+- Journal integration
+- Fallback: Manual daemon mode for non-systemd systems
+
+### Why SHA256 Signatures?
+
+- Deterministic error identification
+- Collision-resistant hashing
+- Fixed-length output (first 16 chars used)
+- Groups similar errors automatically
+
+---
+
+## DEVELOPMENT WORKFLOW
+
+### Before Making Changes
 
 ```bash
-# Professional Installation System (v2.1.0+)
-./install.sh                    # Auto-detect distro, install deps, build
-./install.sh --mode=app         # App Mode (window)
-sudo ./install.sh --mode=os     # OS Mode (full desktop replacement)
+# Check git status
+git status
 
-# Upgrade (with premium UI)
-./upgrade.sh                    # Auto-backup, pull, rebuild, validate
+# Pull latest changes (crash reports may have been auto-committed)
+git pull --rebase origin main
 
-# App Mode (quick dev)
-bash run.sh                     # Legacy launcher
+# Check for existing functionality
+grep -r "function_name" .
+find . -name "*relevant*"
 
-# Dev mode (hot reload frontend)
+# Read relevant documentation
+cat CLAUDE.md AGENT.md ERROR_REPORTING_SYSTEM.md
+```
+
+### Development Commands
+
+```bash
+# App Mode development
+./install.sh --dev
 npm run dev
 
-# Build release binary
+# Build Rust backend only
 cd src-tauri && cargo build --release
 
-# Diagnostic System (v2.1.0+)
-./diagnostics/install-diagnostics.sh         # Install crash logger
-./diagnostics/crash-logger.sh crash "type"   # Manual crash capture
-tail -f diagnostics/logs/compositor/*.log    # Live logs
+# Run tests
+cd src-tauri && cargo test
+./scripts/test-error-reporting.sh
 
-# Emergency recovery (black screen)
-Ctrl+Alt+F2 -> prihlaseni ->
-sudo systemctl disable xkor-login.service
-sudo systemctl enable --now sddm
-sudo reboot
+# Check logs
+tail -f diagnostics/logs/compositor/*.log
+journalctl -u xkor-login -f
+cat diagnostics/crashes/*.log
 ```
+
+### Testing Requirements
+
+- Frontend changes: Test in browser before reporting complete
+- Backend changes: Run `cargo test`, verify with manual test
+- New scripts: Test both success and failure scenarios
+- OS Mode changes: Test in VM or on test system first
+
+### Commit Guidelines
+
+**Format**: `type(scope): description`
+
+**Types**:
+- feat: New feature
+- fix: Bug fix
+- chore: Maintenance, updates (no functional change)
+- refactor: Code restructure (no behavior change)
+- docs: Documentation only
+- style: Formatting, whitespace (no logic change)
+
+**Examples**:
+- `feat(error-reporting): add GitHub issue deduplication`
+- `fix(pty): handle EAGAIN in nonblocking read`
+- `chore(release): bump version 2.1.0 -> 2.1.1`
+
+**Rules**:
+- Always `git pull --rebase origin main` before push
+- Create new commits, not amends (unless explicitly requested)
+- Never use `--no-verify` (unless explicitly requested)
+- Only commit when explicitly requested by user
 
 ---
 
-## Diagnostic System (v2.1.0+) ⚠️ CRITICAL
+## DEBUGGING GUIDELINES
 
-### Automatic Crash Capture
+### Common Issues
 
-When crash occurs:
-1. `diagnostics/crash-logger.sh` auto-runs
-2. Captures full system state:
-   - Kernel version, memory, disk
-   - User sessions (loginctl)
-   - Runtime directory (`/run/user/UID`)
-   - Compositor state (Hyprland/X11)
-   - systemd journal (last 50 lines)
-   - Environment variables
-   - Process list
-   - File permissions
-3. Saves to `diagnostics/crashes/YYYY-MM-DD_HH-MM-SS.log`
-4. **Auto-commits to git** with structured message
-5. You: `git pull` to get crash reports
+**Hyprland Socket Crash**:
+- Symptom: "Couldn't uniqfd for .sock2"
+- Fix: Already fixed in v2.1.0 (PAMName=login in service file)
+- Check: `journalctl -u xkor-login -n 50`
 
-### Directory Structure
+**PTY Not Spawning**:
+- Check: `ls -la /dev/pts/`
+- Check: Backend logs for fork/exec errors
+- Verify: bash is in PATH
 
-```
-diagnostics/
-├── crash-logger.sh          # Main crash capture script
-├── install-diagnostics.sh   # One-command installer
-├── crashes/                 # Full crash reports (tracked in git)
-├── errors/                  # Error logs (tracked in git)
-└── logs/                    # Runtime logs (gitignored, too large)
-    ├── compositor/          # Hyprland/X11 startup logs
-    ├── runtime/             # App runtime logs
-    ├── install/             # Installation logs
-    ├── upgrade/             # Upgrade logs
-    ├── frontend/            # Browser/Tauri logs
-    ├── backend/             # Rust backend logs
-    ├── terminal/            # PTY/terminal logs
-    └── system/              # System service logs
-```
+**GitHub CLI Not Authenticated**:
+- Run: `gh auth status`
+- Fix: `gh auth login`
 
-### Critical Fix (v2.1.0)
+**Database Errors**:
+- Reinitialize: `rm -f .github/issue_cache.db`
+- Rebuild: `./scripts/error-reporting/dedup-manager.sh init`
 
-**Problem**: Hyprland crashed with "Couldn't uniqfd for .sock2"  
-**Root Cause**: `xkor-login.service` had NO PAM session → systemd-logind never created `/run/user/UID`  
-**Fix**: Added `PAMName=login` to `os/systemd/xkor-login.service`
+### Investigation Steps
 
-**Files Changed**:
-- `os/systemd/xkor-login.service` — Added PAMName=login
-- `os/bin/start-hyprland` — Enhanced launcher with pre-flight checks, socket cleanup, logging
-- `diagnostics/crash-logger.sh` — Auto-capture crashes + git commit
-- `.gitignore` — Track crashes/errors, ignore bulk logs
+1. Check diagnostics: `cat diagnostics/crashes/*.log`
+2. View recent logs: `tail -50 diagnostics/logs/*/latest.log`
+3. Check systemd: `journalctl -u xkor-login -e`
+4. Check monitoring: `systemctl status xkor-monitor`
+5. Git status: `git status` (check for uncommitted crashes)
+6. Pull updates: `git pull` (get auto-committed crash reports)
 
-### Debugging Workflow
+---
+
+## ERROR HANDLING PATTERNS
+
+### Bash Scripts
 
 ```bash
-# Before any work:
-git pull  # Get auto-committed crash reports
+set -e  # Exit on error
 
-# Check for crashes:
-ls -lt diagnostics/crashes/
+# Function error handling
+if ! some_command; then
+    log_error "Command failed"
+    return 1
+fi
 
-# View latest crash:
-cat diagnostics/crashes/*.log | less
+# Cleanup on exit
+trap 'cleanup_function' EXIT
 
-# Live compositor logs:
-tail -f diagnostics/logs/compositor/*.log
+# Check file existence
+if [[ ! -f "$FILE_PATH" ]]; then
+    log_error "File not found: $FILE_PATH"
+    exit 1
+fi
+```
 
-# System journal:
-journalctl -u xkor-login -f
+### JavaScript (Frontend)
 
-# Manual crash test:
-./diagnostics/crash-logger.sh crash "test" "Testing crash capture"
+```javascript
+// Global error handler (already implemented)
+window.onerror = (msg, source, line, col, error) => {
+    // Invoke Tauri logging command
+};
+
+// Async error handling
+try {
+    const result = await window.__TAURI__.core.invoke('command', args);
+} catch (error) {
+    console.error('Command failed:', error);
+    // Log to backend
+}
+```
+
+### Rust (Backend)
+
+```rust
+// Result propagation
+fn operation() -> Result<String, String> {
+    let value = risky_call()?;
+    Ok(value)
+}
+
+// Panic hook (already implemented in lib.rs)
+std::panic::set_hook(Box::new(|panic_info| {
+    // Call crash-logger.sh
+}));
 ```
 
 ---
 
-## Architektura (Tauri v2)
+## VERSIONING
+
+When bumping version, update ALL FOUR files:
+
+1. `src-tauri/Cargo.toml`
+2. `package.json`
+3. `src-tauri/tauri.conf.json`
+4. `os/install.sh`
+
+Use semantic versioning: MAJOR.MINOR.PATCH
+
+- MAJOR: Breaking changes
+- MINOR: New features (backward compatible)
+- PATCH: Bug fixes
+
+Current version: 2.1.0-beta.1
+
+---
+
+## DEPLOYMENT CHECKLIST
+
+Before releasing:
+
+- [ ] All version files updated
+- [ ] Tests passing: `cargo test`, `./scripts/test-error-reporting.sh`
+- [ ] No hardcoded paths
+- [ ] No emojis in any files
+- [ ] Secrets sanitized
+- [ ] Documentation updated
+- [ ] Changelog entry created
+- [ ] Git committed with proper message
+- [ ] Tagged: `git tag v2.1.0`
+
+---
+
+## AGENT INTERACTION RULES
+
+### DO:
+
+- Read AGENT.md and CLAUDE.md before every task
+- Analyze existing code before suggesting changes
+- Test changes before reporting completion
+- Ask for clarification when requirements are ambiguous
+- Use plain text for all output (NO EMOJIS)
+- Create backups before destructive operations
+- Log all operations to files
+- Provide rollback instructions after risky changes
+
+### DON'T:
+
+- Use emojis in any output
+- Retry failed commands without diagnosis
+- Create duplicate functionality
+- Skip testing steps
+- Assume paths without verification
+- Commit without explicit request
+- Use destructive git operations without confirmation
+- Skip reading documentation
+
+### Response Template
+
+When completing tasks, structure responses as:
 
 ```
-src-tauri/ (Rust backend)
-  |-- src/main.rs  -> vstupni bod
-  |-- src/lib.rs   -> setup: plugins, commands, background stats emitter
-  |-- src/terminal/mod.rs -> PTY manager (fork + nix crate)
-  |-- src/commands/
-  |   |-- system.rs   -> authenticate, get_system_stats (CPU/RAM/NET/TEMP)
-  |   |-- fs.rs       -> fs_list, fs_read, fs_write, fs_delete, fs_rename
-  |   |-- ai.rs       -> ai_query (Ollama/OpenAI via reqwest)
-  |   |-- terminal_cmd.rs -> terminal_spawn, write, resize, kill
-  |-- Cargo.toml     -> tauri v2, sysinfo, nix, reqwest, serde
-  |-- tauri.conf.json -> fullscreen, kiosk, CSP
-  |-- capabilities/default.json -> IPC permissions
+[TASK SUMMARY]
+Brief description of what was done.
 
-src/ (HTML/CSS/JS frontend)
-  |-- index.html    -> main entry (login, boot, app screens)
-  |-- css/          -> 10 theme files (strict #000/#0f0 palette)
-  |-- js/
-      |-- app.js        -> Tauri IPC bridge, globals, initApp()
-      |-- login.js      -> login screen (USER/PASSWORD/AUTH)
-      |-- boot.js       -> boot sequence (kernel logs + glitch flash)
-      |-- terminal.js   -> xterm.js with Tauri PTY backend
-      |-- tabs.js       -> F1-F7 mode switching + dynamic terminal tabs
-      |-- ai.js         -> AI chat panel (F5 overlay) + web terminal
-      |-- globe.js      -> Canvas2D pseudosphere with heatmap dots
-      |-- graphs.js     -> CPU/RAM/TEMP sparkline graphs
-      |-- keyboard.js   -> On-screen QWERTY visualizer
-      |-- filemanager.js -> File explorer (invoke fs_list etc.)
-      |-- network.js    -> Network status display
+[CHANGES MADE]
+- File 1: Description
+- File 2: Description
 
-Komunikace: window.__TAURI__.core.invoke() + event.listen()  
-Neni Node.js backend, neni WebSocket, neni Electron. Vse pres Tauri IPC.
+[VERIFICATION STEPS]
+Commands to verify changes work.
 
-> **DŮLEŽITÉ**: Následující sekce v tomto souboru dokumentují PŮVODNÍ Electron/Node.js architekturu.  
-> Codebase byl MIGROVÁN na Tauri v2 (Rust backend). Staré soubory (`src/main.js`, `src/preload.js`, `backend/`) jsou zachovány pro referenci ale NEJSOU používány.  
-> Nové Rust soubory: `src-tauri/src/lib.rs`, `src-tauri/src/terminal/mod.rs`, `src-tauri/src/commands/*.rs`.  
-> Nový frontend: `src/index.html`, `src/js/*.js`, `src/css/*.css`.  
-> Nový build: `os/rebuild.sh` (cargo build --release).
+[NEXT STEPS]
+What the user should do next (if applicable).
 
-  WS   terminal    -> backend/terminal/pty.js (node-pty) -- OBSOLETE (Rust PTY v src-tauri)
-  WS   stats loop  -> kazde 200ms: {type:"stats", cpu, ram, net, temp}
+[NOTES]
+Any warnings, known issues, or important context.
 ```
 
 ---
 
-## Kazdy soubor
-### src/main.js [OBSOLETE — zachováno pro referenci]
+## PRIORITY ORDER
 
-Původní Electron entry. Spoustel backend (try/catch), pak createWindow().  
-Nyní nahrazeno `src-tauri/src/main.rs` + `lib.rs`.
-BrowserWindow: 1920x1080, fullscreen, frameless, bg #000.
-nodeIntegration: false, contextIsolation: true, devTools: true (F12).
+When multiple actions are possible, prioritize in this order:
 
-### src/preload.js
-WebSocket na ws://localhost:3001. Auto-reconnect 1s.
-contextBridge exposes window.xkor:
-  send(obj)       -- posle JSON na backend WS
-  onBackend(cb)   -- subscribes na vsechny WS zpravy
-
-### backend/server.js
-Express + WS server port 3001.
-node-pty v try/catch -- app funguje i bez terminalu.
-Stats loop 200ms -- broadcast {type:"stats", cpu, ram, net, temp}.
-/auth IIFE na konci souboru -- cte config/user.json, porovnava plaintext.
-POZOR: /auth IIFE pouziva raw req.on('data'), ne express.json() -- funguje,
-ale nesedi s ostatnim kodem. Bezpecne prepsat na req.body.
-
-### backend/terminal/pty.js [OBSOLETE — Rust PTY v src-tauri/src/terminal/mod.rs]
-Sessions v objektu klic=Date.now() string.
-Shell: bash (linux) / powershell (win32).
-PTY: cols 120, rows 30, cwd HOME.
-API: create()->{id}, write(id,data), onData(cb).
-DULEZITE: native modul -- musi byt rebuild pro Electron ABI.
-
-### backend/ai/proxy.js
-Cte config/ai-endpoint.json.
-POST { model, prompt } na endpoint.
-Vraci data.response nebo "AI endpoint unreachable".
-OPRAVENO: drive chybelo 'model' -- Ollama selhal.
-
-### backend/system/cpu.js
-Cte /proc/stat radek 0. Vraci {idle, total} -- raw ticky.
-graphs.js pocita: usage = 1 - (idleDiff/totalDiff).
-
-### backend/system/ram.js
-Cte /proc/meminfo radky 0+1 (MemTotal, MemFree). Vraci {total, free} v KB.
-
-### backend/system/net.js
-Cte /proc/net/dev, najde prvni non-loopback interface dynamicky.
-OPRAVENO: drive hardcoded eth0/enp -- nefungovalo na wifi.
-Vraci {rx, tx} bajty (ne rychlost -- graphs.js deli 1000000).
-
-### backend/system/temp.js
-Cte /sys/class/thermal/thermal_zone0/temp. Deli 1000 (mili->stupne).
-try/catch vraci {temp:0} pokud nedostupne.
-
-### backend/fs/*.js
-list.js: readdirSync, vraci [{name, type:"dir"|"file"}].
-read.js: readFileSync, vraci {content} nebo {error}.
-write.js: writeFileSync, ocekava {path, content}.
-delete.js: unlinkSync, ocekava {path}.
-rename.js: renameSync, ocekava {oldPath, newPath}.
-Zadna autentizace, zadna sanitizace cest -- pristup k cemukoli.
+1. Read documentation (AGENT.md, CLAUDE.md, ERROR_REPORTING_SYSTEM.md)
+2. Analyze existing code and systems
+3. Verify current state (git status, file existence, service status)
+4. Plan changes (consider reversibility, test strategy)
+5. Implement changes (smallest necessary scope)
+6. Test changes (automated tests, manual verification)
+7. Document changes (comments, documentation updates)
+8. Report results (structured response with verification steps)
 
 ---
 
-### src/renderer/index.html
-Tri hlavni divy (zobrazeny/skryty JS):
-  1. #login-screen   -- login (login.js)
-  2. #boot-screen    -- boot animace (boot.js)
-  3. #app            -- hlavni UI (display:none na startu)
+## SECURITY GUIDELINES
 
-POZOR: Drive existovaly OBA #login-overlay i #login-screen.
-#login-overlay byl odstranen -- pouziva se pouze #login-screen.
+### Never Commit:
 
-Poradi scriptu (dulezite -- login.js MUSI byt prvni):
-  1. js/login.js      <- prvni, nastavi window.xkorAuthPending
-  2. js/boot.js       <- ceka na 'xkor-auth' event
-  3. js/ui.js
-  4. js/tabs.js
-  5. js/terminal.js
-  6. js/ai.js
-  7. js/filemanager.js
-  8. js/keyboard.js
-  9. js/graphs.js
-  10. js/globe.js
+- Passwords, tokens, API keys
+- Private keys or certificates
+- Environment files (.env)
+- User credentials
+- Session data
 
-### src/renderer/js/login.js
-Pouziva #login-screen (ne #login-overlay).
-POST na http://localhost:3001/auth (POZOR: port 3001, ne 3000).
-Pri uspechu: fade out, skryje screen, dispatch Event('xkor-auth').
-Nastavi window.xkorAuthPending = false pred dispatchem.
-Bez login-screen v HTML: okamzite dispatch, app spusti boot.
+### Always Sanitize:
 
-### src/renderer/js/boot.js
-Dve casti:
-1. Auth guard na zacatku -- interceptuje setTimeout/setInterval dokud neprijde xkor-auth
-2. Boot sekvence -- bootLines array, progress bar, fade do #app
+- Log files before upload
+- Error reports before GitHub issue creation
+- Environment variables in crash reports
+- Stack traces containing sensitive data
 
-Spusteni bootStep() musi byt gatovane:
-  if (window.xkorAuthPending) {
-      window.addEventListener("xkor-auth", bootStep, {once:true});
-  } else { bootStep(); }
+### Secret Patterns to Remove:
 
-### src/renderer/js/ui.js
-Minimal -- subscribes na backend events, vola window.updateGraphs(data)
-kdyz data.type === "stats".
-
-### src/renderer/js/tabs.js
-Klik na .tab: skryje vsechny .terminal a #web-panel, ukaze vybrany.
-Nepouziva switchTerminal() z terminal.js -- jen show/hide.
-
-### src/renderer/js/terminal.js
-POZOR: nepouziva xterm.js -- terminaly jsou plain divy.
-Vystup appendovan jako textContent (zadne ANSI kody, zadne barvy).
-Tri sessions: term1, term2, term3.
-Klavesnicovy vstup: document level keydown -> activeTerminal.
-Preskoci pokud je focus na #ai-input.
-switchTerminal(name) -- prepina aktivni terminal.
-
-### src/renderer/js/ai.js
-#ai-panel, #ai-input, #ai-messages, #ai-toggle.
-F2 prepina panel. Enter posle zpravu.
-POST na http://localhost:3001/ai s {prompt}.
-
-### src/renderer/js/graphs.js
-4 canvas elementy. Kruhove buffery velikost 200.
-drawGraph() kresli caru s neon barvou:
-  CPU #00ff9f, RAM #00d4ff, NET #ffaa00, TEMP #ff0033.
-window.updateGraphs nastaveno zde, volano z ui.js.
-
-### src/renderer/js/globe.js
-fetch("../../assets/globe/worldmap.json") -- opravena cesta.
-OPRAVENO: drive "assets/globe/worldmap.json" -- hledalo v src/renderer/ -- nenaslo.
-60fps rotace, threat zones: Ukraine/Middle East/Taiwan.
-
-### src/renderer/js/filemanager.js
-Nacita /fs/list, klik pro navigaci, rightclick context menu.
-Paste: cte /fs/read, zapisuje /fs/write.
-Otevreni souboru: posle `cat "path"\r` do aktivniho terminalu.
-
-### src/renderer/js/keyboard.js
-On-screen klavesnice v #keyboard divu.
-Caps/Shift/Ctrl/Alt toggle stavy.
-Fyzicka klavesnice: keydown prida .active, keyup odebere.
-OPRAVENO: radek 2 mel "V" misto "I" (QWERTY bug).
+- `token=.*`
+- `password=.*`
+- `api_key=.*`
+- `API_.*=.*`
+- `SECRET_.*=.*`
+- Bearer tokens in headers
 
 ---
 
-## CSS soubory
+## PERFORMANCE CONSIDERATIONS
 
-theme.css     -- bg #0a0a0a, barva #00ff9f, font ShareTechMono, top bar, AI panel
-layout.css    -- #layout flex, #left-panel 300px, #main-panel flex:1, #bottom 200px
-login.css     -- #login-screen fixed z-index:9999, CRT scanlines ::before,
-                 vignette ::after, rohove uvozovky na #login-box,
-                 pulse animace loga, shake animace spatneho hesla, fade-out po auth
-boot.css      -- boot screen styly
-terminal.css  -- terminal div styly
-ai.css        -- AI panel message styly
-filemanager.css -- fm-item styly
-keyboard.css  -- .key button styly
-graphs.css    -- canvas sizing
-globe.css     -- globe canvas sizing
+### Resource Limits:
 
----
+- Monitoring service: 10% CPU, 100MB RAM
+- Log files: Rotate daily, keep 7 days
+- Crash reports: No auto-deletion (tracked by git)
+- Database: SQLite (lightweight, no external service)
 
-## Config soubory
+### Optimization:
 
-config/ai-endpoint.json
-  { "endpoint": "http://localhost:11434/api/generate", "model": "llama3" }
-  Default: Ollama locally s llama3. Zmen pro jiny AI backend.
-
-config/user.json
-  { "username": "admin", "password": "admin" }
-  Plaintext credentials pro App Mode login. ZMEN PRED POUZITIM.
+- Use background threads for long operations
+- Implement cooldown periods for repetitive tasks
+- Limit log output to last N lines
+- Use find -mmin for recent file checks (not full directory scans)
 
 ---
 
-## OS Mode
+## MAINTENANCE
 
-### Instalacni cesta
-VZDY /opt/xkor_3rr0r (mala pismena, podtrzitko).
-Hardcoded v: login.js, start-login.sh, xkor-session.sh, .xinitrc.
-Nikdy /opt/xKOR_3RR0R -- cesty se neshodnou a vse prestane fungovat.
+### Daily:
 
-### Boot sekvence
-```
-Power on -> GRUB -> Kernel -> Plymouth (os/plymount/xkor/)
-  -> systemd multi-user.target
-  -> xkor-login.service (Conflicts=getty@tty1)
-    -> /bin/bash /opt/xkor_3rr0r/os/login/start-login.sh
-      -> cd /opt/xkor_3rr0r/os/login
-      -> node login.js  (TTY1 readline app)
-        -> ASCII banner + prompt Username/Password
-        -> pamtester login <user> authenticate
-        -> FAIL: process.exit(1) -> service restartuje -> login znovu
-        -> OK:
-          -> /opt/xkor_3rr0r/os/loading/loading.sh  (~4s animace)
-          -> startx /opt/xkor_3rr0r/os/xorg/xkor-session.sh
-            -> xset s off/-dpms/s noblank
-            -> unclutter -root -idle 1 &
-            -> cd /opt/xkor_3rr0r && exec npm start
-              -> Electron fullscreen
-```
+- Check `git status` for uncommitted crashes
+- Review `diagnostics/crashes/` for new issues
 
-### os/login/login.js
-TTY readline app -- NE Electron, NE browser.
-Bezi v plain Node.js na TTY1.
-execSync loading.sh pak startx xkor-session.sh (blokujici).
-process.exit(1) pri spatnem heslu -> systemd restartuje -> login znovu.
+### Weekly:
 
-### os/login/pam.js
-spawn('pamtester', ['login', username, 'authenticate']).
-Zapise password na stdin. Resolve true pokud exit code === 0.
-POZADAVEK: sudo pacman -S pamtester
+- Run `./scripts/test-error-reporting.sh`
+- Check GitHub issues created by automation
+- Review monitoring logs: `journalctl -u xkor-monitor`
 
-### os/login/package.json
-Zadne dependencies. authenticate-pam bylo odebrano (Node 26 nekompatibilni).
-Pouziva pamtester systemovy binary.
+### Monthly:
 
-### os/login/start-login.sh
-Minimal: cd, install deps pokud chybi, exec node login.js.
-NEdela nic jineho -- login.js sam vola startx.
-
-### os/systemd/xkor-login.service
-After=systemd-user-sessions.service plymouth-quit-wait.service
-Conflicts=getty@tty1 (dulezite -- zabrÄ‚Ë‡nÄ‚Â­ konfliktu s TTY loginovacim promptem)
-StandardInput/Output=tty, TTYPath=/dev/tty1
-Restart=on-failure (po exit 1 se spusti znovu)
-
-### os/systemd/xkor-ui.service
-Definovano ale NENI instalovano install.sh.
-Aktualni flow: login.js vola startx primo. Nechej neinstalovat.
-
-### os/xorg/xkor-session.sh
-Vola startx. DISPLAY=:0, HOME=/home/admin, XAUTHORITY=/home/admin/.Xauthority.
-POZOR: hardcoded /home/admin -- pokud uzivatel neni "admin", rozbije se Xorg.
-
-### os/install.sh
-1. Check root + Arch
-2. chmod +x vsechny .sh soubory
-3. pacman: nodejs npm xorg-* mesa plymouth pam unclutter pamtester
-4. cp repo do /opt/xkor_3rr0r
-5. npm install v /opt/xkor_3rr0r
-6. electron-rebuild: node node_modules/@electron/rebuild/lib/cli.js -f -w node-pty
-7. npm install v /opt/xkor_3rr0r/os/login
-8. cp xkor-login.service -> /etc/systemd/system/, enable
-9. Plymouth tema
-
-### os/unistall.sh (TYPO: jeden 'l' v nazvu souboru)
-Disable xkor-login.service, rm /opt/xkor_3rr0r.
+- Cleanup old logs: `./diagnostics/crash-logger.sh cleanup`
+- Check deduplication stats: `./scripts/error-reporting/dedup-manager.sh stats`
+- Update dependencies: `cargo update`, `npm update`
 
 ---
 
-## Dependencies
+## FINAL NOTES
 
-package.json:
-  electron ^34, node-pty ^1.0.0 (NATIVE - rebuild!),
-  ws ^8.16, express ^4.18, systeminformation ^5.22 (neni pouzito),
-  @xterm/xterm ^5.5 (neni pouzito v terminal.js!)
-devDependencies:
-  @electron/rebuild ^3.7.2 (3.6.0 broken na Node 26 - yargs ESM bug)
-  electron-builder ^24.6
+This file is the PRIMARY reference for AI agents working with xKOR_3RR0R.
 
----
+Always read this file before taking action.
 
-## Zname bugy (stav po agent v6)
+When in doubt:
+1. Read this file again
+2. Check existing systems
+3. Ask for clarification
 
-### OPRAVENO
-- login.js: port 3000 -> 3001
-- login.js: event 'xkor-auth-ok' -> 'xkor-auth'
-- login.js: pouzival #login-overlay -> opraven na #login-screen
-- index.html: odstranen duplicitni #login-overlay div
-- proxy.js: chybel model field pro Ollama
-- net.js: hardcoded eth0/enp -> dynamicke hledani interface
-- globe.js: spatna fetch cesta -> ../../assets/globe/worldmap.json
-- keyboard.js: 'V' -> 'I' v radku 2
-- authenticate-pam: odstranen (Node 26 nekompatibilni) -> pamtester
-- install.sh: inconsistentni cesty /opt/xKOR_3RR0R vs /opt/xkor_3rr0r
-
-### OPRAVENO (pokracovani â€” fixy z agent v7)
-- terminal.js: integrace @xterm/xterm — ANSI barvy, kurzor, vyber, barevne temy
-  Fix: vytvoreny Terminal instance ve trech terminal divich, theme odpovida
-  cyberpunk palete (#0a0a0a bg, #00ff9f fg), xterm.css + xterm.js nacteny v index.html
-- @xterm/xterm v package.json — nyni skutecne pouzito v terminal.js
-- server.js: WebSocket listener leak â€” ptyManager.onData() callbacky se kumulovaly
-  kazdym reconnectem (preload.jsćŻŹéš”1s). Fix: removeCallback() v pty.js,
-  cleanup ve ws.on("close")
-- server.js: /auth pouzival req.on("data") misto req.body â€” i pres express.json()
-  Fix: prepisano na req.body, odstranen IIFE wrapper
-- package.json: electron v dependencies â€” presunuto do devDependencies
-  (zbytecne stahovani Electron binary pri kazdem npm install)
-### OPRAVENO (agent v9 — config, rebuild, package.json fixes, v3 ESM/node-pty opravy)
-- os/login/package.json: odstranen `#` komentar (nevalidni JSON — NPM padal na `JSON.parse Unexpected token '#'`)
-- os/login/login.js: `# @summary` -> `// @summary` (`#` bez `!` je nevalidni JS — Node.js hlasil syntax error)
-- os/login/pam.js: zmenen komentar aby neobsahoval retezec `authenticate-pam`
-  (install.sh grepu `grep -q "authenticate-pam" pam.js` failoval)
-- run.sh + os/install.sh: nahrazeno `electron-rebuild` CLI za programaticke API
-  (@electron/rebuild v3.6.0 ma ESM/yargs bug: `require is not defined` na Node 16)
-- run.sh + os/install.sh: opravena cesta — `require('@electron/rebuild')` misto
-  `require('.../lib/module/rebuilder')` (ta cesta neexistuje)
-- fix-all.sh: vytvoren a po commitu smazan (byl urceny jen pro tento agent run)
-- os/install.sh: po dokonceni automaticky spousti `xkor-login.service` — neni treba reboot
-- README: odstranen `sudo reboot` z navodu, pridan UPGRADE section
-- os/upgrade.sh: aktualizovan header — neni treba reboot
-- os/login/login.js: kompletne prepisan — centrovani (vertikalne + horizontalne), ANSI barvy,
-  heslo zobrazovano jako hvezdicky, raw stdin mod pro plnou kontrolu vstupu,
-  cleanup stale X locks (/tmp/.X0-lock) pred startx
-- os/xorg/xkor-session.sh: cleanup stale X locks, fallback reinstalace Electron binary
-  pokud chybi (reseni "Electron failed to install correctly")
-- run.sh + os/install.sh: rebuild nyni explicitne predava `electronVersion` z `electron/package.json`
-  (reseni "Expected a string version for electron version, got undefined" na Node.js 26)
-- login.js: `startx` volano pres `su -l <user> -c "startx ..."` — X server musi bezet pod
-  authenticated user, ne pod rootem (jinak "unable to open display :0")
-- start-login.sh + install.sh: nastaveni `Xwrapper.config: allowed_users=anybody`
-  (X server defaultne blokuje start jako root)
-- xkor-session.sh: odstranen redundantni cleanup X lock (dela login.js)
-- xkor-session.sh: pridan `XDG_RUNTIME_DIR=/run/user/$(id -u)` + mkdir
-  (reseni "XDG_RUNTIME_DIR is not set" pro Electron stabilitu v Xorg session)
-- login.js: `su -l` obaleno try/catch — pri selhani X serveru se vrati na login obrazovku
-- README: emergency recovery rozsireno o Hyprland navod (XDG_RUNTIME_DIR, fix hyprland.conf)
-- install.sh: step 7 — npm install s `--unsafe-perm` (Electron postinstall pod rootem)
-- install.sh: step 12b — kompletni oprava Hyprland/Wayland prostredi:
-  - odstraneni `dwindle:pseudotile` INLINE syntax (sed '/dwindle:pseudotile/d')
-  - odstraneni `pseudotile = true` BLOCK syntax uvnitr `dwindle { }` (sed '/^\s*pseudotile\s*=/d')
-  - cleanup prazdneho `dwindle { }` bloku po odstraneni vsech radku
-  - kontrola `hyprland.conf` + `hyprlandd.conf` + cely `hyprland.conf.d/`
-  - /etc/profile.d/xkor-hyprland.sh (vsechny login shelly, vsechny uzivatele)
-  - ~/.bashrc (interaktivni non-login shelly)
-  - /usr/local/bin/xkor-hyprland (wrapper, vzdy funguje)
-  - explicitni mkdir /run/user/<uid>
-  - loginctl enable-linger
-- verify.sh: hyprctl configerrors — kontrola chyb Hyprland configu (optional, jen pokud hyprctl existuje)
-  - pokud configerrors ma vystup, vypise varovani + kazdy radek chyby
-- start-login.sh: runtime fallback — oprava hyprland.conf pri kazdem startu login.js
-  (stejna sed pravidla: inline + block + empty block cleanup)
-- run.sh: --unsafe-perm u vsech npm install + Electron reinstal
-  (reseni "Electron failed to install correctly" v App Mode)
-- [Tauri MIGRACE] Celý backend přepsán z Electron+Node.js do Tauri v2 (Rust):
-  - src-tauri/Cargo.toml: tauri v2, sysinfo, nix, reqwest
-  - src-tauri/src/terminal/mod.rs: PTY pres nix fork() + posix_openpt
-  - src-tauri/src/commands/system.rs: CPU/RAM/NET/TEMP pres sysinfo
-  - src-tauri/src/commands/fs.rs: filesystem pres std::fs
-  - src-tauri/src/commands/ai.rs: AI pres reqwest -> Ollama
-  - src-tauri/src/commands/terminal_cmd.rs: spawn/write/resize/kill
-  - Frontend: vanilla JS + xterm.js, komunikace pres Tauri IPC
-  - Žádný Electron, žádný node-pty, žádný Express/WS
-  - Build: os/rebuild.sh (cargo build --release)
-  - Hyprland: os/deploy-hyprland.sh (windowrulev2 pro Tauri okno)
-
-### OPRAVENO (agent v8 — badge system)
-- badges/counts.json + files.json: opraveny na realne hodnoty (4135 lines, 72 files)
-- README: endpoint badge (ne static) — dynamicky nacita z JSONu
-- Cache problem: shields.io cachuje endpoint badge az 24h. Reseni:
-  workflow prida &v=${{ github.run_id }} do badge URL v README
-  (kazdy push ma unikatni URL → shields.io fetchne znovu)
-- .github/workflows/count-lines.yml: krok "Generate badges":
-  1. spusti cloc --json
-  2. vygeneruje badges/counts.json + badges/files.json
-  3. sed updatuje README — vymeni cast [^)]* za URL s &v={run_id}
-  4. commituje LINES.md + badgy + README
-
-### OPRAVENO (agent v11 — icon cleanup, README/AGENT.md sync, autonomní agent workflow)
-- upgrade.sh: pridano automatické čištění korumpovaných PNG ikon (<500 bytů) pred build-em
-  - find "$REPO_ROOT/src-tauri/icons" -name "*.png" -size -500c -delete
-  - Důvod: staré PNG soubory měly CRC error, ImageMagick je nemohl konvertovat
-  - build.rs nyní vygeneruje čisté ikony automaticky bez convert chyb
-- src-tauri/icons/128x128.png, 128x128@2x.png, 32x32.png, icon.png: smazány (budou auto-regenerovány)
-- README.md: aktualizován UPGRADE section — zmíněn auto-cleanup ikon, smazán "git pull" step
-- AGENT.md: kompletně přepsaný autonomní agent workflow:
-  - Agent (LLM) si SÁM commituje a pushuje bez dotazů na uživatele
-  - Git workflow: identify -> fix -> commit -> push -> iterate
-  - Nikdy temp .ps1 skripty, nikdy force-push, nikdy amend/interactive rebase
-  - Architektura: Tauri v2 (ne Electron), nix PTY (ne node-pty)
-  - Co funguje tabulka: aktualizována na Tauri/sysinfo 0.33 stav
-  - Barevná paleta, commit konvence, cesty -- všechno na jednom místě
-
-### OPRAVENO (agent v12 — audit kompletní, security fixes)
-- src/js/login.js: KRITICKÁ OPRAVA — login fallback NIKDY negrante bez ověření
-  - Staré: .catch(() => { setTimeout(() => { setLoginStatus('ACCESS GRANTED', true) } }) <- BEZ OVĚŘENÍ!
-  - Nové: .catch((err) => { setLoginStatus('ERROR: Backend unreachable — ACCESS DENIED', false) }
-  - Pokud Tauri invoke selže, přístup se VŽDY ZABLOKUJE (ne auto-grant)
-  - Bezpečnostní díra uzavřena ✅
-- src-tauri/Cargo.toml: přidán `build = "build.rs"` do [package]
-  - Cargo nyní explicitně zná, že build.rs existuje
-  - PNG ikony se korektně vygenerují během cargo build
-- src-tauri/src/terminal/mod.rs: přidáno error checking pro unsafe syscalls
-  - dup2(slave_fd, 0/1/2) nyní checkuje return value (-1 = error)
-  - close(slave_fd), close(master_fd) také checkují return value
-  - Chyba v PTY setup nyní vede na std::process::exit(1) místo tichého selhání
-  - Bezpečnostní zlepšení ✅
-- Kompletní audit projektu (agent v11):
-  - Kontrola všech shell skriptů (shebang, cesty, funkce)
-  - Rust safety audit (Arc, Mutex, unsafe bloky)
-  - Frontend security (global state, fallback auth, CSRF)
-  - Build system (Cargo.toml, build.rs, dependencies)
-  - Config soubory (capabilities, CSP, icon paths)
-  - Specifické problémy: Hyprland, XDG_RUNTIME_DIR, PAM, upgrade vs install
-  - Výsledek: 2 KRITICKÉ, 5 WARNING, 6 INFO → VŠE OPRAVENO
-
-## Pravidla
-
-### Cesty
-/opt/xkor_3rr0r -- VZDY male pismena. Zmena rozbije vsechno.
-Backend port: 3001. Vsechny fetch() a WS musi pouzivat 3001.
-config/user.json: App Mode credentials.
-config/ai-endpoint.json: AI backend URL + model.
-
-### Architektura
-os/login/ je samostatna plain Node.js app. Zadne Electron API.
-login.js (TTY) vola startx sam. start-login.sh POUZE exec node login.js.
-xkor-ui.service NENI instalovana -- login.js vola startx primo.
-Node.js + Tauri (Rust) + Bash only. Zadny Python v runtime. Zadny Electron.
-Arch Linux only pro OS Mode. setup.sh muze bezet na jakem Linux.
-
-### Git workflow (AUTONOMNI AGENT WORKFLOW)
-Agent (LLM) si SAMOSTATNE:
-1. **Prochází codebase** -- čte soubory, rozumí architektuře
-2. **Identifikuje problémy/TODO** -- buggy, chybějící feature, refactoring
-3. **Implementuje řešení** -- edituje soubory, vytváří kód
-4. **Commituje změny** -- git add, git commit s konvencí `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`, `style:`
-5. **Pushuje do origin/main** -- git push origin main (bez dotazů)
-6. **Iteruje** -- pokud build/test selhaly, opravuje a commituje znovu
-
-Agent NIKDY:
-- Nevytváří temp .ps1 skripty (vygenerovné jen pro výstup)
-- Nečeká na uživatele pro potvrzení commitů/pushů
-- Nepoužívá force-push, amend, interactive rebase
-- Neslučuje chybné commity -- opravuje v novém commitu
-
-Každý commit musí mít smysluplnou zprávu a odpovídat stylu repo.
-
-### Autonomní agent pravidla
-1. **Full git access** -- agent může commitovat, pushovat, mergovat (bez force)
-2. **Soběstačnost** -- agent neposílá temp soubory, nečeká na interakci
-3. **Transparentnost** -- všechny akce jsou vidět v git historii
-4. **Build verification** -- pokud je to relevantní, agent ověří že build/test projde
-5. **Dokumentace** -- agent aktualizuje README.md, AGENT.md, relevantní komentáře
-6. **Rollback schopnost** -- každý commit je atomický a lze jej revertovat
-
-### Commit konvence
-- `feat:` -- nová feature
-- `fix:` -- oprava bugu
-- `chore:` -- údržba, updates, cleanup (bez funkční změny)
-- `refactor:` -- přepsání kódu bez změny chování
-- `docs:` -- dokumentace
-- `style:` -- formátování, bílé znaky, přejmenování (bez logiky)
-
-### Verzování (Semantic Versioning)
-Projekt se automaticky zvedá s KAŽDOU zmĕnou:
-- **PATCH** (z.z.P) -- bug fix, malá oprava: `fix:`, `style:`, `chore:` (bez API změny)
-- **MINOR** (z.M.z) -- nová feature, nové API: `feat:`, `refactor:` (backward compatible)
-- **MAJOR** (M.z.z) -- breaking change, velký refactor: manuálně při `feat: BREAKING CHANGE`
-
-**Aktuální verze:** `2.0.0-alpha.2`
-
-**Soubory s verzí:**
-- `src-tauri/Cargo.toml` -- version = "X.Y.Z"
-- `package.json` -- "version": "X.Y.Z"
-- `src-tauri/tauri.conf.json` -- "version": "X.Y.Z"
-- `os/install.sh` -- Version: X.Y.Z (v header)
-
-**Versioning flow:**
-1. Agent provede změnu → git commit s `feat:` / `fix:` / ...
-2. Agent spustí build pro verifikaci
-3. Pokud OK → agent zvýší PATCH/MINOR v VŠECH 4 souborech
-4. Nový commit: `chore(release): bump version X.Y.Z → X.Y.(Z+1)`
-5. Tag: `git tag vX.Y.Z`
-6. Push: `git push origin main --tags`
-
-**Alpha/Beta kanál:**
-- Dev = `X.Y.Z-alpha.N` (vyvíjení, testování, security fixes)
-- Beta = `X.Y.Z-beta.N` (feature freeze, bug fixes jen)
-- Release = `X.Y.Z` (produkce, no alpha/beta)
-
-**Alpha cycle:**
-- `2.0.0-alpha.1` -- inicializace Tauri v2 migrací
-- `2.0.0-alpha.2` -- audit, security fixes, build system finalizace
-- `2.0.0-alpha.3+` -- nové features, optimizace, community feedback
-- `2.0.0-beta.1` -- feature freeze
-- `2.0.0` -- release candidate ready
+Remember: NO EMOJIS in any output.
 
 ---
 
-## Barevna paleta
-
-Primarni neon:  #00ff9f
-Cyan akcent:    #00d4ff
-Net/warning:    #ffaa00
-Temp/danger:    #ff0033
-Pozadi:         #0a0a0a
-Panel pozadi:   #111111
-Border:         #00ff9f
-Font:           Share Tech Mono (Google Fonts)
-
----
-
-## Co funguje vs nefunguje
-
-| Feature             | Stav                                          |
-|---------------------|-----------------------------------------------|
-| Tauri v2 okno       | Funguje (Rust backend + vanilla JS frontend)  |
-| App Mode launch     | Funguje (`bash run.sh`)                       |
-| OS Mode installation| Funguje (`sudo bash os/install.sh`)           |
-| OS Mode upgrade     | Funguje (`bash os/upgrade.sh` bez rebootu)    |
-| OS Mode login       | Funguje (pamtester PAM na TTY1)               |
-| Boot animace        | Funguje (Plymouth glitch theme)               |
-| System grafy        | Funguje (CPU, RAM via sysinfo 0.33)          |
-| Terminal (PTY)      | Funguje (Rust nix crate fork+execvp+pty)     |
-| Terminal (xterm.js) | Funguje (ANSI barvy, kurzor, selektion)      |
-| AI panel (F2)       | Funguje (Ollama/OpenAI reqwest proxy)        |
-| File manager        | Funguje (Rust fs commands, cross-platform)   |
-| Keyboard visualizer | Funguje (on-screen QWERTY s event tracking)   |
-| Globe (3D)          | Funguje (65 miast, embedded data, glitch FX) |
-| Network Globe       | Funguje (animated nodes, corrupted feed)     |
-| Web panel (F7)      | Funguje (Rust web_fetch + iframe embed)      |
-| Icon generation     | Funguje (build.rs auto-generuje PNG RGBA)    |
-| PTY (Rust)          | Funguje (src-tauri/src/terminal/mod.rs)      |
-
-
-
-## Push rule
-ALWAYS git pull --rebase origin main before git push.
+Last updated: 2026-05-24  
+xKOR_3RR0R Error Reporting System v3.0.0

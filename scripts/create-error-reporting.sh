@@ -1,0 +1,291 @@
+#!/usr/bin/env bash
+#
+# Creates the error reporting system
+#
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+ERROR_REPORTING_DIR="$SCRIPT_DIR/error-reporting"
+
+mkdir -p "$ERROR_REPORTING_DIR"
+
+# ==============================================================================
+# ERROR REPORT GENERATOR
+# ==============================================================================
+
+cat > "$ERROR_REPORTING_DIR/generate-error-report.py" << 'PYEOF'
+#!/usr/bin/env python3
+"""
+xKOR_3RR0R - Error Report Generator
+Generates structured markdown error reports for GitHub issues
+"""
+
+import sys
+import json
+import hashlib
+import platform
+import subprocess
+from datetime import datetime
+from pathlib import Path
+
+class ErrorReportGenerator:
+    def __init__(self, project_root):
+        self.project_root = Path(project_root)
+        self.report = {}
+
+    def collect_system_info(self):
+        """Collect system information"""
+        return {
+            "os": platform.system(),
+            "os_release": platform.release(),
+            "os_version": platform.version(),
+            "architecture": platform.machine(),
+            "hostname": platform.node(),
+            "python_version": platform.python_version()
+        }
+
+    def get_git_info(self):
+        """Get Git commit information"""
+        try:
+            commit = subprocess.check_output(
+                ["git", "rev-parse", "HEAD"],
+                cwd=self.project_root,
+                text=True
+            ).strip()
+
+            branch = subprocess.check_output(
+                ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+                cwd=self.project_root,
+                text=True
+            ).strip()
+
+            return {"commit": commit, "branch": branch}
+        except:
+            return {"commit": "unknown", "branch": "unknown"}
+
+    def get_app_version(self):
+        """Get application version from package.json"""
+        try:
+            package_json = self.project_root / "package.json"
+            with open(package_json) as f:
+                data = json.load(f)
+                return data.get("version", "unknown")
+        except:
+            return "unknown"
+
+    def get_distro_info(self):
+        """Get Linux distribution information"""
+        try:
+            with open("/etc/os-release") as f:
+                lines = f.readlines()
+                info = {}
+                for line in lines:
+                    if "=" in line:
+                        key, value = line.strip().split("=", 1)
+                        info[key] = value.strip('"')
+                return info.get("PRETTY_NAME", "Unknown Linux")
+        except:
+            return platform.system() + " " + platform.release()
+
+    def sanitize_log(self, log_text):
+        """Remove sensitive information from logs"""
+        # Remove tokens, passwords, API keys
+        sensitive_patterns = [
+            (r'token["\']?\s*[:=]\s*["\']?[\w\-\.]+', 'token=REDACTED'),
+            (r'password["\']?\s*[:=]\s*["\']?[\w\-\.]+', 'password=REDACTED'),
+            (r'api[_\-]?key["\']?\s*[:=]\s*["\']?[\w\-\.]+', 'api_key=REDACTED'),
+            (r'secret["\']?\s*[:=]\s*["\']?[\w\-\.]+', 'secret=REDACTED'),
+        ]
+
+        import re
+        sanitized = log_text
+        for pattern, replacement in sensitive_patterns:
+            sanitized = re.sub(pattern, replacement, sanitized, flags=re.IGNORECASE)
+
+        return sanitized
+
+    def generate_signature(self, error_type, stack_trace):
+        """Generate unique signature for error deduplication"""
+        content = f"{error_type}:{stack_trace}"
+        return hashlib.sha256(content.encode()).hexdigest()[:16]
+
+    def generate_markdown_report(self, error_data):
+        """Generate markdown report"""
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        # Build markdown
+        md = f"""## xKOR_3RR0R Crash Report
+
+**Timestamp:** {timestamp}
+**Error Type:** `{error_data.get('type', 'unknown')}`
+**Version:** `{self.get_app_version()}`
+**Commit:** `{self.get_git_info()['commit'][:8]}`
+**Branch:** `{self.get_git_info()['branch']}`
+
+### Error Message
+
+```
+{error_data.get('message', 'No message provided')}
+```
+
+### Stack Trace
+
+```
+{error_data.get('stack_trace', 'No stack trace available')}
+```
+
+### System Information
+
+- **OS:** {self.get_distro_info()}
+- **Kernel:** {self.collect_system_info()['os_release']}
+- **Architecture:** {self.collect_system_info()['architecture']}
+- **Hostname:** {self.collect_system_info()['hostname']}
+
+### Recent Logs
+
+```
+{self.sanitize_log(error_data.get('logs', 'No logs available')[:2000])}
+```
+
+### Environment
+
+```json
+{json.dumps(error_data.get('environment', {}), indent=2)}
+```
+
+### Error Signature
+
+`{self.generate_signature(error_data.get('type', ''), error_data.get('stack_trace', ''))}`
+
+---
+
+*This issue was automatically generated by xKOR_3RR0R error reporting system.*
+"""
+
+        return md
+
+    def save_report(self, report_md, signature):
+        """Save report to file"""
+        reports_dir = self.project_root / "crash_reports"
+        reports_dir.mkdir(exist_ok=True)
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"{timestamp}_{signature}.md"
+
+        report_file = reports_dir / filename
+        report_file.write_text(report_md)
+
+        return str(report_file)
+
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: generate-error-report.py <error_json_file>")
+        sys.exit(1)
+
+    error_file = Path(sys.argv[1])
+    if not error_file.exists():
+        print(f"Error file not found: {error_file}")
+        sys.exit(1)
+
+    # Load error data
+    with open(error_file) as f:
+        error_data = json.load(f)
+
+    # Detect project root
+    project_root = Path(__file__).parent.parent.parent
+
+    # Generate report
+    generator = ErrorReportGenerator(project_root)
+    report_md = generator.generate_markdown_report(error_data)
+    signature = generator.generate_signature(
+        error_data.get('type', ''),
+        error_data.get('stack_trace', '')
+    )
+
+    # Save report
+    report_file = generator.save_report(report_md, signature)
+
+    # Output result
+    result = {
+        "report_file": report_file,
+        "signature": signature,
+        "markdown": report_md
+    }
+
+    print(json.dumps(result))
+
+if __name__ == "__main__":
+    main()
+PYEOF
+
+chmod +x "$ERROR_REPORTING_DIR/generate-error-report.py"
+
+# ==============================================================================
+# ERROR COLLECTOR
+# ==============================================================================
+
+cat > "$ERROR_REPORTING_DIR/collect-error-data.sh" << 'SHEOF'
+#!/usr/bin/env bash
+#
+# Collects error data and generates JSON payload
+#
+
+set -e
+
+collect_logs() {
+    local logs=""
+
+    # Collect from diagnostics
+    if [[ -d "$PROJECT_ROOT/diagnostics/logs" ]]; then
+        logs+=$(find "$PROJECT_ROOT/diagnostics/logs" -name "*.log" -mtime -1 -exec tail -n 50 {} \; 2>/dev/null || true)
+    fi
+
+    # Collect from journald
+    if command -v journalctl >/dev/null 2>&1; then
+        logs+=$'\n\n=== SYSTEMD JOURNAL ===\n'
+        logs+=$(journalctl -u xkor-login -n 50 --no-pager 2>/dev/null || true)
+    fi
+
+    echo "$logs"
+}
+
+collect_environment() {
+    cat <<EOF
+{
+    "DISPLAY": "${DISPLAY:-not set}",
+    "WAYLAND_DISPLAY": "${WAYLAND_DISPLAY:-not set}",
+    "XDG_SESSION_TYPE": "${XDG_SESSION_TYPE:-not set}",
+    "XDG_RUNTIME_DIR": "${XDG_RUNTIME_DIR:-not set}",
+    "PATH": "${PATH}"
+}
+EOF
+}
+
+main() {
+    local error_type="${1:-unknown}"
+    local error_message="${2:-No message provided}"
+    local stack_trace="${3:-No stack trace}"
+
+    PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+
+    # Generate JSON
+    cat <<EOF
+{
+    "type": "$error_type",
+    "message": "$error_message",
+    "stack_trace": "$stack_trace",
+    "logs": $(echo "$(collect_logs)" | jq -Rs .),
+    "environment": $(collect_environment),
+    "timestamp": "$(date -Iseconds)"
+}
+EOF
+}
+
+main "$@"
+SHEOF
+
+chmod +x "$ERROR_REPORTING_DIR/collect-error-data.sh"
+
+echo "✓ Error reporting system created in: $ERROR_REPORTING_DIR"

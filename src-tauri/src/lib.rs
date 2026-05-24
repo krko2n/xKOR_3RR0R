@@ -57,6 +57,11 @@ fn collect_stats() -> StatsPayload {
 }
 
 pub fn run() {
+    // Install panic hook for crash logging
+    std::panic::set_hook(Box::new(|panic_info| {
+        commands::logging::log_panic(panic_info);
+    }));
+
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_fs::init())
@@ -81,6 +86,7 @@ pub fn run() {
             commands::terminal_cmd::terminal_resize,
             commands::terminal_cmd::terminal_kill,
             commands::terminal_cmd::get_network_status,
+            commands::logging::log_frontend_error,
         ])
         .setup(|app| {
             let handle = app.handle().clone();

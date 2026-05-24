@@ -107,7 +107,11 @@ function initApp() {
     console.log('[xKOR] App initialized successfully');
   } catch (err) {
     console.error('[xKOR] FATAL: App initialization failed:', err);
-    alert('xKOR initialization failed. Check console for details.\n\n' + err.message);
+    if (window.reportFatal) {
+      window.reportFatal('App initialization failed: ' + err.message, err);
+    } else {
+      alert('xKOR initialization failed. Check console for details.\n\n' + err.message);
+    }
   }
 }
 

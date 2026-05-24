@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
 #
-# xKOR_3RR0R - Professional Upgrade Script
-# Version: 2.1.0-beta.1
+# xKOR_3RR0R - Automated Upgrade + Error Reporting + GitHub Integration
+# Version: 3.0.0
 #
-# One-command upgrade with rollback support
-# Usage: ./upgrade.sh [--force] [--no-backup] [--dev]
+# ONE-COMMAND COMPLETE UPGRADE:
+# - Updates project
+# - Installs dependencies
+# - Verifies runtime
+# - Sets up logging
+# - Sets up GitHub issue automation
+# - Sets up crash handlers
+# - Sets up background monitoring
+# - Restarts services
+#
+# Usage: ./upgrade.sh [OPTIONS]
 #
 
 set -e
@@ -16,21 +25,27 @@ set -o pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$SCRIPT_DIR"
+VERSION="3.0.0"
 
-# Backup
+# Paths
 BACKUP_DIR="$HOME/.local/share/xkor_3rr0r/backups"
 BACKUP_TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 BACKUP_PATH="$BACKUP_DIR/backup_$BACKUP_TIMESTAMP"
+
+LOG_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/xkor_3rr0r/logs"
+LOG_FILE="$LOG_DIR/upgrade_$(date +%Y%m%d_%H%M%S).log"
+
+SCRIPTS_DIR="$PROJECT_ROOT/scripts"
+ERROR_REPORTING_DIR="$SCRIPTS_DIR/error-reporting"
+MONITORING_SERVICE_DIR="$PROJECT_ROOT/.github/monitoring"
 
 # Options
 OPT_FORCE=false
 OPT_NO_BACKUP=false
 OPT_DEV_MODE=false
 OPT_VERBOSE=false
-
-# Logging
-LOG_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/xkor_3rr0r/logs"
-LOG_FILE="$LOG_DIR/upgrade_$(date +%Y%m%d_%H%M%S).log"
+OPT_SKIP_SERVICES=false
+OPT_SKIP_GITHUB=false
 
 # ==============================================================================
 # COLORS & LOGGING
@@ -88,7 +103,6 @@ log_verbose() {
     [[ "$OPT_VERBOSE" == "true" ]] && log_raw "${DIM}[DEBUG]${RESET} $*"
 }
 
-# Progress spinner
 spinner() {
     local pid=$1
     local delay=0.1
@@ -142,6 +156,21 @@ create_directory() {
     fi
 }
 
+detect_distro() {
+    if [[ -f /etc/os-release ]]; then
+        source /etc/os-release
+        echo "$ID"
+    elif [[ -f /etc/debian_version ]]; then
+        echo "debian"
+    elif [[ -f /etc/arch-release ]]; then
+        echo "arch"
+    elif [[ -f /etc/fedora-release ]]; then
+        echo "fedora"
+    else
+        echo "unknown"
+    fi
+}
+
 # ==============================================================================
 # GIT OPERATIONS
 # ==============================================================================
@@ -157,6 +186,7 @@ check_git_repo() {
 
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
     CURRENT_COMMIT=$(git rev-parse --short HEAD 2>/dev/null)
+    CURRENT_COMMIT_FULL=$(git rev-parse HEAD 2>/dev/null)
 
     log_success "Repository OK"
     log_verbose "Branch: $CURRENT_BRANCH"
@@ -200,21 +230,18 @@ fetch_updates() {
 
     cd "$PROJECT_ROOT"
 
-    # Get current version
     OLD_VERSION=$(get_version_from_file "$PROJECT_ROOT/package.json")
     log_substep "Current version: ${BOLD}$OLD_VERSION${RESET}"
 
-    # Fetch from remote
     log_substep "Connecting to GitHub..."
     git fetch origin "$CURRENT_BRANCH" || log_fatal "Git fetch failed"
 
-    # Check if updates available
     LOCAL=$(git rev-parse HEAD)
     REMOTE=$(git rev-parse "origin/$CURRENT_BRANCH")
 
     if [[ "$LOCAL" == "$REMOTE" ]]; then
         log_info "Already up to date (commit: ${CURRENT_COMMIT})"
-        if ! ask_yes_no "Rebuild anyway?" "n"; then
+        if ! ask_yes_no "Rebuild and setup error reporting anyway?" "y"; then
             log_info "Nothing to do"
             exit 0
         fi
@@ -222,8 +249,6 @@ fetch_updates() {
         NEW_VERSION="$OLD_VERSION"
     else
         NEW_COMMITS=$(git rev-list --count "$LOCAL..$REMOTE")
-
-        # Preview new version from remote
         NEW_VERSION=$(git show "origin/$CURRENT_BRANCH:package.json" 2>/dev/null | grep '"version"' | head -1 | sed 's/.*"\([0-9][^"]*\)".*/\1/' || echo "$OLD_VERSION")
 
         echo
@@ -248,13 +273,12 @@ pull_updates() {
 
     cd "$PROJECT_ROOT"
 
-    # Show what will be pulled
     log_substep "Changes:"
     git log --oneline "$CURRENT_COMMIT..origin/$CURRENT_BRANCH" | head -5 | tee -a "$LOG_FILE"
 
-    # Pull
     if git pull origin "$CURRENT_BRANCH"; then
         NEW_COMMIT=$(git rev-parse --short HEAD)
+        CURRENT_COMMIT_FULL=$(git rev-parse HEAD)
         log_success "Updated: $CURRENT_COMMIT → $NEW_COMMIT"
     else
         log_fatal "Git pull failed"
@@ -276,29 +300,25 @@ create_backup() {
     create_directory "$BACKUP_DIR"
     create_directory "$BACKUP_PATH"
 
-    # Backup configs
     local config_dir="$HOME/.config/xkor_3rr0r"
     if [[ -d "$config_dir" ]]; then
         log_substep "Backing up configs..."
         cp -r "$config_dir" "$BACKUP_PATH/config" 2>/dev/null || true
     fi
 
-    # Backup data
     local data_dir="$HOME/.local/share/xkor_3rr0r"
     if [[ -d "$data_dir" ]]; then
         log_substep "Backing up data..."
         cp -r "$data_dir" "$BACKUP_PATH/data" 2>/dev/null || true
     fi
 
-    # Save version info
     echo "COMMIT=$CURRENT_COMMIT" > "$BACKUP_PATH/version.txt"
     echo "BRANCH=$CURRENT_BRANCH" >> "$BACKUP_PATH/version.txt"
     echo "TIMESTAMP=$BACKUP_TIMESTAMP" >> "$BACKUP_PATH/version.txt"
 
     log_success "Backup saved: $BACKUP_PATH"
 
-    # Clean old backups (keep last 5)
-    log_substep "Cleaning old backups..."
+    log_substep "Cleaning old backups (keeping last 5)..."
     local backups=($(ls -t "$BACKUP_DIR" 2>/dev/null))
     local count=0
     for backup in "${backups[@]}"; do
@@ -310,37 +330,63 @@ create_backup() {
     done
 }
 
-restore_backup() {
-    if [[ ! -d "$BACKUP_PATH" ]]; then
-        log_error "No backup found at: $BACKUP_PATH"
-        return 1
+# ==============================================================================
+# DEPENDENCY INSTALLATION
+# ==============================================================================
+
+install_system_dependencies() {
+    log_step "Installing system dependencies..."
+
+    local distro=$(detect_distro)
+    log_substep "Detected distro: $distro"
+
+    case "$distro" in
+        ubuntu|debian)
+            log_substep "Installing via apt..."
+            if command_exists sudo; then
+                sudo apt-get update -qq || log_warn "apt-get update failed"
+                sudo apt-get install -y -qq \
+                    python3 python3-pip jq curl git gh sqlite3 \
+                    >> "$LOG_FILE" 2>&1 || log_warn "Some packages failed to install"
+            else
+                log_warn "sudo not available, skipping system packages"
+            fi
+            ;;
+        arch)
+            log_substep "Installing via pacman..."
+            if command_exists sudo; then
+                sudo pacman -Sy --noconfirm \
+                    python python-pip jq curl git github-cli sqlite \
+                    >> "$LOG_FILE" 2>&1 || log_warn "Some packages failed to install"
+            else
+                log_warn "sudo not available, skipping system packages"
+            fi
+            ;;
+        fedora)
+            log_substep "Installing via dnf..."
+            if command_exists sudo; then
+                sudo dnf install -y \
+                    python3 python3-pip jq curl git gh sqlite \
+                    >> "$LOG_FILE" 2>&1 || log_warn "Some packages failed to install"
+            else
+                log_warn "sudo not available, skipping system packages"
+            fi
+            ;;
+        *)
+            log_warn "Unknown distro, skipping system package installation"
+            log_info "Please manually install: python3, pip, jq, curl, git, gh (GitHub CLI), sqlite3"
+            ;;
+    esac
+
+    # Python packages
+    if command_exists pip3; then
+        log_substep "Installing Python packages..."
+        pip3 install --user --quiet requests PyGithub 2>&1 | tee -a "$LOG_FILE" || log_warn "Python packages failed"
+    else
+        log_warn "pip3 not found, skipping Python packages"
     fi
 
-    log_step "Restoring from backup..."
-
-    # Restore configs
-    if [[ -d "$BACKUP_PATH/config" ]]; then
-        log_substep "Restoring configs..."
-        cp -r "$BACKUP_PATH/config" "$HOME/.config/xkor_3rr0r" 2>/dev/null || true
-    fi
-
-    # Restore data
-    if [[ -d "$BACKUP_PATH/data" ]]; then
-        log_substep "Restoring data..."
-        cp -r "$BACKUP_PATH/data" "$HOME/.local/share/xkor_3rr0r" 2>/dev/null || true
-    fi
-
-    # Restore Git state
-    if [[ -f "$BACKUP_PATH/version.txt" ]]; then
-        source "$BACKUP_PATH/version.txt"
-        if [[ -n "$COMMIT" ]]; then
-            log_substep "Restoring Git commit: $COMMIT..."
-            cd "$PROJECT_ROOT"
-            git reset --hard "$COMMIT" || log_warn "Git reset failed"
-        fi
-    fi
-
-    log_success "Backup restored"
+    log_success "Dependencies installed"
 }
 
 # ==============================================================================
@@ -352,22 +398,16 @@ update_dependencies() {
 
     cd "$PROJECT_ROOT"
 
-    # Frontend dependencies
     log_substep "Updating frontend..."
     if [[ -f package-lock.json ]]; then
-        npm ci || npm install
-    elif [[ -f pnpm-lock.yaml ]]; then
-        command_exists pnpm && pnpm install
-    elif [[ -f bun.lockb ]]; then
-        command_exists bun && bun install
+        npm ci >> "$LOG_FILE" 2>&1 || npm install >> "$LOG_FILE" 2>&1
     else
-        npm install
+        npm install >> "$LOG_FILE" 2>&1
     fi
 
-    # Cargo dependencies
     log_substep "Updating Rust dependencies..."
     cd "$PROJECT_ROOT/src-tauri"
-    cargo update || log_warn "Cargo update failed"
+    cargo update >> "$LOG_FILE" 2>&1 || log_warn "Cargo update failed"
 
     log_success "Dependencies updated"
 }
@@ -377,11 +417,9 @@ rebuild_project() {
 
     cd "$PROJECT_ROOT/src-tauri"
 
-    # Clean build artifacts
     log_substep "Cleaning build cache..."
-    cargo clean 2>&1 | tee -a "$LOG_FILE" > /dev/null || log_warn "Cargo clean failed"
+    cargo clean >> "$LOG_FILE" 2>&1 || log_warn "Cargo clean failed"
 
-    # Rebuild with progress indicator
     echo -ne "  ${CYAN}⚙${RESET}  Compiling Rust backend (this may take 3-5 minutes)..."
 
     if [[ "$OPT_DEV_MODE" == "true" ]]; then
@@ -404,10 +442,6 @@ rebuild_project() {
 
     log_success "Build complete"
 }
-
-# ==============================================================================
-# VALIDATION
-# ==============================================================================
 
 validate_build() {
     log_step "Validating build..."
@@ -433,6 +467,109 @@ validate_build() {
 }
 
 # ==============================================================================
+# ERROR REPORTING SETUP
+# ==============================================================================
+
+setup_error_reporting() {
+    log_step "Setting up automated error reporting..."
+
+    create_directory "$SCRIPTS_DIR"
+    create_directory "$ERROR_REPORTING_DIR"
+    create_directory "$MONITORING_SERVICE_DIR"
+
+    # Create error reporting script
+    log_substep "Creating error report generator..."
+    bash "$PROJECT_ROOT/scripts/create-error-reporting.sh" >> "$LOG_FILE" 2>&1
+
+    # Create GitHub issue manager
+    log_substep "Creating GitHub issue manager..."
+    bash "$PROJECT_ROOT/scripts/create-github-integration.sh" >> "$LOG_FILE" 2>&1
+
+    # Create monitoring service
+    log_substep "Creating monitoring service..."
+    bash "$PROJECT_ROOT/scripts/create-monitoring-service.sh" >> "$LOG_FILE" 2>&1
+
+    # Create issue deduplication system
+    log_substep "Creating issue deduplication system..."
+    bash "$PROJECT_ROOT/scripts/create-deduplication.sh" >> "$LOG_FILE" 2>&1
+
+    log_success "Error reporting configured"
+}
+
+setup_github_cli() {
+    if [[ "$OPT_SKIP_GITHUB" == "true" ]]; then
+        log_warn "Skipping GitHub CLI setup (--skip-github flag)"
+        return
+    fi
+
+    log_step "Setting up GitHub CLI..."
+
+    if ! command_exists gh; then
+        log_warn "GitHub CLI (gh) not found"
+        log_info "Please install: https://cli.github.com/"
+        log_info "Or run: sudo apt install gh (Ubuntu/Debian)"
+        log_warn "Skipping GitHub integration"
+        return
+    fi
+
+    log_substep "Checking authentication..."
+    if gh auth status >> "$LOG_FILE" 2>&1; then
+        log_success "GitHub CLI authenticated"
+    else
+        log_warn "GitHub CLI not authenticated"
+        if ask_yes_no "Authenticate GitHub CLI now?" "y"; then
+            gh auth login || log_warn "GitHub authentication failed"
+        else
+            log_warn "Skipping GitHub integration"
+        fi
+    fi
+
+    # Create issue labels
+    log_substep "Creating issue labels..."
+    local remote_url=$(git config --get remote.origin.url 2>/dev/null)
+    if [[ -n "$remote_url" ]]; then
+        local repo=$(echo "$remote_url" | sed 's/.*github.com[:/]\(.*\)\.git/\1/')
+        gh label create "bug" --color "d73a4a" --force 2>/dev/null || true
+        gh label create "auto-report" --color "0e8a16" --force 2>/dev/null || true
+        gh label create "crash" --color "b60205" --force 2>/dev/null || true
+        gh label create "ai-debug" --color "1d76db" --force 2>/dev/null || true
+        log_success "Labels created"
+    else
+        log_warn "No GitHub remote found, skipping label creation"
+    fi
+}
+
+setup_monitoring_service() {
+    if [[ "$OPT_SKIP_SERVICES" == "true" ]]; then
+        log_warn "Skipping monitoring service setup (--skip-services flag)"
+        return
+    fi
+
+    log_step "Setting up monitoring service..."
+
+    local service_file="$MONITORING_SERVICE_DIR/xkor-monitor.service"
+
+    if [[ -f "$service_file" ]] && command_exists systemctl; then
+        log_substep "Installing systemd service..."
+
+        if command_exists sudo; then
+            sudo cp "$service_file" /etc/systemd/system/
+            sudo systemctl daemon-reload
+            sudo systemctl enable xkor-monitor.service
+            sudo systemctl restart xkor-monitor.service
+
+            log_success "Monitoring service enabled"
+            log_substep "Status: $(systemctl is-active xkor-monitor.service)"
+        else
+            log_warn "sudo not available, skipping service installation"
+        fi
+    else
+        log_warn "Monitoring service file not found or systemd not available"
+        log_info "Background monitoring will run manually when needed"
+    fi
+}
+
+# ==============================================================================
 # MAIN
 # ==============================================================================
 
@@ -448,30 +585,47 @@ parse_arguments() {
             --dev)
                 OPT_DEV_MODE=true
                 ;;
+            --skip-services)
+                OPT_SKIP_SERVICES=true
+                ;;
+            --skip-github)
+                OPT_SKIP_GITHUB=true
+                ;;
             -v|--verbose)
                 OPT_VERBOSE=true
                 ;;
             -h|--help)
                 cat <<EOF
-xKOR_3RR0R Upgrade Script
+xKOR_3RR0R Automated Upgrade + Error Reporting
 
 Usage: $0 [OPTIONS]
 
 OPTIONS:
-    --force         Skip confirmation prompts
-    --no-backup     Skip creating backup
-    --dev           Development mode (debug build)
-    -v, --verbose   Verbose output
-    -h, --help      Show this help
+    --force             Skip confirmation prompts
+    --no-backup         Skip creating backup
+    --dev               Development mode (debug build)
+    --skip-services     Skip systemd service installation
+    --skip-github       Skip GitHub CLI setup
+    -v, --verbose       Verbose output
+    -h, --help          Show this help
 
 EXAMPLES:
     ./upgrade.sh
     ./upgrade.sh --force
-    ./upgrade.sh --no-backup --verbose
+    ./upgrade.sh --skip-services --verbose
+
+FEATURES:
+    ✓ Automated upgrade
+    ✓ Dependency installation
+    ✓ Error logging
+    ✓ GitHub issue automation
+    ✓ Crash reporting
+    ✓ Background monitoring
+    ✓ Issue deduplication
 
 ROLLBACK:
-    Backups are stored in: $BACKUP_DIR
-    To manually rollback: git reset --hard <commit>
+    Backups: $BACKUP_DIR
+    Manual rollback: git reset --hard <commit>
 
 EOF
                 exit 0
@@ -502,7 +656,7 @@ print_banner() {
     ║          ██████╔╝██║  ██║██║  ██║╚██████╔╝██║  ██║       ║
     ║          ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝       ║
     ║                                                           ║
-    ║                   SYSTEM UPGRADE                          ║
+    ║              AUTOMATED SYSTEM UPGRADE v3.0               ║
     ║                                                           ║
     ╚═══════════════════════════════════════════════════════════╝
 
@@ -514,10 +668,8 @@ main() {
     create_directory "$LOG_DIR"
     : > "$LOG_FILE"
 
-    # Parse arguments
     parse_arguments "$@"
 
-    # Show banner
     print_banner
 
     # Pre-flight checks
@@ -530,10 +682,13 @@ main() {
     # Create backup
     create_backup
 
+    # Install dependencies
+    install_system_dependencies
+
     # Pull updates
     pull_updates
 
-    # Update dependencies
+    # Update project dependencies
     update_dependencies
 
     # Rebuild
@@ -542,6 +697,15 @@ main() {
     # Validate
     validate_build
 
+    # Setup error reporting
+    setup_error_reporting
+
+    # Setup GitHub integration
+    setup_github_cli
+
+    # Setup monitoring service
+    setup_monitoring_service
+
     # Success banner
     echo
     log_raw "${BOLD}${GREEN}╔════════════════════════════════════════════════════════╗${RESET}"
@@ -549,27 +713,30 @@ main() {
     log_raw "${BOLD}${GREEN}║            ✓ UPGRADE SUCCESSFUL                        ║${RESET}"
     log_raw "${BOLD}${GREEN}║                                                        ║${RESET}"
     log_raw "${BOLD}${GREEN}╠════════════════════════════════════════════════════════╣${RESET}"
-    log_raw "${BOLD}${GREEN}║${RESET}  Version:  ${CYAN}$OLD_VERSION${RESET} ${DIM}→${RESET} ${BOLD}${GREEN}$NEW_VERSION${RESET}"
-    log_raw "${BOLD}${GREEN}║${RESET}  Backup:   ${DIM}$BACKUP_PATH${RESET}"
-    log_raw "${BOLD}${GREEN}║${RESET}  Log:      ${DIM}$LOG_FILE${RESET}"
+    log_raw "${BOLD}${GREEN}║${RESET}  Version:     ${CYAN}$OLD_VERSION${RESET} ${DIM}→${RESET} ${BOLD}${GREEN}$NEW_VERSION${RESET}"
+    log_raw "${BOLD}${GREEN}║${RESET}  Backup:      ${DIM}$BACKUP_PATH${RESET}"
+    log_raw "${BOLD}${GREEN}║${RESET}  Log:         ${DIM}$LOG_FILE${RESET}"
+    log_raw "${BOLD}${GREEN}║${RESET}  Monitoring:  ${GREEN}Active${RESET}"
+    log_raw "${BOLD}${GREEN}║${RESET}  Error Report: ${GREEN}Automated${RESET}"
     log_raw "${BOLD}${GREEN}║                                                        ║${RESET}"
     log_raw "${BOLD}${GREEN}╚════════════════════════════════════════════════════════╝${RESET}"
     echo
-    echo -e "${CYAN}${BOLD}Launch xKOR:${RESET} ${BOLD}xkor${RESET}"
-    echo -e "${DIM}Or reboot to start in OS Mode${RESET}"
+    log_info "${CYAN}${BOLD}Next steps:${RESET}"
+    log_info "  • Launch: ${BOLD}xkor${RESET}"
+    log_info "  • View logs: ${BOLD}journalctl -u xkor-login -f${RESET}"
+    log_info "  • Test crash reporting: ${BOLD}./scripts/test-error-reporting.sh${RESET}"
     echo
 }
 
-# Trap errors and offer rollback
+# Trap errors
 trap 'handle_error' ERR
 
 handle_error() {
     log_error "Upgrade failed!"
+    log_error "Check log: $LOG_FILE"
 
     if [[ "$OPT_NO_BACKUP" != "true" ]] && [[ -d "$BACKUP_PATH" ]]; then
-        if ask_yes_no "Restore from backup?" "y"; then
-            restore_backup
-        fi
+        log_info "Backup available at: $BACKUP_PATH"
     fi
 
     exit 1

@@ -21,6 +21,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Comprehensive logging infrastructure
 - Premium upgrade UI with version tracking
 
+**Key Features (v3.0.0 - Error Reporting System)**:
+- Automated error detection and reporting
+- GitHub issue integration with intelligent deduplication
+- Background monitoring service (systemd or manual)
+- SQLite-based issue tracking database
+- Rate limiting and spam prevention
+- Secret sanitization for security
+- AI-readable structured reports
+- One-command setup via upgrade.sh
+
 ---
 
 ## Build & Run Commands
@@ -319,6 +329,15 @@ hyprctl reload
 - Manual capture: `./diagnostics/crash-logger.sh crash "type" "msg"`
 - **Always `git pull` before debugging** - crash reports auto-commit
 
+### Error Reporting System (v3.0.0+)
+- Automatic error detection and GitHub issue creation
+- Background monitoring: `systemctl status xkor-monitor`
+- Manual error report: `./scripts/error-reporting/report-error.sh "type" "message" "trace"`
+- Test suite: `./scripts/test-error-reporting.sh`
+- Deduplication stats: `./scripts/error-reporting/dedup-manager.sh stats`
+- Setup/upgrade: `./upgrade.sh` (installs all components)
+- Documentation: `ERROR_REPORTING_SYSTEM.md`
+
 ---
 
 ## Color Palette
@@ -358,6 +377,7 @@ hyprctl reload
 - Never skip hooks (`--no-verify`) or bypass signing unless user asks
 - Check for unsafe syscalls in Rust PTY code (dup2, close return values)
 - Frontend login fallback: always deny on backend failure (never auto-grant)
+- **NEVER use emojis** in code, documentation, commits, or any output (use plain text alternatives)
 
 ---
 

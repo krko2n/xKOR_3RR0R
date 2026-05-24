@@ -1,6 +1,6 @@
 # xKOR_3RR0R v2.1.0 - Deployment Guide
 
-## 🔥 Critical Fix Deployed
+## [OK][OK][OK][OK] Critical Fix Deployed
 
 **Version:** 2.1.0-beta.1  
 **Release Date:** 2026-05-24  
@@ -8,22 +8,22 @@
 
 ---
 
-## 🎯 What Was Fixed
+## [OK][OK][OK][OK] What Was Fixed
 
 ### Root Cause (Finally Identified!)
 
 ```
 xkor-login.service (User=xkor, NO PAM)
-  ↓
+  [OK][OK][OK]
 systemd-logind IGNORES the session
-  ↓
+  [OK][OK][OK]
 /run/user/1000 NEVER CREATED
-  ↓
+  [OK][OK][OK]
 start-hyprland manually exports XDG_RUNTIME_DIR=/run/user/1000
-  ↓
+  [OK][OK][OK]
 Hyprland tries to mkdir /run/user/1000/hypr/
-  ↓
-💥 CRASH: Permission denied / Couldn't uniqfd
+  [OK][OK][OK]
+[OK][OK][OK][OK] CRASH: Permission denied / Couldn't uniqfd
 ```
 
 ### The Real Fix
@@ -36,7 +36,7 @@ Added `PAMName=login` to xkor-login.service:
 
 ---
 
-## 📦 What's New
+## [OK][OK][OK][OK] What's New
 
 ### 1. Automatic Crash Logger
 - **Location:** `diagnostics/crash-logger.sh`
@@ -63,14 +63,14 @@ Added `PAMName=login` to xkor-login.service:
 ### 3. Centralized Logging
 ```
 diagnostics/
-├── logs/              # gitignored (too large)
-│   ├── compositor/    # Hyprland logs
-│   ├── runtime/       # App runtime logs
-│   ├── install/       # Installation logs
-│   ├── upgrade/       # Upgrade logs
-│   └── ...
-├── crashes/           # tracked in git
-└── errors/            # tracked in git
+[OK][OK][OK][OK][OK][OK][OK][OK][OK] logs/              # gitignored (too large)
+[OK][OK][OK]   [OK][OK][OK][OK][OK][OK][OK][OK][OK] compositor/    # Hyprland logs
+[OK][OK][OK]   [OK][OK][OK][OK][OK][OK][OK][OK][OK] runtime/       # App runtime logs
+[OK][OK][OK]   [OK][OK][OK][OK][OK][OK][OK][OK][OK] install/       # Installation logs
+[OK][OK][OK]   [OK][OK][OK][OK][OK][OK][OK][OK][OK] upgrade/       # Upgrade logs
+[OK][OK][OK]   [OK][OK][OK][OK][OK][OK][OK][OK][OK] ...
+[OK][OK][OK][OK][OK][OK][OK][OK][OK] crashes/           # tracked in git
+[OK][OK][OK][OK][OK][OK][OK][OK][OK] errors/            # tracked in git
 ```
 
 ### 4. systemd Service Hardening
@@ -81,7 +81,7 @@ diagnostics/
 
 ---
 
-## 🚀 Deployment Steps
+## [OK][OK][OK][OK] Deployment Steps
 
 ### On Your System (Arch Linux)
 
@@ -98,12 +98,12 @@ git pull
 
 You'll see:
 ```
-╔════════════════════════════════════════════╗
-║  UPDATE AVAILABLE                          ║
-╠════════════════════════════════════════════╣
-║  Version: 2.0.2-beta.1 → 2.1.0-beta.1      ║
-║  Commits: X new                            ║
-╚════════════════════════════════════════════╝
+[OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK]
+[OK][OK][OK]  UPDATE AVAILABLE                          [OK][OK][OK]
+[OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK]
+[OK][OK][OK]  Version: 2.0.2-beta.1 [OK][OK][OK] 2.1.0-beta.1      [OK][OK][OK]
+[OK][OK][OK]  Commits: X new                            [OK][OK][OK]
+[OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK][OK]
 ```
 
 ```bash
@@ -124,7 +124,7 @@ sudo reboot
 
 ---
 
-## ✅ Verification
+## [OK][OK][OK] Verification
 
 After reboot, the system should:
 
@@ -169,7 +169,7 @@ The crash will be automatically captured and committed to git:
 
 ---
 
-## 🔍 Debugging Tools
+## [OK][OK][OK][OK] Debugging Tools
 
 ### Manual Crash Capture
 
@@ -214,7 +214,7 @@ ls -la /run/user/1000/hypr/
 
 ---
 
-## 📊 Expected Behavior
+## [OK][OK][OK][OK] Expected Behavior
 
 ### Before Fix (v2.0.2)
 ```
@@ -237,7 +237,7 @@ Hyprland v0.45.2 starting...
 
 ---
 
-## 🆘 Recovery
+## [OK][OK][OK][OK] Recovery
 
 If system is unbootable:
 
@@ -279,39 +279,39 @@ sudo reboot
 
 ---
 
-## 📝 Changelog
+## [OK][OK][OK][OK] Changelog
 
 ### v2.1.0-beta.1 (2026-05-24)
 
 **CRITICAL FIX:**
-- ✅ Added PAMName=login to xkor-login.service
-- ✅ systemd-logind now creates /run/user/UID properly
-- ✅ Hyprland socket initialization succeeds
-- ✅ No more "Couldn't uniqfd" crashes
+- [OK][OK][OK] Added PAMName=login to xkor-login.service
+- [OK][OK][OK] systemd-logind now creates /run/user/UID properly
+- [OK][OK][OK] Hyprland socket initialization succeeds
+- [OK][OK][OK] No more "Couldn't uniqfd" crashes
 
 **NEW FEATURES:**
-- ✨ Automatic crash logger with git auto-commit
-- ✨ Centralized diagnostic logging system
-- ✨ Enhanced start-hyprland with pre-flight checks
-- ✨ Stale socket cleanup
-- ✨ Comprehensive system state capture
-- ✨ 7-day automatic log rotation
+- [OK][OK][OK] Automatic crash logger with git auto-commit
+- [OK][OK][OK] Centralized diagnostic logging system
+- [OK][OK][OK] Enhanced start-hyprland with pre-flight checks
+- [OK][OK][OK] Stale socket cleanup
+- [OK][OK][OK] Comprehensive system state capture
+- [OK][OK][OK] 7-day automatic log rotation
 
 **IMPROVEMENTS:**
-- 📊 All logs timestamped and structured
-- 📊 systemd journal integration
-- 📊 Crash reports tracked in git
-- 📊 Bulk logs gitignored (keep local)
+- [OK][OK][OK][OK] All logs timestamped and structured
+- [OK][OK][OK][OK] systemd journal integration
+- [OK][OK][OK][OK] Crash reports tracked in git
+- [OK][OK][OK][OK] Bulk logs gitignored (keep local)
 
 **FIXES:**
-- 🐛 Fixed runtime directory creation
-- 🐛 Fixed permission issues
-- 🐛 Fixed socket initialization
-- 🐛 Fixed PAM session registration
+- [OK][OK][OK][OK] Fixed runtime directory creation
+- [OK][OK][OK][OK] Fixed permission issues
+- [OK][OK][OK][OK] Fixed socket initialization
+- [OK][OK][OK][OK] Fixed PAM session registration
 
 ---
 
-## 📚 Additional Resources
+## [OK][OK][OK][OK] Additional Resources
 
 - **Crash Reports:** `diagnostics/crashes/`
 - **Live Logs:** `diagnostics/logs/compositor/`
@@ -320,7 +320,7 @@ sudo reboot
 
 ---
 
-## ⚠️ Important Notes
+## [OK][OK][OK][OK][OK][OK] Important Notes
 
 1. **Always git pull before debugging** - crash reports may be auto-committed
 2. **Check diagnostics/crashes/ first** after any crash
@@ -330,15 +330,15 @@ sudo reboot
 
 ---
 
-## 🎉 Success Metrics
+## [OK][OK][OK][OK] Success Metrics
 
 After deployment, you should have:
-- ✅ Clean Hyprland startup
-- ✅ No socket initialization errors
-- ✅ Automatic crash capture if anything fails
-- ✅ Git history of all crashes
-- ✅ Comprehensive logs for debugging
-- ✅ Zero manual intervention needed
+- [OK][OK][OK] Clean Hyprland startup
+- [OK][OK][OK] No socket initialization errors
+- [OK][OK][OK] Automatic crash capture if anything fails
+- [OK][OK][OK] Git history of all crashes
+- [OK][OK][OK] Comprehensive logs for debugging
+- [OK][OK][OK] Zero manual intervention needed
 
 ---
 
